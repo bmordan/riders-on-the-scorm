@@ -1,0 +1,30 @@
+{
+  "name": "riders-on-the-scorm",
+  "version": "0.1.0",
+  "description": "create scorm packages in markdown",
+  "main": "server.js",
+  "scripts": {
+    "start": "PORT=9292 nodemon server.js",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bmordan/riders-on-the-scorm.git"
+  },
+  "keywords": [
+    "SCORM",
+    "markdown",
+    "editor"
+  ],
+  "author": "bmordan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bmordan/riders-on-the-scorm/issues"
+  },
+  "homepage": "https://github.com/bmordan/riders-on-the-scorm#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.2",
+    "pug": "^2.0.4"
+  }
+}
