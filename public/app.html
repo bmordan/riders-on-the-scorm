@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset='utf-8'>
+        <meta name='viewport' content='width=device-width,initial-scale=1'>
+
+        <title>Riders on the SCORM</title>
+
+        <link rel='icon' type='image/png' href='/favicon.png'>
+        <link rel='stylesheet' href='/bundle.css'>
+        <meta name="google-signin-client_id" content="815614717875-vd394cu2j958j33ihim5q08ns7058lh2.apps.googleusercontent.com">
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <script defer src='/bundle.js'></script>
+        <script>
+            function signOut() {
+                gapi.load('auth2', () => {
+                    const client_id = document.querySelector('meta[name="google-signin-client_id"]').content
+                    gapi.auth2.init({client_id})
+                        .then(googleUser => {
+                            googleUser.signOut().then(() => window.location.assign("/"))
+                        })
+                })
+            }
+        </script>
+    </head>
+    <body>
+        <nav>
+            <a href="#" onclick="signOut();">Sign out</a>
+        </nav>
+    </body>
+</html>

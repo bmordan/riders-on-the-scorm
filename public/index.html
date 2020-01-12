@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset='utf-8'>
+        <meta name='viewport' content='width=device-width,initial-scale=1'>
+
+        <title>Login into "Riders on the SCORM"</title>
+
+        <link rel='icon' type='image/png' href='/favicon.png'>
+        <link rel='stylesheet' href='/bundle.css'>
+
+        <meta name="google-signin-client_id" content="815614717875-vd394cu2j958j33ihim5q08ns7058lh2.apps.googleusercontent.com">
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <script>
+            function onSignIn(googleUser) {
+                const tokenid = googleUser.getAuthResponse().id_token
+                fetch('/login', { 
+                    method: 'post',
+                    headers: new Headers({'content-type': 'application/json'}),
+                    body: JSON.stringify({tokenid})
+                })
+                .then(res => res.json())
+                .then(user => window.location.assign(`/app?token=${tokenid}`))
+                .then(console.log)
+                .catch(console.error)
+            }
+            function signOut() {
+                gapi.load('auth2', () => {
+                    const client_id = document.querySelector('meta[name="google-signin-client_id"]').content
+                    gapi.auth2.init({client_id})
+                        .then(googleUser => googleUser.signOut().then(() => window.location.assign("/logout")))
+                })
+            }
+        </script>
+    </head>
+    <body>
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        <a href="#" onclick="signOut();">Sign out</a>
+    </body>
+</html>

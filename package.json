@@ -4,7 +4,11 @@
   "description": "create scorm packages in markdown",
   "main": "server.js",
   "scripts": {
-    "start": "PORT=9292 nodemon server.js",
+    "start": "PORT=3000 nodemon server.js",
+    "build": "rollup -c && docker build -t bmordan/riders-on-the-scorm .",
+    "docker": "docker run -p 3000:3000 -e GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID} -e GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET} -e NODE_ENV=development -e PORT=3000 -d bmordan/riders-on-the-scorm",
+    "dev": "rollup -c -w && NODE_ENV='development' npm start",
+    "prod": "nodemon server.js",
     "test": "jest"
   },
   "repository": {
@@ -23,8 +27,21 @@
   },
   "homepage": "https://github.com/bmordan/riders-on-the-scorm#readme",
   "dependencies": {
+    "dgraph-js": "^2.0.2",
     "express": "^4.17.1",
-    "nodemon": "^2.0.2",
-    "pug": "^2.0.4"
+    "express-session": "^1.17.0",
+    "google-auth-library": "^5.8.0",
+    "grpc": "^1.24.2",
+    "node-fetch": "^2.6.0",
+    "nodemon": "^2.0.2"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^11.0.0",
+    "@rollup/plugin-node-resolve": "^6.0.0",
+    "rollup": "^1.20.0",
+    "rollup-plugin-livereload": "^1.0.0",
+    "rollup-plugin-svelte": "^5.0.3",
+    "rollup-plugin-terser": "^5.1.2",
+    "svelte": "^3.0.0"
   }
 }
