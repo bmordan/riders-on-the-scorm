@@ -20,7 +20,7 @@
                     body: JSON.stringify({tokenid})
                 })
                 .then(res => res.json())
-                .then(user => window.location.assign(`/app?token=${tokenid}`))
+                .then(user => window.location.assign(`/users/${user.uid}`))
                 .then(console.log)
                 .catch(console.error)
             }

@@ -5,6 +5,7 @@ const fetch = require('node-fetch')
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NODE_ENV = 'development' } = process.env
 const {OAuth2Client} = require('google-auth-library')
 const gapi = new OAuth2Client(GOOGLE_CLIENT_ID)
+const { getUser, getOrCreateUser } = require('./dgraph')
 
 const publicRoot = file => `${__dirname}/public/${file}.html`
 const session_settings = {
@@ -60,23 +61,34 @@ app.post("/login", (req, res) => {
     const { tokenid } = req.body
     
     getGoogleUser(tokenid)
-        .then(googleUser => {
-            req.session.user_id = googleUser.sub
-            res.send({status: true, googleUser})
+        .then(googleUser => getOrCreateUser(googleUser))
+        .then(user => {
+            const [{uid}] = user
+            req.session.uid = uid
+            res.send({status: true, uid})
         })
         .catch(err => {
             console.error(err)
             res.send({status: false})
         })
 })
-app.get("/app", (req, res) => {
-    return req.session.user_id
-        ? res.sendFile(publicRoot("app"))
+app.get("/users/:uid", (req, res) => {
+    return (req.session.uid && req.session.uid === req.params.uid)
+        ? res.sendFile(publicRoot("users"))
         : res.sendFile(publicRoot("index"))
+})
+app.get("/users/:uid/packages", (req, res) => {
+    getUser(req.params.uid)
+        .then(user => {
+            res.send(user)
+        })
+        .catch(err => {
+            console.error(err)
+            res.send(err)
+        })
 })
 app.get("/logout", (req, res) => {
     delete req.session.user_id
     res.sendFile(publicRoot("index"))
 })
-
 app.listen(process.env.PORT, () => console.log(`riders ready on port ${process.env.PORT}`))

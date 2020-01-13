@@ -1,9 +1,20 @@
 <script>
-	export let user
+	const [uid] = location.pathname.split("/").slice(-1)
+
+	$: user = {}
+
+	async function getUser(uid) {
+		const user = await fetch(`/users/${uid}/packages`)
+		return user.json()
+	}
+
+	getUser(uid).then(_user => (user = _user))
 </script>
 
 <main>
-	<h1>{user.name}'s new app</h1>
+	<h1>collect dgraph for {uid}'s new app</h1>
+	<section>{user.name || "...getting your packages"}</section>
+	<img src={user.picture || ''} alt="avatar" />
 </main>
 
 <style>
