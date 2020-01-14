@@ -17,7 +17,7 @@
                     const client_id = document.querySelector('meta[name="google-signin-client_id"]').content
                     gapi.auth2.init({client_id})
                         .then(googleUser => {
-                            googleUser.signOut().then(() => window.location.assign("/"))
+                            googleUser.signOut().then(() => window.location.assign("/logout"))
                         })
                 })
             }

@@ -8,7 +8,6 @@ async function setSchema() {
     const schema = `
         gid: string @index(exact) .
         title: string @index(exact) .
-        packages: [uid] .
     `
     const op = new dgraph.Operation()
     op.setSchema(schema)
@@ -19,17 +18,7 @@ const queries = {
     getUserByGid: `query user($gid: string) {
         user(func: eq(gid, $gid)) {
             uid
-            name
-            picture
-            packages {
-                uid
-                title
-                sharedwith {
-                    uid
-                    name
-                    picture
-                }
-            }
+            gid
         }
     }`,
     getUserByUid: `query user($uid: string) {
@@ -40,7 +29,24 @@ const queries = {
             packages {
                 uid
                 title
-                download
+                createdAt
+                sharedwith {
+                    uid
+                    name
+                    picture
+                }
+            }
+        }
+    }`,
+    getPackages: `query createPackage($uid: string) {
+        packages(func: uid($uid)) {
+            packages {
+                uid
+                title
+                pages {
+                    uid
+                    content
+                }
                 sharedwith {
                     uid
                     name
@@ -57,6 +63,7 @@ module.exports = {
         const txn = dgraphClient.newTxn()
         let result = await txn.queryWithVars(queries.getUserByGid, {$gid: gid})
         let {user} = result.getJson()
+        
         if (!user.length) {
             try {
                 const mu = new dgraph.Mutation()
@@ -79,8 +86,26 @@ module.exports = {
         await txn.discard()
         return user[0]
     },
-    createPackage: (uid, package) => {
-        return {}
+    createPackage: async (uid, package) => {
+        const txn = dgraphClient.newTxn()
+        try {
+            const packageData = {
+                uid: uid,
+                packages: [
+                    {
+                        title: package.title,
+                        createdAt: new Date().toISOString()
+                    }
+                ]
+            }
+            const node = new dgraph.Mutation()
+            node.setSetJson(packageData)
+            await txn.mutate(node)
+            await txn.commit()
+        } finally {
+            await txn.discard()
+        }
+        return
     },
     getPackage: pid => {
         return {}

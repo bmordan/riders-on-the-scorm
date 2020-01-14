@@ -5,7 +5,7 @@ const fetch = require('node-fetch')
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NODE_ENV = 'development' } = process.env
 const {OAuth2Client} = require('google-auth-library')
 const gapi = new OAuth2Client(GOOGLE_CLIENT_ID)
-const { getUser, getOrCreateUser } = require('./dgraph')
+const dgraph = require('./dgraph')
 
 const publicRoot = file => `${__dirname}/public/${file}.html`
 const session_settings = {
@@ -53,6 +53,10 @@ async function getGoogleUser(token) {
         && payload
 }
 
+function protect (req, res, next) {
+    !req.session.uid ? res.sendFile(publicRoot("index")) : next()
+}
+
 app.get("/", (req, res) => {
     res.sendFile(publicRoot("index"))
 })
@@ -61,7 +65,7 @@ app.post("/login", (req, res) => {
     const { tokenid } = req.body
     
     getGoogleUser(tokenid)
-        .then(googleUser => getOrCreateUser(googleUser))
+        .then(googleUser => dgraph.getOrCreateUser(googleUser))
         .then(user => {
             const [{uid}] = user
             req.session.uid = uid
@@ -72,13 +76,13 @@ app.post("/login", (req, res) => {
             res.send({status: false})
         })
 })
-app.get("/users/:uid", (req, res) => {
-    return (req.session.uid && req.session.uid === req.params.uid)
+app.get("/users/:uid", protect, (req, res) => {
+    return (req.session.uid === req.params.uid)
         ? res.sendFile(publicRoot("users"))
         : res.sendFile(publicRoot("index"))
 })
-app.get("/users/:uid/packages", (req, res) => {
-    getUser(req.params.uid)
+app.get("/users/:uid/packages", protect, (req, res) => {
+    dgraph.getUser(req.params.uid)
         .then(user => {
             res.send(user)
         })
@@ -87,8 +91,27 @@ app.get("/users/:uid/packages", (req, res) => {
             res.send(err)
         })
 })
+app.post("/users/:uid/packages", protect, (req, res) => {
+    dgraph.createPackage(req.session.uid, req.body)
+        .then(() => dgraph.getUser(req.params.uid))
+        .then(user => {
+            res.send(user)
+        })
+        .catch(err => {
+            console.error(err)
+            res.send(err)
+        })
+})
+app.get("/users/:user_uid/packages/:uid", (req, res) => {
+    const props = {
+        user: req.params.user_uid,
+        package: req.params.uid
+    }
+    console.log(props)
+    res.send(props)
+})
 app.get("/logout", (req, res) => {
-    delete req.session.user_id
+    delete req.session.uid
     res.sendFile(publicRoot("index"))
 })
 app.listen(process.env.PORT, () => console.log(`riders ready on port ${process.env.PORT}`))
