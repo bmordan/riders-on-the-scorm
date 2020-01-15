@@ -1,7 +1,3 @@
-import App from './App.svelte'
-
-const app = new App({
-	target: document.body
-})
-
-export default app
+import Riders from './Riders.svelte'
+ 
+export default new Riders({ target: document.getElementById('app') })
