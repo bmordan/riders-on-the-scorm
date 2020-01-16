@@ -93,9 +93,9 @@ app.get("/users/:uid/packages", protect, (req, res) => {
 })
 app.post("/users/:uid/packages", protect, (req, res) => {
     dgraph.createPackage(req.session.uid, req.body)
-        .then(() => dgraph.getUser(req.params.uid))
-        .then(user => {
-            res.send(user)
+        .then(([_package_]) => {
+            console.log(_package_)
+            res.send(_package_)
         })
         .catch(err => {
             console.error(err)

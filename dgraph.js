@@ -54,6 +54,24 @@ const queries = {
                 }
             }
         }
+    }`,
+    getPackage: `query getPackage($uid: string, $title: string) {
+        user(func: uid($uid)) {
+            packages @filter(eq(title, $title)) {
+                uid
+                title
+                createdAt
+                pages {
+                    uid
+                    content
+                }
+                sharedwith {
+                    uid
+                    name
+                    picture
+                }
+            }
+        }
     }`
 }
 
@@ -87,6 +105,7 @@ module.exports = {
         return user[0]
     },
     createPackage: async (uid, package) => {
+        let packages = []
         const txn = dgraphClient.newTxn()
         try {
             const packageData = {
@@ -101,11 +120,14 @@ module.exports = {
             const node = new dgraph.Mutation()
             node.setSetJson(packageData)
             await txn.mutate(node)
+            const newPackageResult = await txn.queryWithVars(queries.getPackage, {$uid:uid, $title: package.title})
+            const {user} = newPackageResult.getJson()
+            packages = user[0].packages
             await txn.commit()
         } finally {
             await txn.discard()
         }
-        return
+        return packages
     },
     getPackage: pid => {
         return {}

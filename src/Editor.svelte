@@ -3,10 +3,13 @@
     import Edit from "./Edit.svelte"
     import Preview from "./Preview.svelte"
 
+    export let user
     export let user_uid
     export let package_uid
 
     $: showPreview = false
+
+    console.log(user)
  
 </script>
 <section>
