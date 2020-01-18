@@ -1,7 +1,7 @@
 <script>
     import { Router, Route, Link } from "svelte-routing"
     import Packages from "./Packages.svelte"
-    import Editor from "./Editor.svelte"
+    import Edit from "./Edit.svelte"
 
     const [uid] = location.pathname.split("/").slice(-1)
 
@@ -22,8 +22,14 @@
                 <Packages user={user} />
             {/await}
         </Route>
-        <Route path="/users/:user_uid/packages/:package_uid/editor" let:params>
-            <Editor user={user} user_uid={params.user_uid} package_uid={params.package_uid} /> 
+        <Route path="/users/:uid/packages/:pid/editor" let:params>
+            <Edit uid={params.uid} pid={params.pid} /> 
         </Route>
     </Router>
 </section>
+<style>
+* {
+    padding: 0;
+    margin: 0;
+}
+</style>

@@ -4,7 +4,7 @@
     export let user
 
     $: showModel = false
-    $: packages = user.packages
+    $: packages = user.packages || []
 
     function dismissModel(evt) {
 		evt.stopPropagation()
@@ -13,17 +13,31 @@
 
 	async function createPackage(evt) {
 		evt.preventDefault()
+		
 		const data = new FormData(evt.target)
+		
 		showModel = false
-		fetch(`/users/${user.uid}/packages`, {
+		
+		const payload = {
 			method: 'post',
 			headers: new Headers({'content-type': 'application/json'}),
 			body: JSON.stringify({title: data.get('title')})
-        })
-        .then(res => res.json())
-        .then(_package_ => (packages = [...packages, _package_]))
-        .catch(console.error)
-    }
+		}
+		
+		fetch(`/users/${user.uid}/packages`, payload)
+			.then(res => res.json())
+			.then(_package_ => (packages = [...packages, _package_]))
+			.catch(console.error)
+	}
+	
+	async function deletePackage (evt) {
+		evt.preventDefault()
+
+		fetch(`/users/${user.uid}/packages/${this.value}/delete`)
+			.then(res => res.json())
+			.then(_packages => (packages = _packages))
+			.catch(console.error)
+	}
 
 </script>
 <section>
@@ -35,6 +49,7 @@
             <article>
                 <h2>{title}</h2>
                 <small>{createdAt}</small>
+				<button value={uid} on:click={deletePackage}>Delete</button>
             </article>
         </Link>
     {/each}

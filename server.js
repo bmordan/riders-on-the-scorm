@@ -93,22 +93,40 @@ app.get("/users/:uid/packages", protect, (req, res) => {
 })
 app.post("/users/:uid/packages", protect, (req, res) => {
     dgraph.createPackage(req.session.uid, req.body)
-        .then(([_package_]) => {
-            console.log(_package_)
-            res.send(_package_)
+        .then(([_package]) => {
+            res.send(_package)
         })
         .catch(err => {
             console.error(err)
             res.send(err)
         })
 })
-app.get("/users/:user_uid/packages/:uid", (req, res) => {
-    const props = {
-        user: req.params.user_uid,
-        package: req.params.uid
-    }
-    console.log(props)
-    res.send(props)
+app.get("/users/:uid/packages/:pid/delete", (req, res) => {
+    dgraph.deletePackageForUser(req.params.uid, req.params.pid)
+        .then(packages => {
+            res.send(packages)
+        })
+        .catch(err => {
+            console.error(err)
+            res.send(err)
+        })
+})
+app.get("/users/:uid/packages/:pid", (req, res) => {
+    dgraph.getPackage(req.params.pid)
+        .then(_package => res.send(_package))
+        .catch(err => {
+            console.error(err)
+            res.send(err)
+        })
+})
+app.post("/users/:uid/packages/:pid/pages", (req, res) => {
+    const {uid, pid} = req.params
+    dgraph.createPage(uid, pid, req.body)
+        .then(pgid => res.send(pgid))
+        .catch(err => {
+            console.error(err)
+            res.send(err)
+        })
 })
 app.get("/logout", (req, res) => {
     delete req.session.uid
