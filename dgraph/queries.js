@@ -53,5 +53,14 @@ module.exports = {
                 picture
             }
         }
+    }`,
+    getPageByUid: `query getPageByUid($uid: string) {
+        page(func: uid($uid)) {
+            uid
+            markdown
+            html
+            createdAt
+            updatedAt
+        }
     }`
 }

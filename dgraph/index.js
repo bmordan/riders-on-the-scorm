@@ -58,9 +58,10 @@ module.exports = {
                         createdAt: new Date().toISOString(),
                         pages: [
                             {
-                                page: 1,
+                                uid: "_:newpage",
                                 markdown: "IyBOZXcgUGFnZQ==",
-                                html: ""
+                                html: "",
+                                createdAt: new Date().toISOString()
                             }
                         ]
                     }
@@ -91,8 +92,8 @@ module.exports = {
         }
         return currentPackage
     },
-    createPage: async (uid, pid, {page, markdown}) => {
-        let pgid = null
+    createPage: async (uid, pid) => {
+        let page = {}
         const txn = dgraphClient.newTxn()
         try {
             const mu = new dgraph.Mutation()
@@ -104,8 +105,7 @@ module.exports = {
                         pages: [
                             {
                                 uid: "_:newpage",
-                                page: page,
-                                markdown: markdown,
+                                markdown: "IyBOZXcgUGFnZQ==",
                                 createdAt: new Date().toISOString()
                             }
                         ]
@@ -113,23 +113,28 @@ module.exports = {
                 ]
             })
             const mutation = await txn.mutate(mu)
+            const pgid = mutation.getUidsMap().get("newpage")
+            const result = await txn.queryWithVars(queries.getPageByUid, {$uid: pgid})
+            page = result.getJson()
             await txn.commit()
-            pgid = mutation.getUidsMap().get("newpage")
         } finally {
             await txn.discard()
         }
-        return pgid
+        return page
     },
     updatePage: async (update) => {
+        console.log({...update, updatedAt: new Date().toISOString()})
         const txn = dgraphClient.newTxn()
         try {
             const mu = new dgraph.Mutation()
             mu.setSetJson({...update, updatedAt: new Date().toISOString()})
+            console.log({...update, updatedAt: new Date().toISOString()})
             await txn.mutate(mu)
             await txn.commit()
         } finally {
             await txn.discard()
         }
+        return
     },
     deletePackageForUser: async (uid, pid) => {
         let packages = []

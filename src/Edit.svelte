@@ -18,24 +18,37 @@
         const [result] = await fetch(`/users/${uid}/packages/${pid}`)
             .then(res => res.json())
             .catch(console.error)
-        pages = result.pages.map(({markdown}) => atob(markdown))
+        _package = result
+        pages = _package.pages.map(({markdown}) => atob(markdown))
         return result
     }
 
-    function onSave () {
+    function onSave (_package, markdown) {
         saving = true
-        
+
+        const body = {..._package.pages[page - 1], markdown: btoa(pages[page - 1])}
+
         const payload = {
 			method: 'post',
 			headers: new Headers({'content-type': 'application/json'}),
-			body: JSON.stringify({
-                page: 1,
-                markdown: btoa(pages[page - 1])
-            })
-		}
-        
-        fetch(`/users/${uid}/packages/${pid}/pages`, payload)
+			body: JSON.stringify(body)
+        }
+
+        fetch(`/users/${uid}/packages/${pid}/pages/${body.uid}`, payload)
             .then(() => (saving = false))
+            .catch(console.error)
+    }
+
+    function addPage () {
+        saving = true
+
+        fetch(`/users/${uid}/packages/${pid}/pages/new`)
+            .then(res => res.json())
+            .then(page => {
+                pages.push(page)
+                page = pages.length + 1
+                saving = false
+            })
             .catch(console.error)
     }
 
@@ -53,19 +66,20 @@
             </article>
         {:then _package}
             <article class="edit">
-                <h1>package {_package.title} p{page} of {pages.length}</h1>
+                <h1>{_package.title} {page} of {pages.length}</h1>
                 <textarea id="markdown" name="markdown" focus=true bind:value={pages[page - 1]}></textarea>
                 <nav>
-                    <button class="save" disabled={saving} on:click={onSave}>Save{saving ? "ing..." : ""}</button>
+                    <button disabled={saving} on:click={e => onSave(_package, pages[page - 1])}>Save{saving ? "ing..." : ""}</button>
                     <button on:click={togglePreview}>Preview</button>
                     <button disabled={page === 1} on:click={prevPage}>prev</button>
                     <button disabled={page === pages.length} on:click={nextPage}>next</button>
+                    <button disabled={saving} on:click={addPage}>+</button>
                 </nav>
             </article>
             <article class="preview">
                 <article id="html">{@html html}</article>
                 <nav>
-                    <button on:click={togglePreview}>Edit</button>
+                    <button on:click={togglePreview}>Exit Preview</button>
                 </nav>
             </article>
         {/await}
@@ -122,12 +136,15 @@
         text-align: left;
     }
     button {
-        width: 8rem;
+        width: 7rem;
         background-color: red;
         color: white;
         border-color: transparent;
-        padding: 0.5;
+        padding: 0.5rem;
+        margin: 0.25rem;
         border-radius: 2px;
-        box-shadow: 1px 1px 2px 4px gray;
+    }
+    button:disabled {
+        opacity: 0.4;
     }
 </style>

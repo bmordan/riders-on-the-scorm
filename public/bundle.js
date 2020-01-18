@@ -4307,7 +4307,7 @@ var app = (function () {
     const { console: console_1$1 } = globals;
     const file$2 = "src/Edit.svelte";
 
-    // (47:8) <Link to={`/users/${uid}`}>
+    // (60:8) <Link to={`/users/${uid}`}>
     function create_default_slot$1(ctx) {
     	let t;
 
@@ -4327,7 +4327,7 @@ var app = (function () {
     		block,
     		id: create_default_slot$1.name,
     		type: "slot",
-    		source: "(47:8) <Link to={`/users/${uid}`}>",
+    		source: "(60:8) <Link to={`/users/${uid}`}>",
     		ctx
     	});
 
@@ -4349,113 +4349,125 @@ var app = (function () {
     	return block;
     }
 
-    // (54:8) {:then _package}
+    // (67:8) {:then _package}
     function create_then_block(ctx) {
     	let article0;
     	let h1;
+    	let t0_value = /*_package*/ ctx[7].title + "";
     	let t0;
-    	let t1_value = /*_package*/ ctx[7].title + "";
     	let t1;
     	let t2;
     	let t3;
+    	let t4_value = /*pages*/ ctx[3].length + "";
     	let t4;
-    	let t5_value = /*pages*/ ctx[3].length + "";
     	let t5;
-    	let t6;
     	let textarea;
-    	let t7;
+    	let t6;
     	let nav0;
     	let button0;
+    	let t7;
+    	let t8_value = (/*saving*/ ctx[6] ? "ing..." : "") + "";
     	let t8;
-    	let t9_value = (/*saving*/ ctx[6] ? "ing..." : "") + "";
     	let t9;
-    	let t10;
     	let button1;
-    	let t12;
+    	let t11;
     	let button2;
-    	let t13;
+    	let t12;
     	let button2_disabled_value;
-    	let t14;
+    	let t13;
     	let button3;
-    	let t15;
+    	let t14;
     	let button3_disabled_value;
+    	let t15;
+    	let button4;
     	let t16;
+    	let t17;
     	let article2;
     	let article1;
-    	let t17;
+    	let t18;
     	let nav1;
-    	let button4;
+    	let button5;
     	let dispose;
+
+    	function click_handler(...args) {
+    		return /*click_handler*/ ctx[15](/*_package*/ ctx[7], ...args);
+    	}
 
     	const block = {
     		c: function create() {
     			article0 = element("article");
     			h1 = element("h1");
-    			t0 = text("package ");
-    			t1 = text(t1_value);
-    			t2 = text(" p");
-    			t3 = text(/*page*/ ctx[2]);
-    			t4 = text(" of ");
-    			t5 = text(t5_value);
-    			t6 = space();
+    			t0 = text(t0_value);
+    			t1 = space();
+    			t2 = text(/*page*/ ctx[2]);
+    			t3 = text(" of ");
+    			t4 = text(t4_value);
+    			t5 = space();
     			textarea = element("textarea");
-    			t7 = space();
+    			t6 = space();
     			nav0 = element("nav");
     			button0 = element("button");
-    			t8 = text("Save");
-    			t9 = text(t9_value);
-    			t10 = space();
+    			t7 = text("Save");
+    			t8 = text(t8_value);
+    			t9 = space();
     			button1 = element("button");
     			button1.textContent = "Preview";
-    			t12 = space();
+    			t11 = space();
     			button2 = element("button");
-    			t13 = text("prev");
-    			t14 = space();
+    			t12 = text("prev");
+    			t13 = space();
     			button3 = element("button");
-    			t15 = text("next");
-    			t16 = space();
+    			t14 = text("next");
+    			t15 = space();
+    			button4 = element("button");
+    			t16 = text("+");
+    			t17 = space();
     			article2 = element("article");
     			article1 = element("article");
-    			t17 = space();
+    			t18 = space();
     			nav1 = element("nav");
-    			button4 = element("button");
-    			button4.textContent = "Edit";
-    			add_location(h1, file$2, 55, 16, 1597);
+    			button5 = element("button");
+    			button5.textContent = "Exit Preview";
+    			add_location(h1, file$2, 68, 16, 1977);
     			attr_dev(textarea, "id", "markdown");
     			attr_dev(textarea, "name", "markdown");
     			attr_dev(textarea, "focus", "true");
-    			attr_dev(textarea, "class", "svelte-kl2kcx");
-    			add_location(textarea, file$2, 56, 16, 1673);
-    			attr_dev(button0, "class", "save svelte-kl2kcx");
+    			attr_dev(textarea, "class", "svelte-14fhh6q");
+    			add_location(textarea, file$2, 69, 16, 2044);
     			button0.disabled = /*saving*/ ctx[6];
-    			add_location(button0, file$2, 58, 20, 1807);
-    			attr_dev(button1, "class", "svelte-kl2kcx");
-    			add_location(button1, file$2, 59, 20, 1922);
+    			attr_dev(button0, "class", "svelte-14fhh6q");
+    			add_location(button0, file$2, 71, 20, 2178);
+    			attr_dev(button1, "class", "svelte-14fhh6q");
+    			add_location(button1, file$2, 72, 20, 2312);
     			button2.disabled = button2_disabled_value = /*page*/ ctx[2] === 1;
-    			attr_dev(button2, "class", "svelte-kl2kcx");
-    			add_location(button2, file$2, 60, 20, 1992);
+    			attr_dev(button2, "class", "svelte-14fhh6q");
+    			add_location(button2, file$2, 73, 20, 2382);
     			button3.disabled = button3_disabled_value = /*page*/ ctx[2] === /*pages*/ ctx[3].length;
-    			attr_dev(button3, "class", "svelte-kl2kcx");
-    			add_location(button3, file$2, 61, 20, 2076);
-    			add_location(nav0, file$2, 57, 16, 1781);
-    			attr_dev(article0, "class", "edit svelte-kl2kcx");
-    			add_location(article0, file$2, 54, 12, 1558);
+    			attr_dev(button3, "class", "svelte-14fhh6q");
+    			add_location(button3, file$2, 74, 20, 2466);
+    			button4.disabled = /*saving*/ ctx[6];
+    			attr_dev(button4, "class", "svelte-14fhh6q");
+    			add_location(button4, file$2, 75, 20, 2561);
+    			add_location(nav0, file$2, 70, 16, 2152);
+    			attr_dev(article0, "class", "edit svelte-14fhh6q");
+    			add_location(article0, file$2, 67, 12, 1938);
     			attr_dev(article1, "id", "html");
-    			attr_dev(article1, "class", "svelte-kl2kcx");
-    			add_location(article1, file$2, 65, 16, 2251);
-    			attr_dev(button4, "class", "svelte-kl2kcx");
-    			add_location(button4, file$2, 67, 20, 2335);
-    			add_location(nav1, file$2, 66, 16, 2309);
-    			attr_dev(article2, "class", "preview svelte-kl2kcx");
-    			add_location(article2, file$2, 64, 12, 2209);
+    			attr_dev(article1, "class", "svelte-14fhh6q");
+    			add_location(article1, file$2, 79, 16, 2717);
+    			attr_dev(button5, "class", "svelte-14fhh6q");
+    			add_location(button5, file$2, 81, 20, 2801);
+    			add_location(nav1, file$2, 80, 16, 2775);
+    			attr_dev(article2, "class", "preview svelte-14fhh6q");
+    			add_location(article2, file$2, 78, 12, 2675);
 
     			dispose = [
-    				listen_dev(textarea, "input", /*textarea_input_handler*/ ctx[13]),
-    				listen_dev(button0, "click", /*onSave*/ ctx[9], false, false, false),
+    				listen_dev(textarea, "input", /*textarea_input_handler*/ ctx[14]),
+    				listen_dev(button0, "click", click_handler, false, false, false),
     				listen_dev(button1, "click", /*togglePreview*/ ctx[8], false, false, false),
-    				listen_dev(button2, "click", /*prevPage*/ ctx[11], false, false, false),
-    				listen_dev(button3, "click", /*nextPage*/ ctx[10], false, false, false),
-    				listen_dev(button4, "click", /*togglePreview*/ ctx[8], false, false, false)
+    				listen_dev(button2, "click", /*prevPage*/ ctx[12], false, false, false),
+    				listen_dev(button3, "click", /*nextPage*/ ctx[11], false, false, false),
+    				listen_dev(button4, "click", /*addPage*/ ctx[10], false, false, false),
+    				listen_dev(button5, "click", /*togglePreview*/ ctx[8], false, false, false)
     			];
     		},
     		m: function mount(target, anchor) {
@@ -4466,41 +4478,44 @@ var app = (function () {
     			append_dev(h1, t2);
     			append_dev(h1, t3);
     			append_dev(h1, t4);
-    			append_dev(h1, t5);
-    			append_dev(article0, t6);
+    			append_dev(article0, t5);
     			append_dev(article0, textarea);
     			set_input_value(textarea, /*pages*/ ctx[3][/*page*/ ctx[2] - 1]);
-    			append_dev(article0, t7);
+    			append_dev(article0, t6);
     			append_dev(article0, nav0);
     			append_dev(nav0, button0);
+    			append_dev(button0, t7);
     			append_dev(button0, t8);
-    			append_dev(button0, t9);
-    			append_dev(nav0, t10);
+    			append_dev(nav0, t9);
     			append_dev(nav0, button1);
-    			append_dev(nav0, t12);
+    			append_dev(nav0, t11);
     			append_dev(nav0, button2);
-    			append_dev(button2, t13);
-    			append_dev(nav0, t14);
+    			append_dev(button2, t12);
+    			append_dev(nav0, t13);
     			append_dev(nav0, button3);
-    			append_dev(button3, t15);
-    			insert_dev(target, t16, anchor);
+    			append_dev(button3, t14);
+    			append_dev(nav0, t15);
+    			append_dev(nav0, button4);
+    			append_dev(button4, t16);
+    			insert_dev(target, t17, anchor);
     			insert_dev(target, article2, anchor);
     			append_dev(article2, article1);
     			article1.innerHTML = /*html*/ ctx[4];
-    			append_dev(article2, t17);
+    			append_dev(article2, t18);
     			append_dev(article2, nav1);
-    			append_dev(nav1, button4);
+    			append_dev(nav1, button5);
     		},
-    		p: function update(ctx, dirty) {
-    			if (dirty & /*_package*/ 128 && t1_value !== (t1_value = /*_package*/ ctx[7].title + "")) set_data_dev(t1, t1_value);
-    			if (dirty & /*page*/ 4) set_data_dev(t3, /*page*/ ctx[2]);
-    			if (dirty & /*pages*/ 8 && t5_value !== (t5_value = /*pages*/ ctx[3].length + "")) set_data_dev(t5, t5_value);
+    		p: function update(new_ctx, dirty) {
+    			ctx = new_ctx;
+    			if (dirty & /*_package*/ 128 && t0_value !== (t0_value = /*_package*/ ctx[7].title + "")) set_data_dev(t0, t0_value);
+    			if (dirty & /*page*/ 4) set_data_dev(t2, /*page*/ ctx[2]);
+    			if (dirty & /*pages*/ 8 && t4_value !== (t4_value = /*pages*/ ctx[3].length + "")) set_data_dev(t4, t4_value);
 
     			if (dirty & /*pages, page*/ 12) {
     				set_input_value(textarea, /*pages*/ ctx[3][/*page*/ ctx[2] - 1]);
     			}
 
-    			if (dirty & /*saving*/ 64 && t9_value !== (t9_value = (/*saving*/ ctx[6] ? "ing..." : "") + "")) set_data_dev(t9, t9_value);
+    			if (dirty & /*saving*/ 64 && t8_value !== (t8_value = (/*saving*/ ctx[6] ? "ing..." : "") + "")) set_data_dev(t8, t8_value);
 
     			if (dirty & /*saving*/ 64) {
     				prop_dev(button0, "disabled", /*saving*/ ctx[6]);
@@ -4514,10 +4529,14 @@ var app = (function () {
     				prop_dev(button3, "disabled", button3_disabled_value);
     			}
 
+    			if (dirty & /*saving*/ 64) {
+    				prop_dev(button4, "disabled", /*saving*/ ctx[6]);
+    			}
+
     			if (dirty & /*html*/ 16) article1.innerHTML = /*html*/ ctx[4];		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(article0);
-    			if (detaching) detach_dev(t16);
+    			if (detaching) detach_dev(t17);
     			if (detaching) detach_dev(article2);
     			run_all(dispose);
     		}
@@ -4527,14 +4546,14 @@ var app = (function () {
     		block,
     		id: create_then_block.name,
     		type: "then",
-    		source: "(54:8) {:then _package}",
+    		source: "(67:8) {:then _package}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (50:25)              <article class="edit">                 <p>... fetching package {pid}
+    // (63:25)              <article class="edit">                 <p>... fetching package {pid}
     function create_pending_block(ctx) {
     	let article;
     	let p;
@@ -4547,9 +4566,9 @@ var app = (function () {
     			p = element("p");
     			t0 = text("... fetching package ");
     			t1 = text(/*pid*/ ctx[1]);
-    			add_location(p, file$2, 51, 16, 1464);
-    			attr_dev(article, "class", "edit svelte-kl2kcx");
-    			add_location(article, file$2, 50, 12, 1425);
+    			add_location(p, file$2, 64, 16, 1844);
+    			attr_dev(article, "class", "edit svelte-14fhh6q");
+    			add_location(article, file$2, 63, 12, 1805);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, article, anchor);
@@ -4569,7 +4588,7 @@ var app = (function () {
     		block,
     		id: create_pending_block.name,
     		type: "pending",
-    		source: "(50:25)              <article class=\\\"edit\\\">                 <p>... fetching package {pid}",
+    		source: "(63:25)              <article class=\\\"edit\\\">                 <p>... fetching package {pid}",
     		ctx
     	});
 
@@ -4613,12 +4632,12 @@ var app = (function () {
     			t = space();
     			section0 = element("section");
     			info.block.c();
-    			add_location(nav, file$2, 45, 4, 1223);
-    			attr_dev(section0, "class", "editor-flip-frame svelte-kl2kcx");
+    			add_location(nav, file$2, 58, 4, 1603);
+    			attr_dev(section0, "class", "editor-flip-frame svelte-14fhh6q");
     			set_style(section0, "transform", "rotateY(" + (/*showPreview*/ ctx[5] ? "180" : "0") + "deg)");
-    			add_location(section0, file$2, 48, 4, 1291);
-    			attr_dev(section1, "class", "editor svelte-kl2kcx");
-    			add_location(section1, file$2, 44, 0, 1194);
+    			add_location(section0, file$2, 61, 4, 1671);
+    			attr_dev(section1, "class", "editor svelte-14fhh6q");
+    			add_location(section1, file$2, 57, 0, 1574);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -4639,7 +4658,7 @@ var app = (function () {
     			const link_changes = {};
     			if (dirty & /*uid*/ 1) link_changes.to = `/users/${/*uid*/ ctx[0]}`;
 
-    			if (dirty & /*$$scope*/ 16384) {
+    			if (dirty & /*$$scope*/ 65536) {
     				link_changes.$$scope = { dirty, ctx };
     			}
 
@@ -4692,20 +4711,36 @@ var app = (function () {
 
     	async function getPackage(pid) {
     		const [result] = await fetch(`/users/${uid}/packages/${pid}`).then(res => res.json()).catch(console.error);
-    		$$invalidate(3, pages = result.pages.map(({ markdown }) => atob(markdown)));
+    		$$invalidate(7, _package = result);
+    		$$invalidate(3, pages = _package.pages.map(({ markdown }) => atob(markdown)));
     		return result;
     	}
 
-    	function onSave() {
+    	function onSave(_package, markdown) {
     		$$invalidate(6, saving = true);
+
+    		const body = {
+    			..._package.pages[page - 1],
+    			markdown: btoa(pages[page - 1])
+    		};
 
     		const payload = {
     			method: "post",
     			headers: new Headers({ "content-type": "application/json" }),
-    			body: JSON.stringify({ page: 1, markdown: btoa(pages[page - 1]) })
+    			body: JSON.stringify(body)
     		};
 
-    		fetch(`/users/${uid}/packages/${pid}/pages`, payload).then(() => $$invalidate(6, saving = false)).catch(console.error);
+    		fetch(`/users/${uid}/packages/${pid}/pages/${body.uid}`, payload).then(() => $$invalidate(6, saving = false)).catch(console.error);
+    	}
+
+    	function addPage() {
+    		$$invalidate(6, saving = true);
+
+    		fetch(`/users/${uid}/packages/${pid}/pages/new`).then(res => res.json()).then(page => {
+    			pages.push(page);
+    			page = pages.length + 1;
+    			$$invalidate(6, saving = false);
+    		}).catch(console.error);
     	}
 
     	const nextPage = () => page + 1 > pages.length
@@ -4724,6 +4759,8 @@ var app = (function () {
     		$$invalidate(3, pages);
     		$$invalidate(2, page);
     	}
+
+    	const click_handler = (_package, e) => onSave(_package, pages[page - 1]);
 
     	$$self.$set = $$props => {
     		if ("uid" in $$props) $$invalidate(0, uid = $$props.uid);
@@ -4787,10 +4824,12 @@ var app = (function () {
     		_package,
     		togglePreview,
     		onSave,
+    		addPage,
     		nextPage,
     		prevPage,
     		getPackage,
-    		textarea_input_handler
+    		textarea_input_handler,
+    		click_handler
     	];
     }
 

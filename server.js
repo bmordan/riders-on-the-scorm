@@ -119,10 +119,18 @@ app.get("/users/:uid/packages/:pid", (req, res) => {
             res.send(err)
         })
 })
-app.post("/users/:uid/packages/:pid/pages", (req, res) => {
+app.get("/users/:uid/packages/:pid/pages/new", (req, res) => {
     const {uid, pid} = req.params
-    dgraph.createPage(uid, pid, req.body)
-        .then(pgid => res.send(pgid))
+    dgraph.createPage(uid, pid)
+        .then(({page}) => res.send(page[0]))
+        .catch(err => {
+            console.error(err)
+            res.send(err)
+        })
+})
+app.post("/users/:uid/packages/:pid/pages/:pgid", (req, res) => {
+    dgraph.updatePage(req.body)
+        .then(() => res.send())
         .catch(err => {
             console.error(err)
             res.send(err)
