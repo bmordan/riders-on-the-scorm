@@ -1,6 +1,6 @@
 <script>
     import { Link } from "svelte-routing"
-    import marked from "marked"
+    import markedex from "./marked-extended"
     
     export let uid
     export let pid
@@ -9,7 +9,7 @@
     $: _package = {}
     $: page = 0
     $: pages = [""]
-    $: html = marked(pages[page])
+    $: html = markedex(pages[page])
     $: showPreview = false
     $: saving = false
 
