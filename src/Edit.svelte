@@ -61,6 +61,22 @@
             .catch(console.error)
     }
 
+    function removePage (_package, page) {
+        saving = true
+
+        const pgid = _package.pages[page].uid
+
+        fetch(`/users/${uid}/packages/${pid}/pages/${pgid}/delete`)
+            .then(res => res.json())
+            .then(([updatedPackage]) => {
+                saving = false
+                _package = updatedPackage
+                pages = _package.pages.map(p => atob(p.markdown))
+                prevPage()
+            })
+            .catch(console.error)
+    }
+
     const nextPage = _package => page + 1 > pages.length - 1 ? page = page : page += 1
     const prevPage = () => page - 1 < 0 ? page = 0 : page -= 1
 </script>
@@ -83,6 +99,7 @@
                     <button disabled={page === 0 && !showPreview} on:click={prevPage}>prev</button>
                     <button disabled={page === pages.length - 1} on:click={e => nextPage(_package)}>next</button>
                     <button disabled={saving} on:click={addPage}>+</button>
+                    <button disabled={saving} on:click={e => removePage(_package, page)}>delete</button>
                 </nav>
             </article>
             <article class="preview">
@@ -138,7 +155,8 @@
         resize: none;
         background-color: salmon;
         padding: 1rem;
-        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-family: 'courier new', 'Courier New', Courier, monospace;
+        font-size: 1.25rem;
         line-height: 1.25rem;
         flex: 1 1 auto;
         min-width: 0;

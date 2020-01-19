@@ -30,12 +30,15 @@
 			.catch(console.error)
 	}
 	
-	async function deletePackage (evt) {
+	function deletePackage (evt) {
 		evt.preventDefault()
 
-		fetch(`/users/${user.uid}/packages/${this.value}/delete`)
+		return fetch(`/users/${user.uid}/packages/${this.value}/delete`)
 			.then(res => res.json())
-			.then(_packages => (packages = _packages))
+			.then(([_packages]) => {
+				console.log(_packages)
+				packages = []
+			})
 			.catch(console.error)
 	}
 
@@ -44,18 +47,20 @@
     <h1>
         <img src={user.picture} alt="avatar" /> {user.name}
     </h1>
-    {#each packages as {uid, title, createdAt}}
-        <Link to={`/users/${user.uid}/packages/${uid}/editor`}>
-            <article>
-                <h2>{title}</h2>
-                <small>{createdAt}</small>
-				<button value={uid} on:click={deletePackage}>Delete</button>
-            </article>
-        </Link>
-    {/each}
-    <article class="create-package" on:click={e => showModel = true}>
-        <h2>new</h2>
-    </article>
+	<section class="packages">
+		{#each packages as {uid, title, createdAt}}
+			<Link to={`/users/${user.uid}/packages/${uid}/editor`}>
+				<article>
+					<h2>{title}</h2>
+					<small>{createdAt}</small>
+					<button value={uid} on:click={deletePackage}>Delete</button>
+				</article>
+			</Link>
+		{/each}
+		<article class="create-package" on:click={e => showModel = true}>
+			<h2>new</h2>
+		</article>
+	</section>
     {#if showModel}
 		<section id="model" on:click={dismissModel}>
 			<form on:submit={createPackage}>
@@ -80,20 +85,20 @@
         border-radius: 50%;
         border: solid 2px black;
     }
+	.packages {
+		display: flex;
+		flex-wrap: wrap;
+	}
     article {
         width: 12rem;
         height: 6rem;
-        background-color: antiquewhite;
+        background-color: lightsalmon;
         border-radius: 3px;
         padding: 1rem;
         margin: 0.5rem;
-        display: inline-block;
     }
     article.create-package {
         cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         opacity: 0.5;
     }
     #model {
@@ -121,6 +126,7 @@
 		z-index: 2;
 	}
 	#model form article {
+		width: auto;
 		flex: 1 1 auto;
 		min-width: 0;
 		min-height: 0;

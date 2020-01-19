@@ -134,26 +134,54 @@ module.exports = {
         }
         return pid
     },
+    deletePageForUser: async (uid, pid, pgid) => {
+        let updatedPackage
+        const txn = dgraphClient.newTxn()
+        try {
+            const mu = new dgraph.Mutation()
+            mu.setDeleteJson([{
+                uid: pid,
+                pages: [
+                    {
+                        uid: pgid
+                    }
+                ]
+            },
+            {
+               uid: pgid 
+            }])
+            await txn.mutate(mu)
+            const result = await txn.queryWithVars(queries.getPackageByUid, {$uid: pid})
+            const { _package } = result.getJson()
+            updatedPackage = _package
+            await txn.commit()
+        } finally {
+            await txn.discard()
+        }
+        return updatedPackage
+    },
     deletePackageForUser: async (uid, pid) => {
         let packages = []
         const txn = dgraphClient.newTxn()
         try {
             const mu = new dgraph.Mutation()
-            mu.setDeleteJson({
+            mu.setDeleteJson([{
                 uid: uid,
                 packages: [
                     {
                         uid: pid
                     }
                 ]
-            })
+            }, {
+                uid: pid
+            }])
             await txn.mutate(mu)
             const result = await txn.queryWithVars(queries.getUserByUid, {$uid: uid})
             const {user} = result.getJson()
-            packages = user[0].packages
+            packages = user[0].packages || []
             await txn.commit()
         } finally {
-            txn.discard()
+            await txn.discard()
         }
         return packages
     }
