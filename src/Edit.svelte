@@ -5,10 +5,11 @@
     export let uid
     export let pid
 
-    $: _package = getPackage(pid)
-    $: page = 1
+    $: promise = getPackage(pid)
+    $: _package = {}
+    $: page = 0
     $: pages = [""]
-    $: html = marked(pages[page - 1])
+    $: html = marked(pages[page])
     $: showPreview = false
     $: saving = false
 
@@ -19,14 +20,16 @@
             .then(res => res.json())
             .catch(console.error)
         _package = result
-        pages = _package.pages.map(({markdown}) => atob(markdown))
-        return result
+        pages = _package.pages.map(p => atob(p.markdown))
+        return _package
     }
 
-    function onSave (_package, markdown) {
+    function onSave (_package, pages) {
         saving = true
 
-        const body = {..._package.pages[page - 1], markdown: btoa(pages[page - 1])}
+        const body = _package.pages.map((packagePage, index) => {
+            return {...packagePage, markdown: btoa(pages[index])}
+        })
 
         const payload = {
 			method: 'post',
@@ -34,8 +37,13 @@
 			body: JSON.stringify(body)
         }
 
-        fetch(`/users/${uid}/packages/${pid}/pages/${body.uid}`, payload)
-            .then(() => (saving = false))
+        return fetch(`/users/${uid}/packages/${pid}/pages/update`, payload)
+            .then(res => res.json())
+            .then(([updatedPackage]) => {
+                saving = false
+                _package = updatedPackage
+                pages = _package.pages.map(p => atob(p.markdown))
+            })
             .catch(console.error)
     }
 
@@ -44,42 +52,45 @@
 
         fetch(`/users/${uid}/packages/${pid}/pages/new`)
             .then(res => res.json())
-            .then(page => {
-                pages.push(page)
-                page = pages.length + 1
+            .then(([updatedPackage]) => {
                 saving = false
+                _package = updatedPackage
+                pages = _package.pages.map(p => atob(p.markdown))
+                page = _package.pages.length - 1
             })
             .catch(console.error)
     }
 
-    const nextPage = () => page + 1 > pages.length ? page : page += 1
-    const prevPage = () => page - 1 === 0 ? 1 : page -= 1
+    const nextPage = _package => page + 1 > pages.length - 1 ? page = page : page += 1
+    const prevPage = () => page - 1 < 0 ? page = 0 : page -= 1
 </script>
 <section class="editor">
     <nav>
         <Link to={`/users/${uid}`}>Exit</Link>
     </nav>
     <section class="editor-flip-frame" style="transform: rotateY({showPreview ? "180" : "0"}deg);">
-        {#await _package}
+        {#await promise}
             <article class="edit">
                 <p>... fetching package {pid}</p>
             </article>
         {:then _package}
             <article class="edit">
-                <h1>{_package.title} {page} of {pages.length}</h1>
-                <textarea id="markdown" name="markdown" focus=true bind:value={pages[page - 1]}></textarea>
+                <h1>{_package.title} {page + 1} of {pages.length}</h1>
+                <textarea id="markdown" name="markdown" focus=true bind:value={pages[page]}></textarea>
                 <nav>
-                    <button disabled={saving} on:click={e => onSave(_package, pages[page - 1])}>Save{saving ? "ing..." : ""}</button>
+                    <button disabled={saving} on:click={e => onSave(_package, pages)}>Save{saving ? "ing..." : ""}</button>
                     <button on:click={togglePreview}>Preview</button>
-                    <button disabled={page === 1} on:click={prevPage}>prev</button>
-                    <button disabled={page === pages.length} on:click={nextPage}>next</button>
+                    <button disabled={page === 0 && !showPreview} on:click={prevPage}>prev</button>
+                    <button disabled={page === pages.length - 1} on:click={e => nextPage(_package)}>next</button>
                     <button disabled={saving} on:click={addPage}>+</button>
                 </nav>
             </article>
             <article class="preview">
                 <article id="html">{@html html}</article>
                 <nav>
+                    <button disabled={page === 0} on:click={prevPage}>prev</button>
                     <button on:click={togglePreview}>Exit Preview</button>
+                    <button disabled={page === pages.length - 1} on:click={e => nextPage(_package)}>next</button>
                 </nav>
             </article>
         {/await}
@@ -134,6 +145,9 @@
         min-height: 0;
         overflow-y: scroll;
         text-align: left;
+    }
+    nav {
+        backface-visibility: hidden;
     }
     button {
         width: 7rem;

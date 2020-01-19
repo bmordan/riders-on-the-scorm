@@ -43,9 +43,10 @@ module.exports = {
             createdAt
             pages {
                 uid
-                page
                 markdown
                 html
+                createdAt
+                updatedAt
             }
             sharedWith {
                 uid

@@ -93,7 +93,6 @@ module.exports = {
         return currentPackage
     },
     createPage: async (uid, pid) => {
-        let page = {}
         const txn = dgraphClient.newTxn()
         try {
             const mu = new dgraph.Mutation()
@@ -112,29 +111,28 @@ module.exports = {
                     }
                 ]
             })
-            const mutation = await txn.mutate(mu)
-            const pgid = mutation.getUidsMap().get("newpage")
-            const result = await txn.queryWithVars(queries.getPageByUid, {$uid: pgid})
-            page = result.getJson()
-            await txn.commit()
-        } finally {
-            await txn.discard()
-        }
-        return page
-    },
-    updatePage: async (update) => {
-        console.log({...update, updatedAt: new Date().toISOString()})
-        const txn = dgraphClient.newTxn()
-        try {
-            const mu = new dgraph.Mutation()
-            mu.setSetJson({...update, updatedAt: new Date().toISOString()})
-            console.log({...update, updatedAt: new Date().toISOString()})
             await txn.mutate(mu)
             await txn.commit()
         } finally {
             await txn.discard()
         }
-        return
+        return pid
+    },
+    updatePages: async (pid, update) => {
+        const updateTimestamped = {
+            uid: pid,
+            pages: update.map(page => ({...page, updatedAt: new Date().toISOString()}))
+        }
+        const txn = dgraphClient.newTxn()
+        try {
+            const mu = new dgraph.Mutation()
+            mu.setSetJson(updateTimestamped)
+            await txn.mutate(mu)
+            await txn.commit()
+        } finally {
+            await txn.discard()
+        }
+        return pid
     },
     deletePackageForUser: async (uid, pid) => {
         let packages = []

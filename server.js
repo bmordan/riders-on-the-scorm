@@ -122,15 +122,17 @@ app.get("/users/:uid/packages/:pid", (req, res) => {
 app.get("/users/:uid/packages/:pid/pages/new", (req, res) => {
     const {uid, pid} = req.params
     dgraph.createPage(uid, pid)
-        .then(({page}) => res.send(page[0]))
+        .then(pid => dgraph.getPackage(pid))
+        .then(_package => res.send(_package))
         .catch(err => {
             console.error(err)
             res.send(err)
         })
 })
-app.post("/users/:uid/packages/:pid/pages/:pgid", (req, res) => {
-    dgraph.updatePage(req.body)
-        .then(() => res.send())
+app.post("/users/:uid/packages/:pid/pages/update", (req, res) => {
+    dgraph.updatePages(req.params.pid, req.body)
+        .then(pid => dgraph.getPackage(pid))
+        .then(_package => res.send(_package))
         .catch(err => {
             console.error(err)
             res.send(err)

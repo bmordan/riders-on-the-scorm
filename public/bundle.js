@@ -4307,7 +4307,7 @@ var app = (function () {
     const { console: console_1$1 } = globals;
     const file$2 = "src/Edit.svelte";
 
-    // (60:8) <Link to={`/users/${uid}`}>
+    // (69:8) <Link to={`/users/${uid}`}>
     function create_default_slot$1(ctx) {
     	let t;
 
@@ -4327,7 +4327,7 @@ var app = (function () {
     		block,
     		id: create_default_slot$1.name,
     		type: "slot",
-    		source: "(60:8) <Link to={`/users/${uid}`}>",
+    		source: "(69:8) <Link to={`/users/${uid}`}>",
     		ctx
     	});
 
@@ -4349,16 +4349,17 @@ var app = (function () {
     	return block;
     }
 
-    // (67:8) {:then _package}
+    // (76:8) {:then _package}
     function create_then_block(ctx) {
     	let article0;
     	let h1;
-    	let t0_value = /*_package*/ ctx[7].title + "";
+    	let t0_value = /*_package*/ ctx[8].title + "";
     	let t0;
     	let t1;
+    	let t2_value = /*page*/ ctx[3] + 1 + "";
     	let t2;
     	let t3;
-    	let t4_value = /*pages*/ ctx[3].length + "";
+    	let t4_value = /*pages*/ ctx[4].length + "";
     	let t4;
     	let t5;
     	let textarea;
@@ -4366,7 +4367,7 @@ var app = (function () {
     	let nav0;
     	let button0;
     	let t7;
-    	let t8_value = (/*saving*/ ctx[6] ? "ing..." : "") + "";
+    	let t8_value = (/*saving*/ ctx[7] ? "ing..." : "") + "";
     	let t8;
     	let t9;
     	let button1;
@@ -4387,10 +4388,26 @@ var app = (function () {
     	let t18;
     	let nav1;
     	let button5;
+    	let t19;
+    	let button5_disabled_value;
+    	let t20;
+    	let button6;
+    	let t22;
+    	let button7;
+    	let t23;
+    	let button7_disabled_value;
     	let dispose;
 
     	function click_handler(...args) {
-    		return /*click_handler*/ ctx[15](/*_package*/ ctx[7], ...args);
+    		return /*click_handler*/ ctx[16](/*_package*/ ctx[8], ...args);
+    	}
+
+    	function click_handler_1(...args) {
+    		return /*click_handler_1*/ ctx[17](/*_package*/ ctx[8], ...args);
+    	}
+
+    	function click_handler_2(...args) {
+    		return /*click_handler_2*/ ctx[18](/*_package*/ ctx[8], ...args);
     	}
 
     	const block = {
@@ -4399,7 +4416,7 @@ var app = (function () {
     			h1 = element("h1");
     			t0 = text(t0_value);
     			t1 = space();
-    			t2 = text(/*page*/ ctx[2]);
+    			t2 = text(t2_value);
     			t3 = text(" of ");
     			t4 = text(t4_value);
     			t5 = space();
@@ -4427,47 +4444,63 @@ var app = (function () {
     			t18 = space();
     			nav1 = element("nav");
     			button5 = element("button");
-    			button5.textContent = "Exit Preview";
-    			add_location(h1, file$2, 68, 16, 1977);
+    			t19 = text("prev");
+    			t20 = space();
+    			button6 = element("button");
+    			button6.textContent = "Exit Preview";
+    			t22 = space();
+    			button7 = element("button");
+    			t23 = text("next");
+    			add_location(h1, file$2, 77, 16, 2354);
     			attr_dev(textarea, "id", "markdown");
     			attr_dev(textarea, "name", "markdown");
     			attr_dev(textarea, "focus", "true");
-    			attr_dev(textarea, "class", "svelte-14fhh6q");
-    			add_location(textarea, file$2, 69, 16, 2044);
-    			button0.disabled = /*saving*/ ctx[6];
-    			attr_dev(button0, "class", "svelte-14fhh6q");
-    			add_location(button0, file$2, 71, 20, 2178);
-    			attr_dev(button1, "class", "svelte-14fhh6q");
-    			add_location(button1, file$2, 72, 20, 2312);
-    			button2.disabled = button2_disabled_value = /*page*/ ctx[2] === 1;
-    			attr_dev(button2, "class", "svelte-14fhh6q");
-    			add_location(button2, file$2, 73, 20, 2382);
-    			button3.disabled = button3_disabled_value = /*page*/ ctx[2] === /*pages*/ ctx[3].length;
-    			attr_dev(button3, "class", "svelte-14fhh6q");
-    			add_location(button3, file$2, 74, 20, 2466);
-    			button4.disabled = /*saving*/ ctx[6];
-    			attr_dev(button4, "class", "svelte-14fhh6q");
-    			add_location(button4, file$2, 75, 20, 2561);
-    			add_location(nav0, file$2, 70, 16, 2152);
-    			attr_dev(article0, "class", "edit svelte-14fhh6q");
-    			add_location(article0, file$2, 67, 12, 1938);
+    			attr_dev(textarea, "class", "svelte-nhwuz1");
+    			add_location(textarea, file$2, 78, 16, 2425);
+    			button0.disabled = /*saving*/ ctx[7];
+    			attr_dev(button0, "class", "svelte-nhwuz1");
+    			add_location(button0, file$2, 80, 20, 2555);
+    			attr_dev(button1, "class", "svelte-nhwuz1");
+    			add_location(button1, file$2, 81, 20, 2679);
+    			button2.disabled = button2_disabled_value = /*page*/ ctx[3] === 0 && !/*showPreview*/ ctx[6];
+    			attr_dev(button2, "class", "svelte-nhwuz1");
+    			add_location(button2, file$2, 82, 20, 2749);
+    			button3.disabled = button3_disabled_value = /*page*/ ctx[3] === /*pages*/ ctx[4].length - 1;
+    			attr_dev(button3, "class", "svelte-nhwuz1");
+    			add_location(button3, file$2, 83, 20, 2849);
+    			button4.disabled = /*saving*/ ctx[7];
+    			attr_dev(button4, "class", "svelte-nhwuz1");
+    			add_location(button4, file$2, 84, 20, 2963);
+    			attr_dev(nav0, "class", "svelte-nhwuz1");
+    			add_location(nav0, file$2, 79, 16, 2529);
+    			attr_dev(article0, "class", "edit svelte-nhwuz1");
+    			add_location(article0, file$2, 76, 12, 2315);
     			attr_dev(article1, "id", "html");
-    			attr_dev(article1, "class", "svelte-14fhh6q");
-    			add_location(article1, file$2, 79, 16, 2717);
-    			attr_dev(button5, "class", "svelte-14fhh6q");
-    			add_location(button5, file$2, 81, 20, 2801);
-    			add_location(nav1, file$2, 80, 16, 2775);
-    			attr_dev(article2, "class", "preview svelte-14fhh6q");
-    			add_location(article2, file$2, 78, 12, 2675);
+    			attr_dev(article1, "class", "svelte-nhwuz1");
+    			add_location(article1, file$2, 88, 16, 3119);
+    			button5.disabled = button5_disabled_value = /*page*/ ctx[3] === 0;
+    			attr_dev(button5, "class", "svelte-nhwuz1");
+    			add_location(button5, file$2, 90, 20, 3203);
+    			attr_dev(button6, "class", "svelte-nhwuz1");
+    			add_location(button6, file$2, 91, 20, 3287);
+    			button7.disabled = button7_disabled_value = /*page*/ ctx[3] === /*pages*/ ctx[4].length - 1;
+    			attr_dev(button7, "class", "svelte-nhwuz1");
+    			add_location(button7, file$2, 92, 20, 3362);
+    			attr_dev(nav1, "class", "svelte-nhwuz1");
+    			add_location(nav1, file$2, 89, 16, 3177);
+    			attr_dev(article2, "class", "preview svelte-nhwuz1");
+    			add_location(article2, file$2, 87, 12, 3077);
 
     			dispose = [
-    				listen_dev(textarea, "input", /*textarea_input_handler*/ ctx[14]),
+    				listen_dev(textarea, "input", /*textarea_input_handler*/ ctx[15]),
     				listen_dev(button0, "click", click_handler, false, false, false),
-    				listen_dev(button1, "click", /*togglePreview*/ ctx[8], false, false, false),
-    				listen_dev(button2, "click", /*prevPage*/ ctx[12], false, false, false),
-    				listen_dev(button3, "click", /*nextPage*/ ctx[11], false, false, false),
-    				listen_dev(button4, "click", /*addPage*/ ctx[10], false, false, false),
-    				listen_dev(button5, "click", /*togglePreview*/ ctx[8], false, false, false)
+    				listen_dev(button1, "click", /*togglePreview*/ ctx[9], false, false, false),
+    				listen_dev(button2, "click", /*prevPage*/ ctx[13], false, false, false),
+    				listen_dev(button3, "click", click_handler_1, false, false, false),
+    				listen_dev(button4, "click", /*addPage*/ ctx[11], false, false, false),
+    				listen_dev(button5, "click", /*prevPage*/ ctx[13], false, false, false),
+    				listen_dev(button6, "click", /*togglePreview*/ ctx[9], false, false, false),
+    				listen_dev(button7, "click", click_handler_2, false, false, false)
     			];
     		},
     		m: function mount(target, anchor) {
@@ -4480,7 +4513,7 @@ var app = (function () {
     			append_dev(h1, t4);
     			append_dev(article0, t5);
     			append_dev(article0, textarea);
-    			set_input_value(textarea, /*pages*/ ctx[3][/*page*/ ctx[2] - 1]);
+    			set_input_value(textarea, /*pages*/ ctx[4][/*page*/ ctx[3]]);
     			append_dev(article0, t6);
     			append_dev(article0, nav0);
     			append_dev(nav0, button0);
@@ -4500,40 +4533,54 @@ var app = (function () {
     			insert_dev(target, t17, anchor);
     			insert_dev(target, article2, anchor);
     			append_dev(article2, article1);
-    			article1.innerHTML = /*html*/ ctx[4];
+    			article1.innerHTML = /*html*/ ctx[5];
     			append_dev(article2, t18);
     			append_dev(article2, nav1);
     			append_dev(nav1, button5);
+    			append_dev(button5, t19);
+    			append_dev(nav1, t20);
+    			append_dev(nav1, button6);
+    			append_dev(nav1, t22);
+    			append_dev(nav1, button7);
+    			append_dev(button7, t23);
     		},
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
-    			if (dirty & /*_package*/ 128 && t0_value !== (t0_value = /*_package*/ ctx[7].title + "")) set_data_dev(t0, t0_value);
-    			if (dirty & /*page*/ 4) set_data_dev(t2, /*page*/ ctx[2]);
-    			if (dirty & /*pages*/ 8 && t4_value !== (t4_value = /*pages*/ ctx[3].length + "")) set_data_dev(t4, t4_value);
+    			if (dirty & /*promise*/ 4 && t0_value !== (t0_value = /*_package*/ ctx[8].title + "")) set_data_dev(t0, t0_value);
+    			if (dirty & /*page*/ 8 && t2_value !== (t2_value = /*page*/ ctx[3] + 1 + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*pages*/ 16 && t4_value !== (t4_value = /*pages*/ ctx[4].length + "")) set_data_dev(t4, t4_value);
 
-    			if (dirty & /*pages, page*/ 12) {
-    				set_input_value(textarea, /*pages*/ ctx[3][/*page*/ ctx[2] - 1]);
+    			if (dirty & /*pages, page*/ 24) {
+    				set_input_value(textarea, /*pages*/ ctx[4][/*page*/ ctx[3]]);
     			}
 
-    			if (dirty & /*saving*/ 64 && t8_value !== (t8_value = (/*saving*/ ctx[6] ? "ing..." : "") + "")) set_data_dev(t8, t8_value);
+    			if (dirty & /*saving*/ 128 && t8_value !== (t8_value = (/*saving*/ ctx[7] ? "ing..." : "") + "")) set_data_dev(t8, t8_value);
 
-    			if (dirty & /*saving*/ 64) {
-    				prop_dev(button0, "disabled", /*saving*/ ctx[6]);
+    			if (dirty & /*saving*/ 128) {
+    				prop_dev(button0, "disabled", /*saving*/ ctx[7]);
     			}
 
-    			if (dirty & /*page*/ 4 && button2_disabled_value !== (button2_disabled_value = /*page*/ ctx[2] === 1)) {
+    			if (dirty & /*page, showPreview*/ 72 && button2_disabled_value !== (button2_disabled_value = /*page*/ ctx[3] === 0 && !/*showPreview*/ ctx[6])) {
     				prop_dev(button2, "disabled", button2_disabled_value);
     			}
 
-    			if (dirty & /*page, pages*/ 12 && button3_disabled_value !== (button3_disabled_value = /*page*/ ctx[2] === /*pages*/ ctx[3].length)) {
+    			if (dirty & /*page, pages*/ 24 && button3_disabled_value !== (button3_disabled_value = /*page*/ ctx[3] === /*pages*/ ctx[4].length - 1)) {
     				prop_dev(button3, "disabled", button3_disabled_value);
     			}
 
-    			if (dirty & /*saving*/ 64) {
-    				prop_dev(button4, "disabled", /*saving*/ ctx[6]);
+    			if (dirty & /*saving*/ 128) {
+    				prop_dev(button4, "disabled", /*saving*/ ctx[7]);
     			}
 
-    			if (dirty & /*html*/ 16) article1.innerHTML = /*html*/ ctx[4];		},
+    			if (dirty & /*html*/ 32) article1.innerHTML = /*html*/ ctx[5];
+    			if (dirty & /*page*/ 8 && button5_disabled_value !== (button5_disabled_value = /*page*/ ctx[3] === 0)) {
+    				prop_dev(button5, "disabled", button5_disabled_value);
+    			}
+
+    			if (dirty & /*page, pages*/ 24 && button7_disabled_value !== (button7_disabled_value = /*page*/ ctx[3] === /*pages*/ ctx[4].length - 1)) {
+    				prop_dev(button7, "disabled", button7_disabled_value);
+    			}
+    		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(article0);
     			if (detaching) detach_dev(t17);
@@ -4546,14 +4593,14 @@ var app = (function () {
     		block,
     		id: create_then_block.name,
     		type: "then",
-    		source: "(67:8) {:then _package}",
+    		source: "(76:8) {:then _package}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (63:25)              <article class="edit">                 <p>... fetching package {pid}
+    // (72:24)              <article class="edit">                 <p>... fetching package {pid}
     function create_pending_block(ctx) {
     	let article;
     	let p;
@@ -4566,9 +4613,9 @@ var app = (function () {
     			p = element("p");
     			t0 = text("... fetching package ");
     			t1 = text(/*pid*/ ctx[1]);
-    			add_location(p, file$2, 64, 16, 1844);
-    			attr_dev(article, "class", "edit svelte-14fhh6q");
-    			add_location(article, file$2, 63, 12, 1805);
+    			add_location(p, file$2, 73, 16, 2221);
+    			attr_dev(article, "class", "edit svelte-nhwuz1");
+    			add_location(article, file$2, 72, 12, 2182);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, article, anchor);
@@ -4588,7 +4635,7 @@ var app = (function () {
     		block,
     		id: create_pending_block.name,
     		type: "pending",
-    		source: "(63:25)              <article class=\\\"edit\\\">                 <p>... fetching package {pid}",
+    		source: "(72:24)              <article class=\\\"edit\\\">                 <p>... fetching package {pid}",
     		ctx
     	});
 
@@ -4600,7 +4647,7 @@ var app = (function () {
     	let nav;
     	let t;
     	let section0;
-    	let promise;
+    	let promise_1;
     	let current;
 
     	const link = new Link({
@@ -4619,10 +4666,10 @@ var app = (function () {
     		pending: create_pending_block,
     		then: create_then_block,
     		catch: create_catch_block,
-    		value: 7
+    		value: 8
     	};
 
-    	handle_promise(promise = /*_package*/ ctx[7], info);
+    	handle_promise(promise_1 = /*promise*/ ctx[2], info);
 
     	const block = {
     		c: function create() {
@@ -4632,12 +4679,13 @@ var app = (function () {
     			t = space();
     			section0 = element("section");
     			info.block.c();
-    			add_location(nav, file$2, 58, 4, 1603);
-    			attr_dev(section0, "class", "editor-flip-frame svelte-14fhh6q");
-    			set_style(section0, "transform", "rotateY(" + (/*showPreview*/ ctx[5] ? "180" : "0") + "deg)");
-    			add_location(section0, file$2, 61, 4, 1671);
-    			attr_dev(section1, "class", "editor svelte-14fhh6q");
-    			add_location(section1, file$2, 57, 0, 1574);
+    			attr_dev(nav, "class", "svelte-nhwuz1");
+    			add_location(nav, file$2, 67, 4, 1981);
+    			attr_dev(section0, "class", "editor-flip-frame svelte-nhwuz1");
+    			set_style(section0, "transform", "rotateY(" + (/*showPreview*/ ctx[6] ? "180" : "0") + "deg)");
+    			add_location(section0, file$2, 70, 4, 2049);
+    			attr_dev(section1, "class", "editor svelte-nhwuz1");
+    			add_location(section1, file$2, 66, 0, 1952);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -4658,21 +4706,21 @@ var app = (function () {
     			const link_changes = {};
     			if (dirty & /*uid*/ 1) link_changes.to = `/users/${/*uid*/ ctx[0]}`;
 
-    			if (dirty & /*$$scope*/ 65536) {
+    			if (dirty & /*$$scope*/ 524288) {
     				link_changes.$$scope = { dirty, ctx };
     			}
 
     			link.$set(link_changes);
     			info.ctx = ctx;
 
-    			if (dirty & /*_package*/ 128 && promise !== (promise = /*_package*/ ctx[7]) && handle_promise(promise, info)) ; else {
+    			if (dirty & /*promise*/ 4 && promise_1 !== (promise_1 = /*promise*/ ctx[2]) && handle_promise(promise_1, info)) ; else {
     				const child_ctx = ctx.slice();
-    				child_ctx[7] = info.resolved;
+    				child_ctx[8] = info.resolved;
     				info.block.p(child_ctx, dirty);
     			}
 
-    			if (!current || dirty & /*showPreview*/ 32) {
-    				set_style(section0, "transform", "rotateY(" + (/*showPreview*/ ctx[5] ? "180" : "0") + "deg)");
+    			if (!current || dirty & /*showPreview*/ 64) {
+    				set_style(section0, "transform", "rotateY(" + (/*showPreview*/ ctx[6] ? "180" : "0") + "deg)");
     			}
     		},
     		i: function intro(local) {
@@ -4707,22 +4755,24 @@ var app = (function () {
     function instance$4($$self, $$props, $$invalidate) {
     	let { uid } = $$props;
     	let { pid } = $$props;
-    	const togglePreview = () => $$invalidate(5, showPreview = !showPreview);
+    	const togglePreview = () => $$invalidate(6, showPreview = !showPreview);
 
     	async function getPackage(pid) {
     		const [result] = await fetch(`/users/${uid}/packages/${pid}`).then(res => res.json()).catch(console.error);
-    		$$invalidate(7, _package = result);
-    		$$invalidate(3, pages = _package.pages.map(({ markdown }) => atob(markdown)));
-    		return result;
+    		$$invalidate(8, _package = result);
+    		$$invalidate(4, pages = _package.pages.map(p => atob(p.markdown)));
+    		return _package;
     	}
 
-    	function onSave(_package, markdown) {
-    		$$invalidate(6, saving = true);
+    	function onSave(_package, pages) {
+    		$$invalidate(7, saving = true);
 
-    		const body = {
-    			..._package.pages[page - 1],
-    			markdown: btoa(pages[page - 1])
-    		};
+    		const body = _package.pages.map((packagePage, index) => {
+    			return {
+    				...packagePage,
+    				markdown: btoa(pages[index])
+    			};
+    		});
 
     		const payload = {
     			method: "post",
@@ -4730,24 +4780,32 @@ var app = (function () {
     			body: JSON.stringify(body)
     		};
 
-    		fetch(`/users/${uid}/packages/${pid}/pages/${body.uid}`, payload).then(() => $$invalidate(6, saving = false)).catch(console.error);
-    	}
-
-    	function addPage() {
-    		$$invalidate(6, saving = true);
-
-    		fetch(`/users/${uid}/packages/${pid}/pages/new`).then(res => res.json()).then(page => {
-    			pages.push(page);
-    			page = pages.length + 1;
-    			$$invalidate(6, saving = false);
+    		return fetch(`/users/${uid}/packages/${pid}/pages/update`, payload).then(res => res.json()).then(([updatedPackage]) => {
+    			$$invalidate(7, saving = false);
+    			_package = updatedPackage;
+    			pages = _package.pages.map(p => atob(p.markdown));
     		}).catch(console.error);
     	}
 
-    	const nextPage = () => page + 1 > pages.length
-    	? page
-    	: $$invalidate(2, page += 1);
+    	function addPage() {
+    		$$invalidate(7, saving = true);
 
-    	const prevPage = () => page - 1 === 0 ? 1 : $$invalidate(2, page -= 1);
+    		fetch(`/users/${uid}/packages/${pid}/pages/new`).then(res => res.json()).then(([updatedPackage]) => {
+    			$$invalidate(7, saving = false);
+    			$$invalidate(8, _package = updatedPackage);
+    			$$invalidate(4, pages = _package.pages.map(p => atob(p.markdown)));
+    			$$invalidate(3, page = _package.pages.length - 1);
+    		}).catch(console.error);
+    	}
+
+    	const nextPage = _package => page + 1 > pages.length - 1
+    	? $$invalidate(3, page)
+    	: $$invalidate(3, page += 1);
+
+    	const prevPage = () => page - 1 < 0
+    	? $$invalidate(3, page = 0)
+    	: $$invalidate(3, page -= 1);
+
     	const writable_props = ["uid", "pid"];
 
     	Object.keys($$props).forEach(key => {
@@ -4755,12 +4813,14 @@ var app = (function () {
     	});
 
     	function textarea_input_handler() {
-    		pages[page - 1] = this.value;
-    		$$invalidate(3, pages);
-    		$$invalidate(2, page);
+    		pages[page] = this.value;
+    		$$invalidate(4, pages);
+    		$$invalidate(3, page);
     	}
 
-    	const click_handler = (_package, e) => onSave(_package, pages[page - 1]);
+    	const click_handler = (_package, e) => onSave(_package, pages);
+    	const click_handler_1 = (_package, e) => nextPage();
+    	const click_handler_2 = (_package, e) => nextPage();
 
     	$$self.$set = $$props => {
     		if ("uid" in $$props) $$invalidate(0, uid = $$props.uid);
@@ -4771,6 +4831,7 @@ var app = (function () {
     		return {
     			uid,
     			pid,
+    			promise,
     			_package,
     			page,
     			pages,
@@ -4783,14 +4844,16 @@ var app = (function () {
     	$$self.$inject_state = $$props => {
     		if ("uid" in $$props) $$invalidate(0, uid = $$props.uid);
     		if ("pid" in $$props) $$invalidate(1, pid = $$props.pid);
-    		if ("_package" in $$props) $$invalidate(7, _package = $$props._package);
-    		if ("page" in $$props) $$invalidate(2, page = $$props.page);
-    		if ("pages" in $$props) $$invalidate(3, pages = $$props.pages);
-    		if ("html" in $$props) $$invalidate(4, html = $$props.html);
-    		if ("showPreview" in $$props) $$invalidate(5, showPreview = $$props.showPreview);
-    		if ("saving" in $$props) $$invalidate(6, saving = $$props.saving);
+    		if ("promise" in $$props) $$invalidate(2, promise = $$props.promise);
+    		if ("_package" in $$props) $$invalidate(8, _package = $$props._package);
+    		if ("page" in $$props) $$invalidate(3, page = $$props.page);
+    		if ("pages" in $$props) $$invalidate(4, pages = $$props.pages);
+    		if ("html" in $$props) $$invalidate(5, html = $$props.html);
+    		if ("showPreview" in $$props) $$invalidate(6, showPreview = $$props.showPreview);
+    		if ("saving" in $$props) $$invalidate(7, saving = $$props.saving);
     	};
 
+    	let promise;
     	let _package;
     	let page;
     	let pages;
@@ -4800,22 +4863,24 @@ var app = (function () {
 
     	$$self.$$.update = () => {
     		if ($$self.$$.dirty & /*pid*/ 2) {
-    			 $$invalidate(7, _package = getPackage(pid));
+    			 $$invalidate(2, promise = getPackage(pid));
     		}
 
-    		if ($$self.$$.dirty & /*pages, page*/ 12) {
-    			 $$invalidate(4, html = marked_1(pages[page - 1]));
+    		if ($$self.$$.dirty & /*pages, page*/ 24) {
+    			 $$invalidate(5, html = marked_1(pages[page]));
     		}
     	};
 
-    	 $$invalidate(2, page = 1);
-    	 $$invalidate(3, pages = [""]);
-    	 $$invalidate(5, showPreview = false);
-    	 $$invalidate(6, saving = false);
+    	 $$invalidate(8, _package = {});
+    	 $$invalidate(3, page = 0);
+    	 $$invalidate(4, pages = [""]);
+    	 $$invalidate(6, showPreview = false);
+    	 $$invalidate(7, saving = false);
 
     	return [
     		uid,
     		pid,
+    		promise,
     		page,
     		pages,
     		html,
@@ -4829,7 +4894,9 @@ var app = (function () {
     		prevPage,
     		getPackage,
     		textarea_input_handler,
-    		click_handler
+    		click_handler,
+    		click_handler_1,
+    		click_handler_2
     	];
     }
 
