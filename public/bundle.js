@@ -7563,8 +7563,13 @@ var app = (function () {
                     .map(token => token.match(/\[q\]/))
                     .map((token, index) => token ? index : null)
                     .filter(index => index);
-                console.log(lensMap);
-                console.log(lensMap.map(i => tokenised[i]));
+
+                const markdown = lensMap
+                    .map(lensIndex => tokenised[lensIndex])
+                    .map(block => block.split(/\n/))
+                    .map(arr => arr.slice(1, arr.length - 1));
+
+                console.log(markdown);
                 return text
             }
         }
