@@ -9,8 +9,8 @@
     $: _package = {}
     $: page = 0
     $: pages = [""]
-    $: html = markedex(pages[page])
     $: showPreview = false
+    $: html = showPreview ? markedex(pages[page]) : ""
     $: saving = false
 
     const togglePreview = () => (showPreview = !showPreview)
@@ -79,6 +79,7 @@
 
     const nextPage = _package => page + 1 > pages.length - 1 ? page = page : page += 1
     const prevPage = () => page - 1 < 0 ? page = 0 : page -= 1
+
 </script>
 <section class="editor">
     <nav>
@@ -92,12 +93,14 @@
         {:then _package}
             <article class="edit">
                 <h1>{_package.title} {page + 1} of {pages.length}</h1>
-                <textarea id="markdown" name="markdown" focus=true bind:value={pages[page]}></textarea>
+                <div id="markdown">
+                    <textarea name="markdown" focus=true bind:value={pages[page]} rows="25"></textarea>
+                </div>
                 <nav>
                     <button disabled={saving} on:click={e => onSave(_package, pages)}>Save{saving ? "ing..." : ""}</button>
                     <button on:click={togglePreview}>Preview</button>
                     <button disabled={page === 0 && !showPreview} on:click={prevPage}>prev</button>
-                    <button disabled={page === pages.length - 1} on:click={e => nextPage(_package)}>next</button>
+                    <button disabled={page === pages.length - 1 && !showPreview} on:click={e => nextPage(_package)}>next</button>
                     <button disabled={saving} on:click={addPage}>+</button>
                     <button disabled={saving} on:click={e => removePage(_package, page)}>delete</button>
                 </nav>
@@ -117,8 +120,8 @@
     .editor {
         margin: auto;
         background-color: transparent;
-        width: 90vw;
-        height: 80vh;
+        width: 95vw;
+        height: 90vh;
         perspective: 2000px;
     }
     .editor-flip-frame {
@@ -126,11 +129,12 @@
         width: 100%;
         height: 100%;
         border: solid 2px black;
+        box-sizing: border-box;
         text-align: center;
         transition: transform 0.6s cubic-bezier(0.13, 0.77, 0.81, 1.21);
         transform-style: preserve-3d;
     }
-    .edit {
+    .edit, .preview {
         position: absolute;
         width: 100%;
         height: 100%;
@@ -138,34 +142,32 @@
         background-color: hotpink;
         display: flex;
         flex-direction: column;
-        overflow-y: scroll;
+    }
+    .edit h1 {
+        padding: 0;
+        margin: 0;
     }
     .preview {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        backface-visibility: hidden;
         background-color: lime;
         transform: rotateY(180deg);
-        display: flex;
-        flex-direction: column;
     }
     #markdown, #html {
+        flex: 1 1 auto;
+        overflow-y: scroll;
+    }
+    #markdown textarea {
         border-color: transparent;
+        width: 96%;
         resize: none;
         background-color: salmon;
         padding: 1rem;
         font-family: 'courier new', 'Courier New', Courier, monospace;
         font-size: 1.25rem;
         line-height: 1.25rem;
-        flex: 1 1 auto;
-        min-width: 0;
-        min-height: 0;
-        overflow-y: scroll;
-        text-align: left;
     }
     nav {
         backface-visibility: hidden;
+        background-color: blue;
     }
     button {
         width: 7rem;
