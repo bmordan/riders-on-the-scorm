@@ -6,42 +6,37 @@
     export let pid
 
     $: promise = getPackage(pid)
-    $: _package = {}
+    $: _package = {pages: [{markdown: ""}]}
     $: page = 0
-    $: pages = [""]
     $: showPreview = false
-    $: html = showPreview ? markedex(pages[page]) : ""
+    $: current = _package.pages[page]
+    $: html = showPreview ? markedex(_package.pages[page].markdown) : ""
     $: saving = false
 
     const togglePreview = () => (showPreview = !showPreview)
 
     async function getPackage (pid) {
-        _package = await fetch(`/users/${uid}/packages/${pid}`)
+        return _package = await fetch(`/users/${uid}/packages/${pid}`)
             .then(res => res.json())
             .catch(console.error)
-        pages = _package.pages.map(p => atob(p.markdown))
-        return _package
     }
 
-    function onSave (_package, pages) {
+    function onSave () {
         saving = true
 
-        const body = _package.pages.map((packagePage, index) => {
-            return {...packagePage, markdown: btoa(pages[index])}
-        })
+        const body = _package.pages
 
         const payload = {
 			method: 'post',
 			headers: new Headers({'content-type': 'application/json'}),
 			body: JSON.stringify(body)
         }
-
+        
         return fetch(`/users/${uid}/packages/${pid}/pages/update`, payload)
             .then(res => res.json())
             .then(updatedPackage => {
                 saving = false
                 _package = updatedPackage
-                pages = _package.pages.map(p => atob(p.markdown))
             })
             .catch(err => {
                 saving = false
@@ -57,8 +52,8 @@
             .then(updatedPackage => {
                 saving = false
                 _package = updatedPackage
-                pages = _package.pages.map(p => atob(p.markdown))
                 page = _package.pages.length - 1
+                current = _package.pages[page]
             })
             .catch(err => {
                 saving = false
@@ -66,7 +61,7 @@
             })
     }
 
-    function removePage (_package, page) {
+    function removePage () {
         saving = true
         // many breaks here
         const pgid = _package.pages[page].uid
@@ -76,8 +71,8 @@
             .then(updatedPackage => {
                 saving = false
                 _package = updatedPackage
-                pages = _package.pages.map(p => atob(p.markdown))
-                prevPage()
+                prevPage(page)
+                current = _package.pages[page]
             })
             .catch(err => {
                 saving = false
@@ -85,12 +80,8 @@
             })
     }
 
-    const nextPage = _package => page + 1 > pages.length - 1 ? page = page : page += 1
-    const prevPage = () => page - 1 < 0 ? page = 0 : page -= 1
-
-    const update_score = (score, question, answer) => {
-        console.log({score, question, answer})
-    }
+    const nextPage = () => {page + 1 > _package.pages.length - 1 ? page = page : page += 1}
+    const prevPage = () => {page - 1 < 0 ? page = 0 : page -= 1}
 </script>
 <section class="editor">
     <nav>
@@ -101,19 +92,19 @@
             <article class="edit">
                 <p>... fetching package {pid}</p>
             </article>
-        {:then _package}
+        {:then}
             <article class="edit">
-                <h1>{_package.title} {page + 1} of {pages.length}</h1>
+                <h1>{_package.title} {page + 1} of {_package.pages.length}</h1>
                 <div id="markdown">
-                    <textarea name="markdown" focus=true bind:value={pages[page]} rows="25"></textarea>
+                    <textarea name="markdown" focus=true bind:value={current.markdown} rows="25"></textarea>
                 </div>
                 <nav>
-                    <button disabled={saving} on:click={e => onSave(_package, pages)}>Save{saving ? "ing..." : ""}</button>
+                    <button disabled={saving} on:click={onSave}>Save{saving ? "ing..." : ""}</button>
                     <button on:click={togglePreview}>Preview</button>
                     <button disabled={page === 0 && !showPreview} on:click={prevPage}>prev</button>
-                    <button disabled={page === pages.length - 1 && !showPreview} on:click={e => nextPage(_package)}>next</button>
+                    <button disabled={page === _package.pages.length - 1 && !showPreview} on:click={nextPage}>next</button>
                     <button disabled={saving} on:click={addPage}>+</button>
-                    <button disabled={saving} on:click={e => removePage(_package, page)}>delete</button>
+                    <button disabled={saving} on:click={removePage}>delete</button>
                 </nav>
             </article>
             <article class="preview">
@@ -121,7 +112,7 @@
                 <nav>
                     <button disabled={page === 0} on:click={prevPage}>prev</button>
                     <button on:click={togglePreview}>Exit Preview</button>
-                    <button disabled={page === pages.length - 1} on:click={e => nextPage(_package)}>next</button>
+                    <button disabled={page === _package.pages.length - 1} on:click={nextPage}>next</button>
                 </nav>
             </article>
         {/await}

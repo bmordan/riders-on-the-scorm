@@ -4,7 +4,6 @@ const queries = require('./queries')
 
 const clientStub = new dgraph.DgraphClientStub("localhost:9080", grpc.credentials.createInsecure())
 const dgraphClient = new dgraph.DgraphClient(clientStub)
-const toSlug = str => str.split(" ").join("-").toLowerCase()
 
 async function setSchema() {
     const schema = `
@@ -58,7 +57,7 @@ const createPackage = async (uid, package) => {
                     createdAt: new Date().toISOString(),
                     pages: [
                         {
-                            markdown: "IyBOZXcgUGFnZQ==",
+                            markdown: `# ${package.title}\n`,
                             createdAt: new Date().toISOString()
                         }
                     ]
@@ -88,7 +87,6 @@ const getPackageByUid = async pid => {
     } finally {
         await txn.discard()
     }
-    console.log("getPackageByUid", currentPackage[0])
     return currentPackage[0]
 }
 
@@ -100,7 +98,7 @@ const createPage = async (pid) => {
             uid: pid,
             pages: [
                 {
-                    markdown: "IyBOZXcgUGFnZQ==",
+                    markdown: "# New Page",
                     createdAt: new Date().toISOString()
                 }
             ]
@@ -128,29 +126,6 @@ const updatePages = async (pid, update) => {
         await txn.discard()
     }
     return pid
-}
-
-const insertDefaultPage = async (pid) => {
-    let updatedPackage
-    const txn = dgraphClient.newTxn()
-    try {
-        const mu = new dgraph.Mutation()
-        mu.setSetJson({
-            uid: pid,
-            pages: [
-                {
-                    markdown: "IyBOZXcgUGFnZQ==",
-                    createdAt: new Date().toISOString()
-                }
-            ]
-        })
-        await txn.mutate(mu)
-        await txn.commit()
-        updatedPackage = await getPackageByUid(pid)
-    } finally {
-        await txn.discard()
-    }
-    return updatedPackage
 }
 
 const deletePageForUser = async (pid, pgid) => {
@@ -217,6 +192,5 @@ module.exports = {
     createPage,
     updatePages,
     deletePageForUser,
-    deletePackageForUser,
-    insertDefaultPage
+    deletePackageForUser
 }

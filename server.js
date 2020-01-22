@@ -145,7 +145,11 @@ app.get("/users/:uid/packages/:pid/pages/:pgid/delete", (req, res) => {
     const noPages = _package => !_package.pages || !_package.pages.length
     dgraph.deletePageForUser(pid, pgid)
         .then(_package => {
-            return noPages(_package) ? dgraph.insertDefaultPage(pid) : _package
+            if (noPages(_package)) {
+                return dgraph.createPage(pid).then(pid => dgraph.getPackageByUid(pid))
+            } else {
+                return _package
+            }
         })
         .then(_package => {
             return res.send(_package)
