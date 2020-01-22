@@ -46845,7 +46845,7 @@ var app = (function () {
     const { console: console_1$1 } = globals;
     const file$2 = "src/Edit.svelte";
 
-    // (89:8) <Link to={`/users/${uid}`}>
+    // (97:8) <Link to={`/users/${uid}`}>
     function create_default_slot$1(ctx) {
     	let t;
 
@@ -46865,7 +46865,7 @@ var app = (function () {
     		block,
     		id: create_default_slot$1.name,
     		type: "slot",
-    		source: "(89:8) <Link to={`/users/${uid}`}>",
+    		source: "(97:8) <Link to={`/users/${uid}`}>",
     		ctx
     	});
 
@@ -46887,7 +46887,7 @@ var app = (function () {
     	return block;
     }
 
-    // (96:8) {:then _package}
+    // (104:8) {:then _package}
     function create_then_block(ctx) {
     	let article0;
     	let h1;
@@ -47001,52 +47001,52 @@ var app = (function () {
     			t24 = space();
     			button8 = element("button");
     			t25 = text("next");
-    			attr_dev(h1, "class", "svelte-16p45e0");
-    			add_location(h1, file$2, 97, 16, 2980);
+    			attr_dev(h1, "class", "svelte-107recs");
+    			add_location(h1, file$2, 105, 16, 3188);
     			attr_dev(textarea, "name", "markdown");
     			attr_dev(textarea, "focus", "true");
     			attr_dev(textarea, "rows", "25");
-    			attr_dev(textarea, "class", "svelte-16p45e0");
-    			add_location(textarea, file$2, 99, 20, 3091);
+    			attr_dev(textarea, "class", "svelte-107recs");
+    			add_location(textarea, file$2, 107, 20, 3299);
     			attr_dev(div, "id", "markdown");
-    			attr_dev(div, "class", "svelte-16p45e0");
-    			add_location(div, file$2, 98, 16, 3051);
+    			attr_dev(div, "class", "svelte-107recs");
+    			add_location(div, file$2, 106, 16, 3259);
     			button0.disabled = /*saving*/ ctx[7];
-    			attr_dev(button0, "class", "svelte-16p45e0");
-    			add_location(button0, file$2, 102, 20, 3240);
-    			attr_dev(button1, "class", "svelte-16p45e0");
-    			add_location(button1, file$2, 103, 20, 3364);
+    			attr_dev(button0, "class", "svelte-107recs");
+    			add_location(button0, file$2, 110, 20, 3448);
+    			attr_dev(button1, "class", "svelte-107recs");
+    			add_location(button1, file$2, 111, 20, 3572);
     			button2.disabled = button2_disabled_value = /*page*/ ctx[3] === 0 && !/*showPreview*/ ctx[5];
-    			attr_dev(button2, "class", "svelte-16p45e0");
-    			add_location(button2, file$2, 104, 20, 3434);
+    			attr_dev(button2, "class", "svelte-107recs");
+    			add_location(button2, file$2, 112, 20, 3642);
     			button3.disabled = button3_disabled_value = /*page*/ ctx[3] === /*pages*/ ctx[4].length - 1 && !/*showPreview*/ ctx[5];
-    			attr_dev(button3, "class", "svelte-16p45e0");
-    			add_location(button3, file$2, 105, 20, 3534);
+    			attr_dev(button3, "class", "svelte-107recs");
+    			add_location(button3, file$2, 113, 20, 3742);
     			button4.disabled = /*saving*/ ctx[7];
-    			attr_dev(button4, "class", "svelte-16p45e0");
-    			add_location(button4, file$2, 106, 20, 3664);
+    			attr_dev(button4, "class", "svelte-107recs");
+    			add_location(button4, file$2, 114, 20, 3872);
     			button5.disabled = /*saving*/ ctx[7];
-    			attr_dev(button5, "class", "svelte-16p45e0");
-    			add_location(button5, file$2, 107, 20, 3740);
-    			attr_dev(nav0, "class", "svelte-16p45e0");
-    			add_location(nav0, file$2, 101, 16, 3214);
-    			attr_dev(article0, "class", "edit svelte-16p45e0");
-    			add_location(article0, file$2, 96, 12, 2941);
+    			attr_dev(button5, "class", "svelte-107recs");
+    			add_location(button5, file$2, 115, 20, 3948);
+    			attr_dev(nav0, "class", "svelte-107recs");
+    			add_location(nav0, file$2, 109, 16, 3422);
+    			attr_dev(article0, "class", "edit svelte-107recs");
+    			add_location(article0, file$2, 104, 12, 3149);
     			attr_dev(article1, "id", "html");
-    			attr_dev(article1, "class", "svelte-16p45e0");
-    			add_location(article1, file$2, 111, 16, 3925);
+    			attr_dev(article1, "class", "svelte-107recs");
+    			add_location(article1, file$2, 119, 16, 4133);
     			button6.disabled = button6_disabled_value = /*page*/ ctx[3] === 0;
-    			attr_dev(button6, "class", "svelte-16p45e0");
-    			add_location(button6, file$2, 113, 20, 4009);
-    			attr_dev(button7, "class", "svelte-16p45e0");
-    			add_location(button7, file$2, 114, 20, 4093);
+    			attr_dev(button6, "class", "svelte-107recs");
+    			add_location(button6, file$2, 121, 20, 4217);
+    			attr_dev(button7, "class", "svelte-107recs");
+    			add_location(button7, file$2, 122, 20, 4301);
     			button8.disabled = button8_disabled_value = /*page*/ ctx[3] === /*pages*/ ctx[4].length - 1;
-    			attr_dev(button8, "class", "svelte-16p45e0");
-    			add_location(button8, file$2, 115, 20, 4168);
-    			attr_dev(nav1, "class", "svelte-16p45e0");
-    			add_location(nav1, file$2, 112, 16, 3983);
-    			attr_dev(article2, "class", "preview svelte-16p45e0");
-    			add_location(article2, file$2, 110, 12, 3883);
+    			attr_dev(button8, "class", "svelte-107recs");
+    			add_location(button8, file$2, 123, 20, 4376);
+    			attr_dev(nav1, "class", "svelte-107recs");
+    			add_location(nav1, file$2, 120, 16, 4191);
+    			attr_dev(article2, "class", "preview svelte-107recs");
+    			add_location(article2, file$2, 118, 12, 4091);
 
     			dispose = [
     				listen_dev(textarea, "input", /*textarea_input_handler*/ ctx[17]),
@@ -47159,14 +47159,14 @@ var app = (function () {
     		block,
     		id: create_then_block.name,
     		type: "then",
-    		source: "(96:8) {:then _package}",
+    		source: "(104:8) {:then _package}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (92:24)              <article class="edit">                 <p>... fetching package {pid}
+    // (100:24)              <article class="edit">                 <p>... fetching package {pid}
     function create_pending_block(ctx) {
     	let article;
     	let p;
@@ -47179,9 +47179,9 @@ var app = (function () {
     			p = element("p");
     			t0 = text("... fetching package ");
     			t1 = text(/*pid*/ ctx[1]);
-    			add_location(p, file$2, 93, 16, 2847);
-    			attr_dev(article, "class", "edit svelte-16p45e0");
-    			add_location(article, file$2, 92, 12, 2808);
+    			add_location(p, file$2, 101, 16, 3055);
+    			attr_dev(article, "class", "edit svelte-107recs");
+    			add_location(article, file$2, 100, 12, 3016);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, article, anchor);
@@ -47201,7 +47201,7 @@ var app = (function () {
     		block,
     		id: create_pending_block.name,
     		type: "pending",
-    		source: "(92:24)              <article class=\\\"edit\\\">                 <p>... fetching package {pid}",
+    		source: "(100:24)              <article class=\\\"edit\\\">                 <p>... fetching package {pid}",
     		ctx
     	});
 
@@ -47245,13 +47245,13 @@ var app = (function () {
     			t = space();
     			section0 = element("section");
     			info.block.c();
-    			attr_dev(nav, "class", "svelte-16p45e0");
-    			add_location(nav, file$2, 87, 4, 2607);
-    			attr_dev(section0, "class", "editor-flip-frame svelte-16p45e0");
+    			attr_dev(nav, "class", "svelte-107recs");
+    			add_location(nav, file$2, 95, 4, 2815);
+    			attr_dev(section0, "class", "editor-flip-frame svelte-107recs");
     			set_style(section0, "transform", "rotateY(" + (/*showPreview*/ ctx[5] ? "180" : "0") + "deg)");
-    			add_location(section0, file$2, 90, 4, 2675);
-    			attr_dev(section1, "class", "editor svelte-16p45e0");
-    			add_location(section1, file$2, 86, 0, 2578);
+    			add_location(section0, file$2, 98, 4, 2883);
+    			attr_dev(section1, "class", "editor svelte-107recs");
+    			add_location(section1, file$2, 94, 0, 2786);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -47324,8 +47324,7 @@ var app = (function () {
     	const togglePreview = () => $$invalidate(5, showPreview = !showPreview);
 
     	async function getPackage(pid) {
-    		const [result] = await fetch(`/users/${uid}/packages/${pid}`).then(res => res.json()).catch(console.error);
-    		$$invalidate(8, _package = result);
+    		$$invalidate(8, _package = await fetch(`/users/${uid}/packages/${pid}`).then(res => res.json()).catch(console.error));
     		$$invalidate(4, pages = _package.pages.map(p => atob(p.markdown)));
     		return _package;
     	}
@@ -47346,34 +47345,43 @@ var app = (function () {
     			body: JSON.stringify(body)
     		};
 
-    		return fetch(`/users/${uid}/packages/${pid}/pages/update`, payload).then(res => res.json()).then(([updatedPackage]) => {
+    		return fetch(`/users/${uid}/packages/${pid}/pages/update`, payload).then(res => res.json()).then(updatedPackage => {
     			$$invalidate(7, saving = false);
     			_package = updatedPackage;
     			pages = _package.pages.map(p => atob(p.markdown));
-    		}).catch(console.error);
+    		}).catch(err => {
+    			$$invalidate(7, saving = false);
+    			console.error(err);
+    		});
     	}
 
     	function addPage() {
     		$$invalidate(7, saving = true);
 
-    		fetch(`/users/${uid}/packages/${pid}/pages/new`).then(res => res.json()).then(([updatedPackage]) => {
+    		fetch(`/users/${uid}/packages/${pid}/pages/new`).then(res => res.json()).then(updatedPackage => {
     			$$invalidate(7, saving = false);
     			$$invalidate(8, _package = updatedPackage);
     			$$invalidate(4, pages = _package.pages.map(p => atob(p.markdown)));
     			$$invalidate(3, page = _package.pages.length - 1);
-    		}).catch(console.error);
+    		}).catch(err => {
+    			$$invalidate(7, saving = false);
+    			console.error(err);
+    		});
     	}
 
     	function removePage(_package, page) {
     		$$invalidate(7, saving = true);
     		const pgid = _package.pages[page].uid;
 
-    		fetch(`/users/${uid}/packages/${pid}/pages/${pgid}/delete`).then(res => res.json()).then(([updatedPackage]) => {
+    		fetch(`/users/${uid}/packages/${pid}/pages/${pgid}/delete`).then(res => res.json()).then(updatedPackage => {
     			$$invalidate(7, saving = false);
     			_package = updatedPackage;
     			$$invalidate(4, pages = _package.pages.map(p => atob(p.markdown)));
     			prevPage();
-    		}).catch(console.error);
+    		}).catch(err => {
+    			$$invalidate(7, saving = false);
+    			console.error(err);
+    		});
     	}
 
     	const nextPage = _package => page + 1 > pages.length - 1

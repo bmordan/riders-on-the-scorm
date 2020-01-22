@@ -16,10 +16,9 @@
     const togglePreview = () => (showPreview = !showPreview)
 
     async function getPackage (pid) {
-        const [result] = await fetch(`/users/${uid}/packages/${pid}`)
+        _package = await fetch(`/users/${uid}/packages/${pid}`)
             .then(res => res.json())
             .catch(console.error)
-        _package = result
         pages = _package.pages.map(p => atob(p.markdown))
         return _package
     }
@@ -39,12 +38,15 @@
 
         return fetch(`/users/${uid}/packages/${pid}/pages/update`, payload)
             .then(res => res.json())
-            .then(([updatedPackage]) => {
+            .then(updatedPackage => {
                 saving = false
                 _package = updatedPackage
                 pages = _package.pages.map(p => atob(p.markdown))
             })
-            .catch(console.error)
+            .catch(err => {
+                saving = false
+                console.error(err)
+            })
     }
 
     function addPage () {
@@ -52,29 +54,35 @@
 
         fetch(`/users/${uid}/packages/${pid}/pages/new`)
             .then(res => res.json())
-            .then(([updatedPackage]) => {
+            .then(updatedPackage => {
                 saving = false
                 _package = updatedPackage
                 pages = _package.pages.map(p => atob(p.markdown))
                 page = _package.pages.length - 1
             })
-            .catch(console.error)
+            .catch(err => {
+                saving = false
+                console.error(err)
+            })
     }
 
     function removePage (_package, page) {
         saving = true
-
+        // many breaks here
         const pgid = _package.pages[page].uid
 
         fetch(`/users/${uid}/packages/${pid}/pages/${pgid}/delete`)
             .then(res => res.json())
-            .then(([updatedPackage]) => {
+            .then(updatedPackage => {
                 saving = false
                 _package = updatedPackage
                 pages = _package.pages.map(p => atob(p.markdown))
                 prevPage()
             })
-            .catch(console.error)
+            .catch(err => {
+                saving = false
+                console.error(err)
+            })
     }
 
     const nextPage = _package => page + 1 > pages.length - 1 ? page = page : page += 1
@@ -157,6 +165,7 @@
     #markdown, #html {
         flex: 1 1 auto;
         overflow-y: scroll;
+        text-align: left;
     }
     #markdown textarea {
         border-color: transparent;
@@ -171,6 +180,7 @@
     nav {
         backface-visibility: hidden;
         background-color: blue;
+        color: white;
     }
     button {
         width: 7rem;
