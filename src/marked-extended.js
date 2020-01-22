@@ -1,22 +1,16 @@
-import showdown from "showdown"
-showdown.extension('multi-choice-questions', function() {
-    return {
-        type: 'lang',
-        filter: function (text, converter, options) {
-            const tokenised = text.split("???")
-            const lensMap = tokenised
-                .map(token => token.match(/\[q\]/))
-                .map((token, index) => token ? index : null)
-                .filter(index => index)
-            console.log(lensMap)
-            console.log(lensMap.map(i => tokenised[i]))
-            return text
-        }
-    }
+import Markdown from 'markdown-it'
+import emoji from 'markdown-it-emoji'
+import highlightjs from 'markdown-it-highlightjs'
+import scorm_quiz from './markdown-it-scorm-quiz'
+const md = new Markdown({
+    html: true, 
+    breaks: true, 
+    linkify: true
 })
-const converter = new showdown.Converter({extensions: ['multi-choice-questions']})
-converter.setFlavor('github')
+.use(emoji)
+.use(highlightjs)
+.use(scorm_quiz)
 
-export default function (md) {
-    return converter.makeHtml(md)
+export default function (markdown) {
+    return md.render(markdown)
 }

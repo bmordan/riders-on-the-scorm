@@ -3,6 +3,9 @@ import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import livereload from 'rollup-plugin-livereload'
 import { terser } from 'rollup-plugin-terser'
+import json from 'rollup-plugin-json'
+import builtins from 'rollup-plugin-node-builtins'
+import nodeGlobals from 'rollup-plugin-node-globals'
 
 const production = !process.env.ROLLUP_WATCH
 
@@ -31,8 +34,9 @@ export default {
 		// consult the documentation for details:
 		// https://github.com/rollup/plugins/tree/master/packages/commonjs
 		resolve({
-			browser: true,
-			dedupe: importee => importee === 'svelte' || importee.startsWith('svelte/')
+			browser: false,
+			dedupe: importee => importee === 'svelte' || importee.startsWith('svelte/'),
+			preferBuiltins: true
 		}),
 		commonjs(),
 
@@ -46,7 +50,10 @@ export default {
 
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify
-		production && terser()
+		production && terser(),
+		json(),
+		nodeGlobals(),
+		builtins()
 	],
 	watch: {
 		clearScreen: false

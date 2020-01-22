@@ -92,7 +92,7 @@
     article {
         width: 12rem;
         height: 6rem;
-        background-color: lightsalmon;
+        background-color: salmon;
         border-radius: 3px;
         padding: 1rem;
         margin: 0.5rem;

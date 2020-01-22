@@ -112,7 +112,7 @@ app.get("/users/:uid/packages/:pid/delete", (req, res) => {
         })
 })
 app.get("/users/:uid/packages/:pid", (req, res) => {
-    dgraph.getPackage(req.params.pid)
+    dgraph.getPackageByUid(req.params.pid)
         .then(_package => {
             res.send(_package)
         })
@@ -123,8 +123,8 @@ app.get("/users/:uid/packages/:pid", (req, res) => {
 })
 app.get("/users/:uid/packages/:pid/pages/new", (req, res) => {
     const {uid, pid} = req.params
-    dgraph.createPage(uid, pid)
-        .then(pid => dgraph.getPackage(pid))
+    dgraph.createPage(pid)
+        .then(pid => dgraph.getPackageByUid(pid))
         .then(_package => res.send(_package))
         .catch(err => {
             console.error(err)
@@ -133,7 +133,7 @@ app.get("/users/:uid/packages/:pid/pages/new", (req, res) => {
 })
 app.post("/users/:uid/packages/:pid/pages/update", (req, res) => {
     dgraph.updatePages(req.params.pid, req.body)
-        .then(pid => dgraph.getPackage(pid))
+        .then(pid => dgraph.getPackageByUid(pid))
         .then(_package => res.send(_package))
         .catch(err => {
             console.error(err)
@@ -141,9 +141,19 @@ app.post("/users/:uid/packages/:pid/pages/update", (req, res) => {
         })
 })
 app.get("/users/:uid/packages/:pid/pages/:pgid/delete", (req, res) => {
-    const {uid, pid, pgid} = req.params
-    dgraph.deletePageForUser(uid, pid, pgid)
-        .then(_package => res.send(_package))
+    const {pid, pgid} = req.params
+    const noPages = _package => !_package.pages || !_package.pages.length
+    dgraph.deletePageForUser(pid, pgid)
+        .then(_package => {
+            if (noPages(_package)) {
+                return dgraph.createPage(pid).then(pid => dgraph.getPackageByUid(pid))
+            } else {
+                return _package
+            }
+        })
+        .then(_package => {
+            return res.send(_package)
+        })
         .catch(err => {
             console.error(err)
             res.send(err)

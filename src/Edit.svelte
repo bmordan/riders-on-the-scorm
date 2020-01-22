@@ -6,45 +6,42 @@
     export let pid
 
     $: promise = getPackage(pid)
-    $: _package = {}
+    $: _package = {pages: [{markdown: ""}]}
     $: page = 0
-    $: pages = [""]
-    $: html = markedex(pages[page])
     $: showPreview = false
+    $: current = _package.pages[page]
+    $: html = showPreview ? markedex(_package.pages[page].markdown) : ""
     $: saving = false
 
     const togglePreview = () => (showPreview = !showPreview)
 
     async function getPackage (pid) {
-        const [result] = await fetch(`/users/${uid}/packages/${pid}`)
+        return _package = await fetch(`/users/${uid}/packages/${pid}`)
             .then(res => res.json())
             .catch(console.error)
-        _package = result
-        pages = _package.pages.map(p => atob(p.markdown))
-        return _package
     }
 
-    function onSave (_package, pages) {
+    function onSave () {
         saving = true
 
-        const body = _package.pages.map((packagePage, index) => {
-            return {...packagePage, markdown: btoa(pages[index])}
-        })
+        const body = _package.pages
 
         const payload = {
 			method: 'post',
 			headers: new Headers({'content-type': 'application/json'}),
 			body: JSON.stringify(body)
         }
-
+        
         return fetch(`/users/${uid}/packages/${pid}/pages/update`, payload)
             .then(res => res.json())
-            .then(([updatedPackage]) => {
+            .then(updatedPackage => {
                 saving = false
                 _package = updatedPackage
-                pages = _package.pages.map(p => atob(p.markdown))
             })
-            .catch(console.error)
+            .catch(err => {
+                saving = false
+                console.error(err)
+            })
     }
 
     function addPage () {
@@ -52,33 +49,39 @@
 
         fetch(`/users/${uid}/packages/${pid}/pages/new`)
             .then(res => res.json())
-            .then(([updatedPackage]) => {
+            .then(updatedPackage => {
                 saving = false
                 _package = updatedPackage
-                pages = _package.pages.map(p => atob(p.markdown))
                 page = _package.pages.length - 1
+                current = _package.pages[page]
             })
-            .catch(console.error)
+            .catch(err => {
+                saving = false
+                console.error(err)
+            })
     }
 
-    function removePage (_package, page) {
+    function removePage () {
         saving = true
-
+        // many breaks here
         const pgid = _package.pages[page].uid
 
         fetch(`/users/${uid}/packages/${pid}/pages/${pgid}/delete`)
             .then(res => res.json())
-            .then(([updatedPackage]) => {
+            .then(updatedPackage => {
                 saving = false
                 _package = updatedPackage
-                pages = _package.pages.map(p => atob(p.markdown))
-                prevPage()
+                prevPage(page)
+                current = _package.pages[page]
             })
-            .catch(console.error)
+            .catch(err => {
+                saving = false
+                console.error(err)
+            })
     }
 
-    const nextPage = _package => page + 1 > pages.length - 1 ? page = page : page += 1
-    const prevPage = () => page - 1 < 0 ? page = 0 : page -= 1
+    const nextPage = () => {page + 1 > _package.pages.length - 1 ? page = page : page += 1}
+    const prevPage = () => {page - 1 < 0 ? page = 0 : page -= 1}
 </script>
 <section class="editor">
     <nav>
@@ -89,17 +92,19 @@
             <article class="edit">
                 <p>... fetching package {pid}</p>
             </article>
-        {:then _package}
+        {:then}
             <article class="edit">
-                <h1>{_package.title} {page + 1} of {pages.length}</h1>
-                <textarea id="markdown" name="markdown" focus=true bind:value={pages[page]}></textarea>
+                <h1>{_package.title} {page + 1} of {_package.pages.length}</h1>
+                <div id="markdown">
+                    <textarea name="markdown" focus=true bind:value={current.markdown} rows="25"></textarea>
+                </div>
                 <nav>
-                    <button disabled={saving} on:click={e => onSave(_package, pages)}>Save{saving ? "ing..." : ""}</button>
+                    <button disabled={saving} on:click={onSave}>Save{saving ? "ing..." : ""}</button>
                     <button on:click={togglePreview}>Preview</button>
                     <button disabled={page === 0 && !showPreview} on:click={prevPage}>prev</button>
-                    <button disabled={page === pages.length - 1} on:click={e => nextPage(_package)}>next</button>
+                    <button disabled={page === _package.pages.length - 1 && !showPreview} on:click={nextPage}>next</button>
                     <button disabled={saving} on:click={addPage}>+</button>
-                    <button disabled={saving} on:click={e => removePage(_package, page)}>delete</button>
+                    <button disabled={saving} on:click={removePage}>delete</button>
                 </nav>
             </article>
             <article class="preview">
@@ -107,7 +112,7 @@
                 <nav>
                     <button disabled={page === 0} on:click={prevPage}>prev</button>
                     <button on:click={togglePreview}>Exit Preview</button>
-                    <button disabled={page === pages.length - 1} on:click={e => nextPage(_package)}>next</button>
+                    <button disabled={page === _package.pages.length - 1} on:click={nextPage}>next</button>
                 </nav>
             </article>
         {/await}
@@ -117,8 +122,8 @@
     .editor {
         margin: auto;
         background-color: transparent;
-        width: 90vw;
-        height: 80vh;
+        width: 95vw;
+        height: 90vh;
         perspective: 2000px;
     }
     .editor-flip-frame {
@@ -126,11 +131,12 @@
         width: 100%;
         height: 100%;
         border: solid 2px black;
+        box-sizing: border-box;
         text-align: center;
         transition: transform 0.6s cubic-bezier(0.13, 0.77, 0.81, 1.21);
         transform-style: preserve-3d;
     }
-    .edit {
+    .edit, .preview {
         position: absolute;
         width: 100%;
         height: 100%;
@@ -138,34 +144,34 @@
         background-color: hotpink;
         display: flex;
         flex-direction: column;
-        overflow-y: scroll;
+    }
+    .edit h1 {
+        padding: 0;
+        margin: 0;
     }
     .preview {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        backface-visibility: hidden;
         background-color: lime;
         transform: rotateY(180deg);
-        display: flex;
-        flex-direction: column;
     }
     #markdown, #html {
+        flex: 1 1 auto;
+        overflow-y: scroll;
+        text-align: left;
+    }
+    #markdown textarea {
         border-color: transparent;
+        width: 96%;
         resize: none;
         background-color: salmon;
         padding: 1rem;
         font-family: 'courier new', 'Courier New', Courier, monospace;
         font-size: 1.25rem;
         line-height: 1.25rem;
-        flex: 1 1 auto;
-        min-width: 0;
-        min-height: 0;
-        overflow-y: scroll;
-        text-align: left;
     }
     nav {
         backface-visibility: hidden;
+        background-color: blue;
+        color: white;
     }
     button {
         width: 7rem;
