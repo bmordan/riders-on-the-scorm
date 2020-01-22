@@ -80,6 +80,9 @@
     const nextPage = _package => page + 1 > pages.length - 1 ? page = page : page += 1
     const prevPage = () => page - 1 < 0 ? page = 0 : page -= 1
 
+    const update_score = (score, question, answer) => {
+        console.log({score, question, answer})
+    }
 </script>
 <section class="editor">
     <nav>

@@ -46769,31 +46769,48 @@ var app = (function () {
     }());
     });
 
+    const tokeniseChildren = (tokens) => {
+        const tokenised = [];
+        let question_opened = false;
+        const forAnswer = new RegExp(/\[[#|\s]\]/);
+        
+        tokens.forEach((token, i) => {
+            const substr = token.content.substring(0,3);
+
+            if (substr === "[q]") {
+                tokenised.push(token.content);
+                question_opened = true;
+            } else if (question_opened && substr.match(forAnswer)) {
+                tokenised.push(token.content);
+                question_opened = false;
+            } else if (!question_opened && substr.match(forAnswer)) {
+                tokenised.push(token.content);
+            } else if (question_opened && token.content.length) {
+                tokenised[tokenised.length - 1] += "<br />" + token.content;
+            } 
+        });
+        return tokenised
+    };
+
     var markdownItScormQuiz = function (md) {
         md.renderer.rules.scorm_quiz = function (tokens, idx, options, env, self) {
-            const answers = tokens[idx].children
-                .filter(token => token.type === 'text')
-                .map(token => token.content);
+            const answers = tokens[idx].children;
             const question = answers.shift();
-            
-            return scorm_quiz_html(question, answers)
-        };
-
-        function scorm_quiz_html (question, answers) {    
-            const [correct_answer] = answers.filter(answer => answer.substring(0, 4) === '[#] ');  
+            const [correct_answer] = answers.filter(answer => answer.substring(0, 3) === '[#]');  
             return `
             <section id="${btoa$1(question)}" style="margin: .5rem 0;">
                 <style>.scorm-quiz-answer:hover {background-color:purple !important;color:white !important;}</style>
-                <article style="padding:1rem;background-color:purple;color:white;">${question.substring(4, question.length)}</article>
+                <article style="padding:1rem;background-color:purple;color:white;">${question.substring(4)}</article>
                 ${answers.map((answer) => {
-                    const score = answer.substring(0, 4) === '[#] ' ? 1 : 0;
-                    const answer_string = answer.substring(4, answer.length);
+                    const score = answer.substring(0, 3) === '[#]' ? 1 : 0;
+                    const answer_string = answer.substring(4);
                     return `
-                        <article class="scorm-quiz-answer" style="margin:0.25rem 0;padding:1rem;color:purple;background-color:white;border:solid 2px purple;" onclick="updateScore('updateScore', ${score}, '${btoa$1(question)}', '${btoa$1(correct_answer)}')">${answer_string}</article>`
+                        <article class="scorm-quiz-answer" style="margin:0.25rem 0;padding:1rem;color:purple;background-color:white;border:solid 2px purple;" onclick="update_score(${score}, '${btoa$1(question)}', '${btoa$1(correct_answer)}')">${answer_string}</article>
+                    `
                 }).join('')}
             </section>
         `
-        }
+        };
         
         md.core.ruler.push('scorm_quiz', state => {
             state.tokens.forEach((token, i) => {
@@ -46803,7 +46820,7 @@ var app = (function () {
                 && token.children[0].content === '???'
                 && token.children[token.children.length - 1].content === '???') {
                     state.tokens[i] = new state.Token('scorm_quiz', 'section', 0);
-                    state.tokens[i].children = token.children.slice(1,-1);
+                    state.tokens[i].children = tokeniseChildren(token.children.slice(1,-1));
                     state.tokens[i].block = true;
                 }
             });
@@ -46828,7 +46845,7 @@ var app = (function () {
     const { console: console_1$1 } = globals;
     const file$2 = "src/Edit.svelte";
 
-    // (86:8) <Link to={`/users/${uid}`}>
+    // (89:8) <Link to={`/users/${uid}`}>
     function create_default_slot$1(ctx) {
     	let t;
 
@@ -46848,7 +46865,7 @@ var app = (function () {
     		block,
     		id: create_default_slot$1.name,
     		type: "slot",
-    		source: "(86:8) <Link to={`/users/${uid}`}>",
+    		source: "(89:8) <Link to={`/users/${uid}`}>",
     		ctx
     	});
 
@@ -46870,7 +46887,7 @@ var app = (function () {
     	return block;
     }
 
-    // (93:8) {:then _package}
+    // (96:8) {:then _package}
     function create_then_block(ctx) {
     	let article0;
     	let h1;
@@ -46924,19 +46941,19 @@ var app = (function () {
     	let dispose;
 
     	function click_handler(...args) {
-    		return /*click_handler*/ ctx[17](/*_package*/ ctx[8], ...args);
+    		return /*click_handler*/ ctx[18](/*_package*/ ctx[8], ...args);
     	}
 
     	function click_handler_1(...args) {
-    		return /*click_handler_1*/ ctx[18](/*_package*/ ctx[8], ...args);
+    		return /*click_handler_1*/ ctx[19](/*_package*/ ctx[8], ...args);
     	}
 
     	function click_handler_2(...args) {
-    		return /*click_handler_2*/ ctx[19](/*_package*/ ctx[8], ...args);
+    		return /*click_handler_2*/ ctx[20](/*_package*/ ctx[8], ...args);
     	}
 
     	function click_handler_3(...args) {
-    		return /*click_handler_3*/ ctx[20](/*_package*/ ctx[8], ...args);
+    		return /*click_handler_3*/ ctx[21](/*_package*/ ctx[8], ...args);
     	}
 
     	const block = {
@@ -46985,54 +47002,54 @@ var app = (function () {
     			button8 = element("button");
     			t25 = text("next");
     			attr_dev(h1, "class", "svelte-16p45e0");
-    			add_location(h1, file$2, 94, 16, 2871);
+    			add_location(h1, file$2, 97, 16, 2980);
     			attr_dev(textarea, "name", "markdown");
     			attr_dev(textarea, "focus", "true");
     			attr_dev(textarea, "rows", "25");
     			attr_dev(textarea, "class", "svelte-16p45e0");
-    			add_location(textarea, file$2, 96, 20, 2982);
+    			add_location(textarea, file$2, 99, 20, 3091);
     			attr_dev(div, "id", "markdown");
     			attr_dev(div, "class", "svelte-16p45e0");
-    			add_location(div, file$2, 95, 16, 2942);
+    			add_location(div, file$2, 98, 16, 3051);
     			button0.disabled = /*saving*/ ctx[7];
     			attr_dev(button0, "class", "svelte-16p45e0");
-    			add_location(button0, file$2, 99, 20, 3131);
+    			add_location(button0, file$2, 102, 20, 3240);
     			attr_dev(button1, "class", "svelte-16p45e0");
-    			add_location(button1, file$2, 100, 20, 3255);
+    			add_location(button1, file$2, 103, 20, 3364);
     			button2.disabled = button2_disabled_value = /*page*/ ctx[3] === 0 && !/*showPreview*/ ctx[5];
     			attr_dev(button2, "class", "svelte-16p45e0");
-    			add_location(button2, file$2, 101, 20, 3325);
+    			add_location(button2, file$2, 104, 20, 3434);
     			button3.disabled = button3_disabled_value = /*page*/ ctx[3] === /*pages*/ ctx[4].length - 1 && !/*showPreview*/ ctx[5];
     			attr_dev(button3, "class", "svelte-16p45e0");
-    			add_location(button3, file$2, 102, 20, 3425);
+    			add_location(button3, file$2, 105, 20, 3534);
     			button4.disabled = /*saving*/ ctx[7];
     			attr_dev(button4, "class", "svelte-16p45e0");
-    			add_location(button4, file$2, 103, 20, 3555);
+    			add_location(button4, file$2, 106, 20, 3664);
     			button5.disabled = /*saving*/ ctx[7];
     			attr_dev(button5, "class", "svelte-16p45e0");
-    			add_location(button5, file$2, 104, 20, 3631);
+    			add_location(button5, file$2, 107, 20, 3740);
     			attr_dev(nav0, "class", "svelte-16p45e0");
-    			add_location(nav0, file$2, 98, 16, 3105);
+    			add_location(nav0, file$2, 101, 16, 3214);
     			attr_dev(article0, "class", "edit svelte-16p45e0");
-    			add_location(article0, file$2, 93, 12, 2832);
+    			add_location(article0, file$2, 96, 12, 2941);
     			attr_dev(article1, "id", "html");
     			attr_dev(article1, "class", "svelte-16p45e0");
-    			add_location(article1, file$2, 108, 16, 3816);
+    			add_location(article1, file$2, 111, 16, 3925);
     			button6.disabled = button6_disabled_value = /*page*/ ctx[3] === 0;
     			attr_dev(button6, "class", "svelte-16p45e0");
-    			add_location(button6, file$2, 110, 20, 3900);
+    			add_location(button6, file$2, 113, 20, 4009);
     			attr_dev(button7, "class", "svelte-16p45e0");
-    			add_location(button7, file$2, 111, 20, 3984);
+    			add_location(button7, file$2, 114, 20, 4093);
     			button8.disabled = button8_disabled_value = /*page*/ ctx[3] === /*pages*/ ctx[4].length - 1;
     			attr_dev(button8, "class", "svelte-16p45e0");
-    			add_location(button8, file$2, 112, 20, 4059);
+    			add_location(button8, file$2, 115, 20, 4168);
     			attr_dev(nav1, "class", "svelte-16p45e0");
-    			add_location(nav1, file$2, 109, 16, 3874);
+    			add_location(nav1, file$2, 112, 16, 3983);
     			attr_dev(article2, "class", "preview svelte-16p45e0");
-    			add_location(article2, file$2, 107, 12, 3774);
+    			add_location(article2, file$2, 110, 12, 3883);
 
     			dispose = [
-    				listen_dev(textarea, "input", /*textarea_input_handler*/ ctx[16]),
+    				listen_dev(textarea, "input", /*textarea_input_handler*/ ctx[17]),
     				listen_dev(button0, "click", click_handler, false, false, false),
     				listen_dev(button1, "click", /*togglePreview*/ ctx[9], false, false, false),
     				listen_dev(button2, "click", /*prevPage*/ ctx[14], false, false, false),
@@ -47142,14 +47159,14 @@ var app = (function () {
     		block,
     		id: create_then_block.name,
     		type: "then",
-    		source: "(93:8) {:then _package}",
+    		source: "(96:8) {:then _package}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (89:24)              <article class="edit">                 <p>... fetching package {pid}
+    // (92:24)              <article class="edit">                 <p>... fetching package {pid}
     function create_pending_block(ctx) {
     	let article;
     	let p;
@@ -47162,9 +47179,9 @@ var app = (function () {
     			p = element("p");
     			t0 = text("... fetching package ");
     			t1 = text(/*pid*/ ctx[1]);
-    			add_location(p, file$2, 90, 16, 2738);
+    			add_location(p, file$2, 93, 16, 2847);
     			attr_dev(article, "class", "edit svelte-16p45e0");
-    			add_location(article, file$2, 89, 12, 2699);
+    			add_location(article, file$2, 92, 12, 2808);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, article, anchor);
@@ -47184,7 +47201,7 @@ var app = (function () {
     		block,
     		id: create_pending_block.name,
     		type: "pending",
-    		source: "(89:24)              <article class=\\\"edit\\\">                 <p>... fetching package {pid}",
+    		source: "(92:24)              <article class=\\\"edit\\\">                 <p>... fetching package {pid}",
     		ctx
     	});
 
@@ -47229,12 +47246,12 @@ var app = (function () {
     			section0 = element("section");
     			info.block.c();
     			attr_dev(nav, "class", "svelte-16p45e0");
-    			add_location(nav, file$2, 84, 4, 2498);
+    			add_location(nav, file$2, 87, 4, 2607);
     			attr_dev(section0, "class", "editor-flip-frame svelte-16p45e0");
     			set_style(section0, "transform", "rotateY(" + (/*showPreview*/ ctx[5] ? "180" : "0") + "deg)");
-    			add_location(section0, file$2, 87, 4, 2566);
+    			add_location(section0, file$2, 90, 4, 2675);
     			attr_dev(section1, "class", "editor svelte-16p45e0");
-    			add_location(section1, file$2, 83, 0, 2469);
+    			add_location(section1, file$2, 86, 0, 2578);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -47255,7 +47272,7 @@ var app = (function () {
     			const link_changes = {};
     			if (dirty & /*uid*/ 1) link_changes.to = `/users/${/*uid*/ ctx[0]}`;
 
-    			if (dirty & /*$$scope*/ 2097152) {
+    			if (dirty & /*$$scope*/ 4194304) {
     				link_changes.$$scope = { dirty, ctx };
     			}
 
@@ -47367,6 +47384,10 @@ var app = (function () {
     	? $$invalidate(3, page = 0)
     	: $$invalidate(3, page -= 1);
 
+    	const update_score = (score, question, answer) => {
+    		console.log({ score, question, answer });
+    	};
+
     	const writable_props = ["uid", "pid"];
 
     	Object.keys($$props).forEach(key => {
@@ -47456,6 +47477,7 @@ var app = (function () {
     		nextPage,
     		prevPage,
     		getPackage,
+    		update_score,
     		textarea_input_handler,
     		click_handler,
     		click_handler_1,
