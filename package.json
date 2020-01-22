@@ -40,7 +40,6 @@
     "marked": "^0.8.0",
     "node-fetch": "^2.6.0",
     "nodemon": "^2.0.2",
-    "showdown": "^1.9.1",
     "svelte-routing": "^1.4.0"
   },
   "devDependencies": {
