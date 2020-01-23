@@ -4,7 +4,7 @@
   "description": "create scorm packages in markdown",
   "main": "server.js",
   "scripts": {
-    "start": "PORT=3000 nodemon server.js",
+    "start": "PORT=3000 nodemon --ignore 'public/packages/' --ignore 'scorm/' server.js",
     "build": "rollup -c && docker build -t bmordan/riders-on-the-scorm .",
     "docker": "docker run -p 3000:3000 -e GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID} -e GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET} -e NODE_ENV=development -e PORT=3000 -d bmordan/riders-on-the-scorm",
     "roll": "rollup -c",
@@ -40,6 +40,7 @@
     "marked": "^0.8.0",
     "node-fetch": "^2.6.0",
     "nodemon": "^2.0.2",
+    "simple-scorm-packager": "^0.2.4",
     "svelte-routing": "^1.4.0"
   },
   "devDependencies": {

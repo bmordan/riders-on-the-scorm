@@ -2026,26 +2026,30 @@ var app = (function () {
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[7] = list[i].uid;
-    	child_ctx[8] = list[i].title;
-    	child_ctx[9] = list[i].createdAt;
+    	child_ctx[8] = list[i].uid;
+    	child_ctx[9] = list[i].title;
+    	child_ctx[10] = list[i].createdAt;
     	return child_ctx;
     }
 
-    // (52:3) <Link to={`/users/${user.uid}/packages/${uid}/editor`}>
+    // (64:3) <Link to={`/users/${user.uid}/packages/${uid}/editor`}>
     function create_default_slot(ctx) {
     	let article;
     	let h2;
-    	let t0_value = /*title*/ ctx[8] + "";
+    	let t0_value = /*title*/ ctx[9] + "";
     	let t0;
     	let t1;
     	let small;
-    	let t2_value = /*createdAt*/ ctx[9] + "";
+    	let t2_value = /*createdAt*/ ctx[10] + "";
     	let t2;
     	let t3;
-    	let button;
+    	let button0;
     	let t4;
-    	let button_value_value;
+    	let button0_value_value;
+    	let t5;
+    	let button1;
+    	let t6;
+    	let button1_value_value;
     	let dispose;
 
     	const block = {
@@ -2057,15 +2061,24 @@ var app = (function () {
     			small = element("small");
     			t2 = text(t2_value);
     			t3 = space();
-    			button = element("button");
+    			button0 = element("button");
     			t4 = text("Delete");
-    			add_location(h2, file$1, 53, 5, 1203);
-    			add_location(small, file$1, 54, 5, 1225);
-    			button.value = button_value_value = /*uid*/ ctx[7];
-    			add_location(button, file$1, 55, 5, 1257);
+    			t5 = space();
+    			button1 = element("button");
+    			t6 = text("Download");
+    			add_location(h2, file$1, 65, 5, 1485);
+    			add_location(small, file$1, 66, 5, 1507);
+    			button0.value = button0_value_value = /*uid*/ ctx[8];
+    			add_location(button0, file$1, 67, 5, 1539);
+    			button1.value = button1_value_value = /*uid*/ ctx[8];
+    			add_location(button1, file$1, 68, 5, 1605);
     			attr_dev(article, "class", "svelte-1jjqg4f");
-    			add_location(article, file$1, 52, 4, 1188);
-    			dispose = listen_dev(button, "click", /*deletePackage*/ ctx[5], false, false, false);
+    			add_location(article, file$1, 64, 4, 1470);
+
+    			dispose = [
+    				listen_dev(button0, "click", /*deletePackage*/ ctx[5], false, false, false),
+    				listen_dev(button1, "click", /*downloadPackage*/ ctx[6], false, false, false)
+    			];
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, article, anchor);
@@ -2075,20 +2088,27 @@ var app = (function () {
     			append_dev(article, small);
     			append_dev(small, t2);
     			append_dev(article, t3);
-    			append_dev(article, button);
-    			append_dev(button, t4);
+    			append_dev(article, button0);
+    			append_dev(button0, t4);
+    			append_dev(article, t5);
+    			append_dev(article, button1);
+    			append_dev(button1, t6);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*packages*/ 4 && t0_value !== (t0_value = /*title*/ ctx[8] + "")) set_data_dev(t0, t0_value);
-    			if (dirty & /*packages*/ 4 && t2_value !== (t2_value = /*createdAt*/ ctx[9] + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*packages*/ 4 && t0_value !== (t0_value = /*title*/ ctx[9] + "")) set_data_dev(t0, t0_value);
+    			if (dirty & /*packages*/ 4 && t2_value !== (t2_value = /*createdAt*/ ctx[10] + "")) set_data_dev(t2, t2_value);
 
-    			if (dirty & /*packages*/ 4 && button_value_value !== (button_value_value = /*uid*/ ctx[7])) {
-    				prop_dev(button, "value", button_value_value);
+    			if (dirty & /*packages*/ 4 && button0_value_value !== (button0_value_value = /*uid*/ ctx[8])) {
+    				prop_dev(button0, "value", button0_value_value);
+    			}
+
+    			if (dirty & /*packages*/ 4 && button1_value_value !== (button1_value_value = /*uid*/ ctx[8])) {
+    				prop_dev(button1, "value", button1_value_value);
     			}
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(article);
-    			dispose();
+    			run_all(dispose);
     		}
     	};
 
@@ -2096,20 +2116,20 @@ var app = (function () {
     		block,
     		id: create_default_slot.name,
     		type: "slot",
-    		source: "(52:3) <Link to={`/users/${user.uid}/packages/${uid}/editor`}>",
+    		source: "(64:3) <Link to={`/users/${user.uid}/packages/${uid}/editor`}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (51:2) {#each packages as {uid, title, createdAt}}
+    // (63:2) {#each packages as {uid, title, createdAt}}
     function create_each_block(ctx) {
     	let current;
 
     	const link = new Link({
     			props: {
-    				to: `/users/${/*user*/ ctx[0].uid}/packages/${/*uid*/ ctx[7]}/editor`,
+    				to: `/users/${/*user*/ ctx[0].uid}/packages/${/*uid*/ ctx[8]}/editor`,
     				$$slots: { default: [create_default_slot] },
     				$$scope: { ctx }
     			},
@@ -2126,9 +2146,9 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			const link_changes = {};
-    			if (dirty & /*user, packages*/ 5) link_changes.to = `/users/${/*user*/ ctx[0].uid}/packages/${/*uid*/ ctx[7]}/editor`;
+    			if (dirty & /*user, packages*/ 5) link_changes.to = `/users/${/*user*/ ctx[0].uid}/packages/${/*uid*/ ctx[8]}/editor`;
 
-    			if (dirty & /*$$scope, packages*/ 4100) {
+    			if (dirty & /*$$scope, packages*/ 8196) {
     				link_changes.$$scope = { dirty, ctx };
     			}
 
@@ -2152,14 +2172,14 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(51:2) {#each packages as {uid, title, createdAt}}",
+    		source: "(63:2) {#each packages as {uid, title, createdAt}}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (64:4) {#if showModel}
+    // (77:4) {#if showModel}
     function create_if_block$1(ctx) {
     	let section;
     	let form;
@@ -2184,21 +2204,21 @@ var app = (function () {
     			button = element("button");
     			button.textContent = "Create";
     			attr_dev(h1, "class", "svelte-1jjqg4f");
-    			add_location(h1, file$1, 66, 4, 1570);
+    			add_location(h1, file$1, 79, 4, 1922);
     			attr_dev(input, "name", "title");
     			attr_dev(input, "placeholder", "Title");
     			input.required = true;
     			attr_dev(input, "class", "svelte-1jjqg4f");
-    			add_location(input, file$1, 68, 5, 1625);
+    			add_location(input, file$1, 81, 5, 1977);
     			attr_dev(article, "class", "svelte-1jjqg4f");
-    			add_location(article, file$1, 67, 4, 1610);
+    			add_location(article, file$1, 80, 4, 1962);
     			attr_dev(button, "class", "svelte-1jjqg4f");
-    			add_location(button, file$1, 70, 4, 1696);
+    			add_location(button, file$1, 83, 4, 2048);
     			attr_dev(form, "class", "svelte-1jjqg4f");
-    			add_location(form, file$1, 65, 3, 1533);
+    			add_location(form, file$1, 78, 3, 1885);
     			attr_dev(section, "id", "model");
     			attr_dev(section, "class", "svelte-1jjqg4f");
-    			add_location(section, file$1, 64, 2, 1485);
+    			add_location(section, file$1, 77, 2, 1837);
 
     			dispose = [
     				listen_dev(form, "submit", /*createPackage*/ ctx[4], false, false, false),
@@ -2226,7 +2246,7 @@ var app = (function () {
     		block,
     		id: create_if_block$1.name,
     		type: "if",
-    		source: "(64:4) {#if showModel}",
+    		source: "(77:4) {#if showModel}",
     		ctx
     	});
 
@@ -2285,16 +2305,16 @@ var app = (function () {
     			if (img.src !== (img_src_value = /*user*/ ctx[0].picture)) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "avatar");
     			attr_dev(img, "class", "svelte-1jjqg4f");
-    			add_location(img, file$1, 47, 8, 989);
+    			add_location(img, file$1, 59, 8, 1271);
     			attr_dev(h1, "class", "svelte-1jjqg4f");
-    			add_location(h1, file$1, 46, 4, 976);
-    			add_location(h2, file$1, 60, 3, 1425);
+    			add_location(h1, file$1, 58, 4, 1258);
+    			add_location(h2, file$1, 73, 3, 1777);
     			attr_dev(article, "class", "create-package svelte-1jjqg4f");
-    			add_location(article, file$1, 59, 2, 1356);
+    			add_location(article, file$1, 72, 2, 1708);
     			attr_dev(section0, "class", "packages svelte-1jjqg4f");
-    			add_location(section0, file$1, 49, 1, 1052);
-    			add_location(section1, file$1, 45, 0, 962);
-    			dispose = listen_dev(article, "click", /*click_handler*/ ctx[6], false, false, false);
+    			add_location(section0, file$1, 61, 1, 1334);
+    			add_location(section1, file$1, 57, 0, 1244);
+    			dispose = listen_dev(article, "click", /*click_handler*/ ctx[7], false, false, false);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -2326,7 +2346,7 @@ var app = (function () {
 
     			if ((!current || dirty & /*user*/ 1) && t1_value !== (t1_value = /*user*/ ctx[0].name + "")) set_data_dev(t1, t1_value);
 
-    			if (dirty & /*user, packages, deletePackage*/ 37) {
+    			if (dirty & /*user, packages, downloadPackage, deletePackage*/ 101) {
     				each_value = /*packages*/ ctx[2];
     				let i;
 
@@ -2427,10 +2447,17 @@ var app = (function () {
 
     	function deletePackage(evt) {
     		evt.preventDefault();
+    		return fetch(`/users/${user.uid}/packages/${this.value}/delete`).then(res => res.json()).then(_packages => $$invalidate(2, packages = _packages)).catch(console.error);
+    	}
 
-    		return fetch(`/users/${user.uid}/packages/${this.value}/delete`).then(res => res.json()).then(([_packages]) => {
-    			console.log(_packages);
-    			$$invalidate(2, packages = []);
+    	function downloadPackage(evt) {
+    		evt.preventDefault();
+
+    		fetch(`/users/${user.uid}/packages/${this.value}/download`).then(res => res.json()).then(zip => {
+    			console.log({ zip });
+    			return fetch(`/packages/${zip}`);
+    		}).then(payload => {
+    			console.log(payload);
     		}).catch(console.error);
     	}
 
@@ -2474,6 +2501,7 @@ var app = (function () {
     		dismissModel,
     		createPackage,
     		deletePackage,
+    		downloadPackage,
     		click_handler
     	];
     }
@@ -46836,9 +46864,9 @@ var app = (function () {
     .use(markdownItHighlightjs)
     .use(markdownItScormQuiz);
 
-    function markedex (markdown) {
+    var markedExtended = function (markdown) {
         return md.render(markdown)
-    }
+    };
 
     /* src/Edit.svelte generated by Svelte v3.16.7 */
 
@@ -47429,7 +47457,7 @@ var app = (function () {
 
     		if ($$self.$$.dirty & /*showPreview, _package, page*/ 56) {
     			 $$invalidate(7, html = showPreview
-    			? markedex(_package.pages[page].markdown)
+    			? markedExtended(_package.pages[page].markdown)
     			: "");
     		}
     	};

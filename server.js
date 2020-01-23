@@ -6,6 +6,7 @@ const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NODE_ENV = 'development' } = pro
 const {OAuth2Client} = require('google-auth-library')
 const gapi = new OAuth2Client(GOOGLE_CLIENT_ID)
 const dgraph = require('./dgraph')
+const scormify = require('./scorm')
 
 const publicRoot = file => `${__dirname}/public/${file}.html`
 const session_settings = {
@@ -105,6 +106,23 @@ app.get("/users/:uid/packages/:pid/delete", (req, res) => {
     dgraph.deletePackageForUser(req.params.uid, req.params.pid)
         .then(packages => {
             res.send(packages)
+        })
+        .catch(err => {
+            console.error(err)
+            res.send(err)
+        })
+})
+app.get("/users/:uid/packages/:pid/download", (req, res) => {
+    let user
+    dgraph.getUser(req.params.uid)
+        .then(_user => {
+            user = _user
+            return dgraph.getPackageByUid(req.params.pid)
+        })
+        .then(_package => scormify(_package, user))
+        .then(zip => {
+            console.log(zip)
+            res.send({zip})
         })
         .catch(err => {
             console.error(err)

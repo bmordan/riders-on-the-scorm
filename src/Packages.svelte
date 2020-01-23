@@ -35,9 +35,21 @@
 
 		return fetch(`/users/${user.uid}/packages/${this.value}/delete`)
 			.then(res => res.json())
-			.then(([_packages]) => {
-				console.log(_packages)
-				packages = []
+			.then(_packages => (packages = _packages))
+			.catch(console.error)
+	}
+
+	function downloadPackage (evt) {
+		evt.preventDefault()
+
+		fetch(`/users/${user.uid}/packages/${this.value}/download`)
+			.then(res => res.json())
+			.then(zip => {
+				console.log({zip})
+				return fetch(`/packages/${zip}`)
+				})
+			.then(payload => {
+				console.log(payload)
 			})
 			.catch(console.error)
 	}
@@ -54,6 +66,7 @@
 					<h2>{title}</h2>
 					<small>{createdAt}</small>
 					<button value={uid} on:click={deletePackage}>Delete</button>
+					<button value={uid} on:click={downloadPackage}>Download</button>
 				</article>
 			</Link>
 		{/each}
