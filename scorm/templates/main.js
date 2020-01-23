@@ -923,19 +923,20 @@ further modified by Philip Hutchison
 
 }));
 
-/*******************************************************************************
-** LMS **
-doInitialize()
-doGetValue(name)
-doSetValue(name)
-doCommit()
-doTerminate()
-*******************************************************************************/
 const { SCORM } = pipwerks
 SCORM.init()
-SCORM.set('cmi.score.min', 0)
-SCORM.set('cmi.score.max', 100)
+SCORM.set('cmi.core.score.min', 0)
+SCORM.set('cmi.core.score.max', 2)
 window.onbeforeunload = () => SCORM.quit()
+
+console.log({
+    name: SCORM.get('cmi.core.student_name').split(', ').pop(),
+    status: SCORM.get('cmi.core.lesson_status'),
+    first_time: SCORM.get('cmi.core.entry'),
+    score: SCORM.get('cmi.core.score.raw'),
+    location: SCORM.get('cmi.core.lesson_location'),
+    launch_data: SCORM.get('cmi.launch_data')
+})
 
 const initialGetPageNumber = () => Number(localStorage.getItem('uk.co.whitehat.applied.swe.mod2.page')) || 0
 const savePage = page => localStorage.setItem('uk.co.whitehat.applied.swe.mod2.page', page)
@@ -993,10 +994,10 @@ const update = {
         return {...state, pages: json}
     },
     updateScore: (state, score, question, correctAnswer) => {
-        const current_score = Number(doGetValue('cmi.score.raw'))
+        const current_score = Number(SCORM.get('cmi.core.score.raw'))
         const questions = getQuestions()
         if (!Object.keys(questions).includes(question)) {
-            SCORM.set('cmi.score.raw', current_score + Number(score))
+            SCORM.set('cmi.core.score.raw', current_score + Number(score))
             SCORM.save()
             saveQuestion(question, score, correctAnswer)
         }

@@ -160,7 +160,8 @@
     }
     #markdown textarea {
         border-color: transparent;
-        width: 96%;
+        width: 100%;
+        height: 100%;
         resize: none;
         background-color: salmon;
         padding: 1rem;
@@ -168,10 +169,15 @@
         font-size: 1.25rem;
         line-height: 1.25rem;
     }
+    #html {
+        padding: 2rem;
+    }
     nav {
         backface-visibility: hidden;
         background-color: blue;
-        color: white;
+    }
+    nav > a {
+        color: white !important;
     }
     button {
         width: 7rem;

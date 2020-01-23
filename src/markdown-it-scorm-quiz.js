@@ -36,7 +36,7 @@ module.exports = function (md) {
                     const score = answer.substring(0, 3) === '[#]' ? 1 : 0
                     const answer_string = answer.substring(4)
                     return `
-                        <article class="scorm-quiz-answer" style="margin:0.25rem 0;padding:1rem;color:purple;background-color:white;border:solid 2px purple;" onclick="update_score(${score}, '${btoa(question)}', '${btoa(correct_answer)}')">${answer_string}</article>
+                        <article class="scorm-quiz-answer" style="margin:0.25rem 0;padding:1rem;color:purple;background-color:white;border:solid 2px purple;" onclick="app.run('updateScore', ${score}, '${btoa(question)}', '${btoa(correct_answer)}')">${answer_string}</article>
                     `
                 }).join('')}
             </section>

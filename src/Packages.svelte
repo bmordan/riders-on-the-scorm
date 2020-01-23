@@ -116,14 +116,17 @@
 		display: flex;
 		flex-wrap: wrap;
 	}
-    article {
+    .packages article {
         width: 12rem;
-        height: 6rem;
+        height: 8rem;
         background-color: salmon;
         border-radius: 3px;
         padding: 1rem;
-        margin: 0.5rem;
-    }
+		margin: 0.5rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
     article.create-package {
         cursor: pointer;
         opacity: 0.5;
@@ -165,12 +168,13 @@
 		border: solid 0px transparent;
 		border-bottom: solid 2px black;
 	}
-	#model form button {
-		font-size: 1.25rem;
-		padding: 1rem 2rem;
-		border-color: transparent;
-		box-shadow: 1px 1px 2px 2px;
-		color: white;
-		background-color: darkorange;
-	}
+	button {
+        width: 7rem;
+        background-color: red;
+        color: white;
+        border-color: transparent;
+        padding: 0.5rem;
+        margin: 0.25rem;
+        border-radius: 2px;
+    }
 </style>

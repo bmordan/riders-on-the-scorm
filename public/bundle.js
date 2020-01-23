@@ -2246,11 +2246,13 @@ var app = (function () {
     			add_location(small, file$1, 80, 5, 1931);
     			button0.value = button0_value_value = /*uid*/ ctx[10];
     			button0.disabled = button0_disabled_value = /*downloading*/ ctx[3] && /*downloading*/ ctx[3] === /*uid*/ ctx[10];
+    			attr_dev(button0, "class", "svelte-lzk63a");
     			add_location(button0, file$1, 81, 5, 1963);
     			button1.value = button1_value_value = /*uid*/ ctx[10];
     			button1.disabled = button1_disabled_value = /*downloading*/ ctx[3] && /*downloading*/ ctx[3] === /*uid*/ ctx[10];
+    			attr_dev(button1, "class", "svelte-lzk63a");
     			add_location(button1, file$1, 82, 5, 2075);
-    			attr_dev(article, "class", "svelte-1jjqg4f");
+    			attr_dev(article, "class", "svelte-lzk63a");
     			add_location(article, file$1, 78, 4, 1894);
 
     			dispose = [
@@ -2389,21 +2391,21 @@ var app = (function () {
     			t2 = space();
     			button = element("button");
     			button.textContent = "Create";
-    			attr_dev(h1, "class", "svelte-1jjqg4f");
+    			attr_dev(h1, "class", "svelte-lzk63a");
     			add_location(h1, file$1, 93, 4, 2438);
     			attr_dev(input, "name", "title");
     			attr_dev(input, "placeholder", "Title");
     			input.required = true;
-    			attr_dev(input, "class", "svelte-1jjqg4f");
+    			attr_dev(input, "class", "svelte-lzk63a");
     			add_location(input, file$1, 95, 5, 2493);
-    			attr_dev(article, "class", "svelte-1jjqg4f");
+    			attr_dev(article, "class", "svelte-lzk63a");
     			add_location(article, file$1, 94, 4, 2478);
-    			attr_dev(button, "class", "svelte-1jjqg4f");
+    			attr_dev(button, "class", "svelte-lzk63a");
     			add_location(button, file$1, 97, 4, 2564);
-    			attr_dev(form, "class", "svelte-1jjqg4f");
+    			attr_dev(form, "class", "svelte-lzk63a");
     			add_location(form, file$1, 92, 3, 2401);
     			attr_dev(section, "id", "model");
-    			attr_dev(section, "class", "svelte-1jjqg4f");
+    			attr_dev(section, "class", "svelte-lzk63a");
     			add_location(section, file$1, 91, 2, 2353);
 
     			dispose = [
@@ -2490,14 +2492,14 @@ var app = (function () {
     			if (if_block) if_block.c();
     			if (img.src !== (img_src_value = /*user*/ ctx[0].picture)) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "avatar");
-    			attr_dev(img, "class", "svelte-1jjqg4f");
+    			attr_dev(img, "class", "svelte-lzk63a");
     			add_location(img, file$1, 73, 8, 1695);
-    			attr_dev(h1, "class", "svelte-1jjqg4f");
+    			attr_dev(h1, "class", "svelte-lzk63a");
     			add_location(h1, file$1, 72, 4, 1682);
     			add_location(h2, file$1, 87, 3, 2293);
-    			attr_dev(article, "class", "create-package svelte-1jjqg4f");
+    			attr_dev(article, "class", "create-package svelte-lzk63a");
     			add_location(article, file$1, 86, 2, 2224);
-    			attr_dev(section0, "class", "packages svelte-1jjqg4f");
+    			attr_dev(section0, "class", "packages svelte-lzk63a");
     			add_location(section0, file$1, 75, 1, 1758);
     			add_location(section1, file$1, 71, 0, 1668);
     			dispose = listen_dev(article, "click", /*click_handler*/ ctx[9], false, false, false);
@@ -47036,7 +47038,7 @@ var app = (function () {
                     const score = answer.substring(0, 3) === '[#]' ? 1 : 0;
                     const answer_string = answer.substring(4);
                     return `
-                        <article class="scorm-quiz-answer" style="margin:0.25rem 0;padding:1rem;color:purple;background-color:white;border:solid 2px purple;" onclick="update_score(${score}, '${btoa(question)}', '${btoa(correct_answer)}')">${answer_string}</article>
+                        <article class="scorm-quiz-answer" style="margin:0.25rem 0;padding:1rem;color:purple;background-color:white;border:solid 2px purple;" onclick="app.run('updateScore', ${score}, '${btoa(question)}', '${btoa(correct_answer)}')">${answer_string}</article>
                     `
                 }).join('')}
             </section>
@@ -47216,51 +47218,51 @@ var app = (function () {
     			t24 = space();
     			button8 = element("button");
     			t25 = text("next");
-    			attr_dev(h1, "class", "svelte-107recs");
+    			attr_dev(h1, "class", "svelte-68taml");
     			add_location(h1, file$2, 96, 16, 2832);
     			attr_dev(textarea, "name", "markdown");
     			attr_dev(textarea, "focus", "true");
     			attr_dev(textarea, "rows", "25");
-    			attr_dev(textarea, "class", "svelte-107recs");
+    			attr_dev(textarea, "class", "svelte-68taml");
     			add_location(textarea, file$2, 98, 20, 2952);
     			attr_dev(div, "id", "markdown");
-    			attr_dev(div, "class", "svelte-107recs");
+    			attr_dev(div, "class", "svelte-68taml");
     			add_location(div, file$2, 97, 16, 2912);
     			button0.disabled = /*saving*/ ctx[8];
-    			attr_dev(button0, "class", "svelte-107recs");
+    			attr_dev(button0, "class", "svelte-68taml");
     			add_location(button0, file$2, 101, 20, 3106);
-    			attr_dev(button1, "class", "svelte-107recs");
+    			attr_dev(button1, "class", "svelte-68taml");
     			add_location(button1, file$2, 102, 20, 3208);
     			button2.disabled = button2_disabled_value = /*page*/ ctx[4] === 0 && !/*showPreview*/ ctx[5];
-    			attr_dev(button2, "class", "svelte-107recs");
+    			attr_dev(button2, "class", "svelte-68taml");
     			add_location(button2, file$2, 103, 20, 3278);
     			button3.disabled = button3_disabled_value = /*page*/ ctx[4] === /*_package*/ ctx[3].pages.length - 1 && !/*showPreview*/ ctx[5];
-    			attr_dev(button3, "class", "svelte-107recs");
+    			attr_dev(button3, "class", "svelte-68taml");
     			add_location(button3, file$2, 104, 20, 3378);
     			button4.disabled = /*saving*/ ctx[8];
-    			attr_dev(button4, "class", "svelte-107recs");
+    			attr_dev(button4, "class", "svelte-68taml");
     			add_location(button4, file$2, 105, 20, 3502);
     			button5.disabled = /*saving*/ ctx[8];
-    			attr_dev(button5, "class", "svelte-107recs");
+    			attr_dev(button5, "class", "svelte-68taml");
     			add_location(button5, file$2, 106, 20, 3578);
-    			attr_dev(nav0, "class", "svelte-107recs");
+    			attr_dev(nav0, "class", "svelte-68taml");
     			add_location(nav0, file$2, 100, 16, 3080);
-    			attr_dev(article0, "class", "edit svelte-107recs");
+    			attr_dev(article0, "class", "edit svelte-68taml");
     			add_location(article0, file$2, 95, 12, 2793);
     			attr_dev(article1, "id", "html");
-    			attr_dev(article1, "class", "svelte-107recs");
+    			attr_dev(article1, "class", "svelte-68taml");
     			add_location(article1, file$2, 110, 16, 3742);
     			button6.disabled = button6_disabled_value = /*page*/ ctx[4] === 0;
-    			attr_dev(button6, "class", "svelte-107recs");
+    			attr_dev(button6, "class", "svelte-68taml");
     			add_location(button6, file$2, 112, 20, 3826);
-    			attr_dev(button7, "class", "svelte-107recs");
+    			attr_dev(button7, "class", "svelte-68taml");
     			add_location(button7, file$2, 113, 20, 3910);
     			button8.disabled = button8_disabled_value = /*page*/ ctx[4] === /*_package*/ ctx[3].pages.length - 1;
-    			attr_dev(button8, "class", "svelte-107recs");
+    			attr_dev(button8, "class", "svelte-68taml");
     			add_location(button8, file$2, 114, 20, 3985);
-    			attr_dev(nav1, "class", "svelte-107recs");
+    			attr_dev(nav1, "class", "svelte-68taml");
     			add_location(nav1, file$2, 111, 16, 3800);
-    			attr_dev(article2, "class", "preview svelte-107recs");
+    			attr_dev(article2, "class", "preview svelte-68taml");
     			add_location(article2, file$2, 109, 12, 3700);
 
     			dispose = [
@@ -47394,7 +47396,7 @@ var app = (function () {
     			t0 = text("... fetching package ");
     			t1 = text(/*pid*/ ctx[1]);
     			add_location(p, file$2, 92, 16, 2708);
-    			attr_dev(article, "class", "edit svelte-107recs");
+    			attr_dev(article, "class", "edit svelte-68taml");
     			add_location(article, file$2, 91, 12, 2669);
     		},
     		m: function mount(target, anchor) {
@@ -47458,12 +47460,12 @@ var app = (function () {
     			t = space();
     			section0 = element("section");
     			info.block.c();
-    			attr_dev(nav, "class", "svelte-107recs");
+    			attr_dev(nav, "class", "svelte-68taml");
     			add_location(nav, file$2, 86, 4, 2468);
-    			attr_dev(section0, "class", "editor-flip-frame svelte-107recs");
+    			attr_dev(section0, "class", "editor-flip-frame svelte-68taml");
     			set_style(section0, "transform", "rotateY(" + (/*showPreview*/ ctx[5] ? "180" : "0") + "deg)");
     			add_location(section0, file$2, 89, 4, 2536);
-    			attr_dev(section1, "class", "editor svelte-107recs");
+    			attr_dev(section1, "class", "editor svelte-68taml");
     			add_location(section1, file$2, 85, 0, 2439);
     		},
     		l: function claim(nodes) {
