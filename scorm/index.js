@@ -7,7 +7,7 @@ const markdown = require('../src/marked-extended')
 
 const scormify = (_package, user) => {
     return new Promise((resolve, reject) => {
-        const package_dir = path.join(__dirname, encodeURIComponent(_package.title))
+        const package_dir = path.join(__dirname, 'builds', encodeURIComponent(_package.title).toLowerCase())
         const output_dir = path.join(__dirname, '..', 'public', 'packages')
         try {
             execSync(`rm -fr ${package_dir}`)
