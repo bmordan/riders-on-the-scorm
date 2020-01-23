@@ -39,16 +39,16 @@ const scormify = (_package, user) => {
                     outputFolder: output_dir,
                     author: user.name
                 }
-            }, function(outputzip) {
+            }, function() {
+                const package_name = `${_package.title.split(" ").join("")}_v0.1.0_${new Date().toISOString().substring(0,10)}_${Number(new Date().getTime().toString().substring(0,10))}`
+                
                 const poll = () => {
-                    console.log(path.join(output_dir, outputzip))
-                    console.log(fs.existsSync(path.join(output_dir, outputzip)))
-                    if(fs.existsSync(path.join(output_dir, outputzip))) {
-                        return resolve(outputzip)
-                    } else {
-                        return setTimeout(poll, 1000)
-                    }
+                    fs.readdir(output_dir, (err, files) => {
+                        const [file] = files.filter(f => f.includes(package_name))
+                        return file ? resolve(path.join(output_dir, file)) : poll()
+                    })
                 }
+                
                 poll()
             })
         })
