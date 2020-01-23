@@ -2019,6 +2019,180 @@ var app = (function () {
     	}
     }
 
+    var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+    function createCommonjsModule(fn, module) {
+    	return module = { exports: {} }, fn(module, module.exports), module.exports;
+    }
+
+    function getCjsExportFromNamespace (n) {
+    	return n && n['default'] || n;
+    }
+
+    var download = createCommonjsModule(function (module, exports) {
+    //download.js v4.2, by dandavis; 2008-2016. [MIT] see http://danml.com/download.html for tests/usage
+    // v1 landed a FF+Chrome compat way of downloading strings to local un-named files, upgraded to use a hidden frame and optional mime
+    // v2 added named files via a[download], msSaveBlob, IE (10+) support, and window.URL support for larger+faster saves than dataURLs
+    // v3 added dataURL and Blob Input, bind-toggle arity, and legacy dataURL fallback was improved with force-download mime and base64 support. 3.1 improved safari handling.
+    // v4 adds AMD/UMD, commonJS, and plain browser support
+    // v4.1 adds url download capability via solo URL argument (same domain/CORS only)
+    // v4.2 adds semantic variable names, long (over 2MB) dataURL support, and hidden by default temp anchors
+    // https://github.com/rndme/download
+
+    (function (root, factory) {
+    	{
+    		// Node. Does not work with strict CommonJS, but
+    		// only CommonJS-like environments that support module.exports,
+    		// like Node.
+    		module.exports = factory();
+    	}
+    }(commonjsGlobal, function () {
+
+    	return function download(data, strFileName, strMimeType) {
+
+    		var self = window, // this script is only for browsers anyway...
+    			defaultMime = "application/octet-stream", // this default mime also triggers iframe downloads
+    			mimeType = strMimeType || defaultMime,
+    			payload = data,
+    			url = !strFileName && !strMimeType && payload,
+    			anchor = document.createElement("a"),
+    			toString = function(a){return String(a);},
+    			myBlob = (self.Blob || self.MozBlob || self.WebKitBlob || toString),
+    			fileName = strFileName || "download",
+    			blob,
+    			reader;
+    			myBlob= myBlob.call ? myBlob.bind(self) : Blob ;
+    	  
+    		if(String(this)==="true"){ //reverse arguments, allowing download.bind(true, "text/xml", "export.xml") to act as a callback
+    			payload=[payload, mimeType];
+    			mimeType=payload[0];
+    			payload=payload[1];
+    		}
+
+
+    		if(url && url.length< 2048){ // if no filename and no mime, assume a url was passed as the only argument
+    			fileName = url.split("/").pop().split("?")[0];
+    			anchor.href = url; // assign href prop to temp anchor
+    		  	if(anchor.href.indexOf(url) !== -1){ // if the browser determines that it's a potentially valid url path:
+            		var ajax=new XMLHttpRequest();
+            		ajax.open( "GET", url, true);
+            		ajax.responseType = 'blob';
+            		ajax.onload= function(e){ 
+    				  download(e.target.response, fileName, defaultMime);
+    				};
+            		setTimeout(function(){ ajax.send();}, 0); // allows setting custom ajax headers using the return:
+    			    return ajax;
+    			} // end if valid url?
+    		} // end if url?
+
+
+    		//go ahead and download dataURLs right away
+    		if(/^data:([\w+-]+\/[\w+.-]+)?[,;]/.test(payload)){
+    		
+    			if(payload.length > (1024*1024*1.999) && myBlob !== toString ){
+    				payload=dataUrlToBlob(payload);
+    				mimeType=payload.type || defaultMime;
+    			}else{			
+    				return navigator.msSaveBlob ?  // IE10 can't do a[download], only Blobs:
+    					navigator.msSaveBlob(dataUrlToBlob(payload), fileName) :
+    					saver(payload) ; // everyone else can save dataURLs un-processed
+    			}
+    			
+    		}else{//not data url, is it a string with special needs?
+    			if(/([\x80-\xff])/.test(payload)){			  
+    				var i=0, tempUiArr= new Uint8Array(payload.length), mx=tempUiArr.length;
+    				for(i;i<mx;++i) tempUiArr[i]= payload.charCodeAt(i);
+    			 	payload=new myBlob([tempUiArr], {type: mimeType});
+    			}		  
+    		}
+    		blob = payload instanceof myBlob ?
+    			payload :
+    			new myBlob([payload], {type: mimeType}) ;
+
+
+    		function dataUrlToBlob(strUrl) {
+    			var parts= strUrl.split(/[:;,]/),
+    			type= parts[1],
+    			decoder= parts[2] == "base64" ? atob : decodeURIComponent,
+    			binData= decoder( parts.pop() ),
+    			mx= binData.length,
+    			i= 0,
+    			uiArr= new Uint8Array(mx);
+
+    			for(i;i<mx;++i) uiArr[i]= binData.charCodeAt(i);
+
+    			return new myBlob([uiArr], {type: type});
+    		 }
+
+    		function saver(url, winMode){
+
+    			if ('download' in anchor) { //html5 A[download]
+    				anchor.href = url;
+    				anchor.setAttribute("download", fileName);
+    				anchor.className = "download-js-link";
+    				anchor.innerHTML = "downloading...";
+    				anchor.style.display = "none";
+    				document.body.appendChild(anchor);
+    				setTimeout(function() {
+    					anchor.click();
+    					document.body.removeChild(anchor);
+    					if(winMode===true){setTimeout(function(){ self.URL.revokeObjectURL(anchor.href);}, 250 );}
+    				}, 66);
+    				return true;
+    			}
+
+    			// handle non-a[download] safari as best we can:
+    			if(/(Version)\/(\d+)\.(\d+)(?:\.(\d+))?.*Safari\//.test(navigator.userAgent)) {
+    				if(/^data:/.test(url))	url="data:"+url.replace(/^data:([\w\/\-\+]+)/, defaultMime);
+    				if(!window.open(url)){ // popup blocked, offer direct download:
+    					if(confirm("Displaying New Document\n\nUse Save As... to download, then click back to return to this page.")){ location.href=url; }
+    				}
+    				return true;
+    			}
+
+    			//do iframe dataURL download (old ch+FF):
+    			var f = document.createElement("iframe");
+    			document.body.appendChild(f);
+
+    			if(!winMode && /^data:/.test(url)){ // force a mime that will download:
+    				url="data:"+url.replace(/^data:([\w\/\-\+]+)/, defaultMime);
+    			}
+    			f.src=url;
+    			setTimeout(function(){ document.body.removeChild(f); }, 333);
+
+    		}//end saver
+
+
+
+
+    		if (navigator.msSaveBlob) { // IE10+ : (has Blob, but not a[download] or URL)
+    			return navigator.msSaveBlob(blob, fileName);
+    		}
+
+    		if(self.URL){ // simple fast and modern way using Blob and URL:
+    			saver(self.URL.createObjectURL(blob), true);
+    		}else{
+    			// handle non-Blob()+non-URL browsers:
+    			if(typeof blob === "string" || blob.constructor===toString ){
+    				try{
+    					return saver( "data:" +  mimeType   + ";base64,"  +  self.btoa(blob)  );
+    				}catch(y){
+    					return saver( "data:" +  mimeType   + "," + encodeURIComponent(blob)  );
+    				}
+    			}
+
+    			// Blob but not URL support:
+    			reader=new FileReader();
+    			reader.onload=function(e){
+    				saver(this.result);
+    			};
+    			reader.readAsDataURL(blob);
+    		}
+    		return true;
+    	}; /* end download() */
+    }));
+    });
+
     /* src/Packages.svelte generated by Svelte v3.16.7 */
 
     const { console: console_1 } = globals;
@@ -2026,30 +2200,32 @@ var app = (function () {
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[8] = list[i].uid;
-    	child_ctx[9] = list[i].title;
-    	child_ctx[10] = list[i].createdAt;
+    	child_ctx[10] = list[i].uid;
+    	child_ctx[11] = list[i].title;
+    	child_ctx[12] = list[i].createdAt;
     	return child_ctx;
     }
 
-    // (64:3) <Link to={`/users/${user.uid}/packages/${uid}/editor`}>
+    // (78:3) <Link to={`/users/${user.uid}/packages/${uid}/editor`}>
     function create_default_slot(ctx) {
     	let article;
     	let h2;
-    	let t0_value = /*title*/ ctx[9] + "";
+    	let t0_value = /*title*/ ctx[11] + "";
     	let t0;
     	let t1;
     	let small;
-    	let t2_value = /*createdAt*/ ctx[10] + "";
+    	let t2_value = /*createdAt*/ ctx[12] + "";
     	let t2;
     	let t3;
     	let button0;
     	let t4;
     	let button0_value_value;
+    	let button0_disabled_value;
     	let t5;
     	let button1;
     	let t6;
     	let button1_value_value;
+    	let button1_disabled_value;
     	let dispose;
 
     	const block = {
@@ -2066,18 +2242,20 @@ var app = (function () {
     			t5 = space();
     			button1 = element("button");
     			t6 = text("Download");
-    			add_location(h2, file$1, 65, 5, 1485);
-    			add_location(small, file$1, 66, 5, 1507);
-    			button0.value = button0_value_value = /*uid*/ ctx[8];
-    			add_location(button0, file$1, 67, 5, 1539);
-    			button1.value = button1_value_value = /*uid*/ ctx[8];
-    			add_location(button1, file$1, 68, 5, 1605);
+    			add_location(h2, file$1, 79, 5, 1909);
+    			add_location(small, file$1, 80, 5, 1931);
+    			button0.value = button0_value_value = /*uid*/ ctx[10];
+    			button0.disabled = button0_disabled_value = /*downloading*/ ctx[3] && /*downloading*/ ctx[3] === /*uid*/ ctx[10];
+    			add_location(button0, file$1, 81, 5, 1963);
+    			button1.value = button1_value_value = /*uid*/ ctx[10];
+    			button1.disabled = button1_disabled_value = /*downloading*/ ctx[3] && /*downloading*/ ctx[3] === /*uid*/ ctx[10];
+    			add_location(button1, file$1, 82, 5, 2075);
     			attr_dev(article, "class", "svelte-1jjqg4f");
-    			add_location(article, file$1, 64, 4, 1470);
+    			add_location(article, file$1, 78, 4, 1894);
 
     			dispose = [
-    				listen_dev(button0, "click", /*deletePackage*/ ctx[5], false, false, false),
-    				listen_dev(button1, "click", /*downloadPackage*/ ctx[6], false, false, false)
+    				listen_dev(button0, "click", /*deletePackage*/ ctx[6], false, false, false),
+    				listen_dev(button1, "click", /*downloadPackage*/ ctx[7], false, false, false)
     			];
     		},
     		m: function mount(target, anchor) {
@@ -2095,15 +2273,23 @@ var app = (function () {
     			append_dev(button1, t6);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*packages*/ 4 && t0_value !== (t0_value = /*title*/ ctx[9] + "")) set_data_dev(t0, t0_value);
-    			if (dirty & /*packages*/ 4 && t2_value !== (t2_value = /*createdAt*/ ctx[10] + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*packages*/ 4 && t0_value !== (t0_value = /*title*/ ctx[11] + "")) set_data_dev(t0, t0_value);
+    			if (dirty & /*packages*/ 4 && t2_value !== (t2_value = /*createdAt*/ ctx[12] + "")) set_data_dev(t2, t2_value);
 
-    			if (dirty & /*packages*/ 4 && button0_value_value !== (button0_value_value = /*uid*/ ctx[8])) {
+    			if (dirty & /*packages*/ 4 && button0_value_value !== (button0_value_value = /*uid*/ ctx[10])) {
     				prop_dev(button0, "value", button0_value_value);
     			}
 
-    			if (dirty & /*packages*/ 4 && button1_value_value !== (button1_value_value = /*uid*/ ctx[8])) {
+    			if (dirty & /*downloading, packages*/ 12 && button0_disabled_value !== (button0_disabled_value = /*downloading*/ ctx[3] && /*downloading*/ ctx[3] === /*uid*/ ctx[10])) {
+    				prop_dev(button0, "disabled", button0_disabled_value);
+    			}
+
+    			if (dirty & /*packages*/ 4 && button1_value_value !== (button1_value_value = /*uid*/ ctx[10])) {
     				prop_dev(button1, "value", button1_value_value);
+    			}
+
+    			if (dirty & /*downloading, packages*/ 12 && button1_disabled_value !== (button1_disabled_value = /*downloading*/ ctx[3] && /*downloading*/ ctx[3] === /*uid*/ ctx[10])) {
+    				prop_dev(button1, "disabled", button1_disabled_value);
     			}
     		},
     		d: function destroy(detaching) {
@@ -2116,20 +2302,20 @@ var app = (function () {
     		block,
     		id: create_default_slot.name,
     		type: "slot",
-    		source: "(64:3) <Link to={`/users/${user.uid}/packages/${uid}/editor`}>",
+    		source: "(78:3) <Link to={`/users/${user.uid}/packages/${uid}/editor`}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (63:2) {#each packages as {uid, title, createdAt}}
+    // (77:2) {#each packages as {uid, title, createdAt}}
     function create_each_block(ctx) {
     	let current;
 
     	const link = new Link({
     			props: {
-    				to: `/users/${/*user*/ ctx[0].uid}/packages/${/*uid*/ ctx[8]}/editor`,
+    				to: `/users/${/*user*/ ctx[0].uid}/packages/${/*uid*/ ctx[10]}/editor`,
     				$$slots: { default: [create_default_slot] },
     				$$scope: { ctx }
     			},
@@ -2146,9 +2332,9 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			const link_changes = {};
-    			if (dirty & /*user, packages*/ 5) link_changes.to = `/users/${/*user*/ ctx[0].uid}/packages/${/*uid*/ ctx[8]}/editor`;
+    			if (dirty & /*user, packages*/ 5) link_changes.to = `/users/${/*user*/ ctx[0].uid}/packages/${/*uid*/ ctx[10]}/editor`;
 
-    			if (dirty & /*$$scope, packages*/ 8196) {
+    			if (dirty & /*$$scope, packages, downloading*/ 32780) {
     				link_changes.$$scope = { dirty, ctx };
     			}
 
@@ -2172,14 +2358,14 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(63:2) {#each packages as {uid, title, createdAt}}",
+    		source: "(77:2) {#each packages as {uid, title, createdAt}}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (77:4) {#if showModel}
+    // (91:4) {#if showModel}
     function create_if_block$1(ctx) {
     	let section;
     	let form;
@@ -2204,25 +2390,25 @@ var app = (function () {
     			button = element("button");
     			button.textContent = "Create";
     			attr_dev(h1, "class", "svelte-1jjqg4f");
-    			add_location(h1, file$1, 79, 4, 1922);
+    			add_location(h1, file$1, 93, 4, 2438);
     			attr_dev(input, "name", "title");
     			attr_dev(input, "placeholder", "Title");
     			input.required = true;
     			attr_dev(input, "class", "svelte-1jjqg4f");
-    			add_location(input, file$1, 81, 5, 1977);
+    			add_location(input, file$1, 95, 5, 2493);
     			attr_dev(article, "class", "svelte-1jjqg4f");
-    			add_location(article, file$1, 80, 4, 1962);
+    			add_location(article, file$1, 94, 4, 2478);
     			attr_dev(button, "class", "svelte-1jjqg4f");
-    			add_location(button, file$1, 83, 4, 2048);
+    			add_location(button, file$1, 97, 4, 2564);
     			attr_dev(form, "class", "svelte-1jjqg4f");
-    			add_location(form, file$1, 78, 3, 1885);
+    			add_location(form, file$1, 92, 3, 2401);
     			attr_dev(section, "id", "model");
     			attr_dev(section, "class", "svelte-1jjqg4f");
-    			add_location(section, file$1, 77, 2, 1837);
+    			add_location(section, file$1, 91, 2, 2353);
 
     			dispose = [
-    				listen_dev(form, "submit", /*createPackage*/ ctx[4], false, false, false),
-    				listen_dev(section, "click", /*dismissModel*/ ctx[3], false, false, false)
+    				listen_dev(form, "submit", /*createPackage*/ ctx[5], false, false, false),
+    				listen_dev(section, "click", /*dismissModel*/ ctx[4], false, false, false)
     			];
     		},
     		m: function mount(target, anchor) {
@@ -2246,7 +2432,7 @@ var app = (function () {
     		block,
     		id: create_if_block$1.name,
     		type: "if",
-    		source: "(77:4) {#if showModel}",
+    		source: "(91:4) {#if showModel}",
     		ctx
     	});
 
@@ -2305,16 +2491,16 @@ var app = (function () {
     			if (img.src !== (img_src_value = /*user*/ ctx[0].picture)) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "avatar");
     			attr_dev(img, "class", "svelte-1jjqg4f");
-    			add_location(img, file$1, 59, 8, 1271);
+    			add_location(img, file$1, 73, 8, 1695);
     			attr_dev(h1, "class", "svelte-1jjqg4f");
-    			add_location(h1, file$1, 58, 4, 1258);
-    			add_location(h2, file$1, 73, 3, 1777);
+    			add_location(h1, file$1, 72, 4, 1682);
+    			add_location(h2, file$1, 87, 3, 2293);
     			attr_dev(article, "class", "create-package svelte-1jjqg4f");
-    			add_location(article, file$1, 72, 2, 1708);
+    			add_location(article, file$1, 86, 2, 2224);
     			attr_dev(section0, "class", "packages svelte-1jjqg4f");
-    			add_location(section0, file$1, 61, 1, 1334);
-    			add_location(section1, file$1, 57, 0, 1244);
-    			dispose = listen_dev(article, "click", /*click_handler*/ ctx[7], false, false, false);
+    			add_location(section0, file$1, 75, 1, 1758);
+    			add_location(section1, file$1, 71, 0, 1668);
+    			dispose = listen_dev(article, "click", /*click_handler*/ ctx[9], false, false, false);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -2346,7 +2532,7 @@ var app = (function () {
 
     			if ((!current || dirty & /*user*/ 1) && t1_value !== (t1_value = /*user*/ ctx[0].name + "")) set_data_dev(t1, t1_value);
 
-    			if (dirty & /*user, packages, downloadPackage, deletePackage*/ 101) {
+    			if (dirty & /*user, packages, downloading, downloadPackage, deletePackage*/ 205) {
     				each_value = /*packages*/ ctx[2];
     				let i;
 
@@ -2452,12 +2638,23 @@ var app = (function () {
 
     	function downloadPackage(evt) {
     		evt.preventDefault();
+    		const pid = this.value;
+    		$$invalidate(3, downloading = pid);
+    		let filename = `package-${pid}`;
 
-    		fetch(`/users/${user.uid}/packages/${this.value}/download`).then(res => res.json()).then(zip => {
-    			console.log({ zip });
-    			return fetch(`/packages/${zip}`);
-    		}).then(payload => {
-    			console.log(payload);
+    		fetch(`/users/${user.uid}/packages/${pid}/download`).then(res => {
+    			res.headers.forEach((key, value) => filename = key === "x-scorm-download" ? value : filename);
+    			return res.blob();
+    		}).then(blob => {
+    			download(blob, filename, "application/zip");
+
+    			setTimeout(
+    				() => {
+    					fetch(`/users/${user.uid}/packages/${pid}/download/${filename}/remove`);
+    					$$invalidate(3, downloading = false);
+    				},
+    				9000
+    			);
     		}).catch(console.error);
     	}
 
@@ -2474,17 +2671,27 @@ var app = (function () {
     	};
 
     	$$self.$capture_state = () => {
-    		return { user, showModel, packages };
+    		return {
+    			user,
+    			showModel,
+    			packages,
+    			downloading,
+    			selected
+    		};
     	};
 
     	$$self.$inject_state = $$props => {
     		if ("user" in $$props) $$invalidate(0, user = $$props.user);
     		if ("showModel" in $$props) $$invalidate(1, showModel = $$props.showModel);
     		if ("packages" in $$props) $$invalidate(2, packages = $$props.packages);
+    		if ("downloading" in $$props) $$invalidate(3, downloading = $$props.downloading);
+    		if ("selected" in $$props) selected = $$props.selected;
     	};
 
     	let showModel;
     	let packages;
+    	let downloading;
+    	let selected;
 
     	$$self.$$.update = () => {
     		if ($$self.$$.dirty & /*user*/ 1) {
@@ -2493,15 +2700,19 @@ var app = (function () {
     	};
 
     	 $$invalidate(1, showModel = false);
+    	 $$invalidate(3, downloading = false);
+    	 selected = "";
 
     	return [
     		user,
     		showModel,
     		packages,
+    		downloading,
     		dismissModel,
     		createPackage,
     		deletePackage,
     		downloadPackage,
+    		selected,
     		click_handler
     	];
     }
@@ -2533,14 +2744,6 @@ var app = (function () {
     	set user(value) {
     		throw new Error("<Packages>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
-    }
-
-    function createCommonjsModule(fn, module) {
-    	return module = { exports: {} }, fn(module, module.exports), module.exports;
-    }
-
-    function getCjsExportFromNamespace (n) {
-    	return n && n['default'] || n;
     }
 
     var Aacute = "Á";

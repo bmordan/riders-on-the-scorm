@@ -1,10 +1,13 @@
 <script>
+	import download from "downloadjs"
     import {Link} from "svelte-routing"
 
     export let user
 
     $: showModel = false
-    $: packages = user.packages || []
+	$: packages = user.packages || []
+	$: downloading = false
+	$: selected = ""
 
     function dismissModel(evt) {
 		evt.stopPropagation()
@@ -41,15 +44,26 @@
 
 	function downloadPackage (evt) {
 		evt.preventDefault()
+		const pid = this.value
+		
+		downloading = pid
 
-		fetch(`/users/${user.uid}/packages/${this.value}/download`)
-			.then(res => res.json())
-			.then(zip => {
-				console.log({zip})
-				return fetch(`/packages/${zip}`)
-				})
-			.then(payload => {
-				console.log(payload)
+		let filename = `package-${pid}`
+
+		fetch(`/users/${user.uid}/packages/${pid}/download`)
+			.then(res => {
+				res.headers.forEach((key, value) => (
+					filename = key === 'x-scorm-download' ? value : filename
+				))
+				return res.blob()
+			})
+			.then(blob => {
+				download(blob, filename, 'application/zip')
+				setTimeout(() => {
+					// there is no other way to know that the file has been downloaded
+					fetch(`/users/${user.uid}/packages/${pid}/download/${filename}/remove`)
+					downloading = false
+				}, 9000)
 			})
 			.catch(console.error)
 	}
@@ -65,8 +79,8 @@
 				<article>
 					<h2>{title}</h2>
 					<small>{createdAt}</small>
-					<button value={uid} on:click={deletePackage}>Delete</button>
-					<button value={uid} on:click={downloadPackage}>Download</button>
+					<button value={uid} on:click={deletePackage} disabled={downloading && downloading === uid}>Delete</button>
+					<button value={uid} on:click={downloadPackage} disabled={downloading && downloading === uid}>Download</button>
 				</article>
 			</Link>
 		{/each}

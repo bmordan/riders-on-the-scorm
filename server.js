@@ -7,6 +7,8 @@ const {OAuth2Client} = require('google-auth-library')
 const gapi = new OAuth2Client(GOOGLE_CLIENT_ID)
 const dgraph = require('./dgraph')
 const scormify = require('./scorm')
+const fs = require('fs')
+const path = require('path')
 
 const publicRoot = file => `${__dirname}/public/${file}.html`
 const session_settings = {
@@ -121,13 +123,16 @@ app.get("/users/:uid/packages/:pid/download", (req, res) => {
         })
         .then(_package => scormify(_package, user))
         .then(zip => {
-            console.log(zip)
-            res.send({zip})
+            res.setHeader(zip.split("/").pop(), 'x-scorm-download')
+            res.sendFile(zip)
         })
         .catch(err => {
             console.error(err)
             res.send(err)
         })
+})
+app.get("/users/:uid/packages/:pid/download/:filename/remove", (req) => {
+    fs.unlink(path.join(__dirname, 'public', 'packages', req.params.filename), console.error)
 })
 app.get("/users/:uid/packages/:pid", (req, res) => {
     dgraph.getPackageByUid(req.params.pid)

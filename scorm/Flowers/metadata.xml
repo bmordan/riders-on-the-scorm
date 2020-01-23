@@ -5,7 +5,7 @@
     <metadataSchema>ADL SCORM 1.2</metadataSchema>
     <identifier>
       <catalog>URI</catalog>
-      <entry>BM.WhiteHat.Beaches.e4171817-3229-4005-b37d-757968ce92c5</entry>
+      <entry>BM.WhiteHat.Flowers.87aae565-d802-40a0-a93d-e63d12cdc257</entry>
     </identifier>
     <language>en-EN</language>
     <contribute>
@@ -23,7 +23,7 @@ END:VCARD  ]]>
       <date>
         <dateTime>2020-01-23</dateTime>
         <description language="en-EN">
-          <![CDATA[1579776977437]]>
+          <![CDATA[1579782473170]]>
         </description>
       </date>
     </contribute>
@@ -31,11 +31,11 @@ END:VCARD  ]]>
   <general>
     <identifier>
       <catalog>URI</catalog>
-      <entry>BM.WhiteHat.Beaches.e4171817-3229-4005-b37d-757968ce92c5</entry>
+      <entry>BM.WhiteHat.Flowers.87aae565-d802-40a0-a93d-e63d12cdc257</entry>
     </identifier>
     <title>
       <string language="en-EN">
-        <![CDATA[Beaches]]>
+        <![CDATA[Flowers]]>
       </string>
     </title>
     <language>en-EN</language>
@@ -72,7 +72,7 @@ END:VCARD  ]]>
       <date>
         <dateTime>2020-01-23</dateTime>
         <description language="en-EN">
-          <![CDATA[1579776977437]]>
+          <![CDATA[1579782473170]]>
         </description>
       </date>
     </contribute>
@@ -91,7 +91,7 @@ END:VCARD  ]]>
       <date>
         <dateTime>2020-01-23</dateTime>
         <description language="en-EN">
-          <![CDATA[1579776977437]]>
+          <![CDATA[1579782473170]]>
         </description>
       </date>
     </contribute>
@@ -111,7 +111,7 @@ END:VCARD  ]]>
       <date>
         <dateTime>2020-01-23</dateTime>
         <description language="en-EN">
-          <![CDATA[1579776977437]]>
+          <![CDATA[1579782473170]]>
         </description>
       </date>
     </contribute>
@@ -130,7 +130,7 @@ END:VCARD  ]]>
       <date>
         <dateTime>2020-01-23</dateTime>
         <description language="en-EN">
-          <![CDATA[1579776977437]]>
+          <![CDATA[1579782473170]]>
         </description>
       </date>
     </contribute>
@@ -139,7 +139,7 @@ END:VCARD  ]]>
     <format>text/html</format>
     <format>application/x-javascript</format>
     <format>text/css</format>
-    <size>12596</size>
+    <size>55269</size>
     <location>index.html</location>
     <duration>
       <duration>PT0H0M0S</duration>
