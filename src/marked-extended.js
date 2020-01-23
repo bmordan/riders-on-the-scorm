@@ -1,7 +1,7 @@
-import Markdown from 'markdown-it'
-import emoji from 'markdown-it-emoji'
-import highlightjs from 'markdown-it-highlightjs'
-import scorm_quiz from './markdown-it-scorm-quiz'
+const Markdown = require('markdown-it')
+const emoji = require('markdown-it-emoji')
+const highlightjs = require('markdown-it-highlightjs')
+const scorm_quiz = require('./markdown-it-scorm-quiz')
 const md = new Markdown({
     html: true, 
     breaks: true, 
@@ -11,6 +11,6 @@ const md = new Markdown({
 .use(highlightjs)
 .use(scorm_quiz)
 
-export default function (markdown) {
+module.exports = function (markdown) {
     return md.render(markdown)
 }
