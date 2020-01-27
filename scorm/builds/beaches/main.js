@@ -929,6 +929,8 @@ SCORM.set('cmi.core.score.min', 0)
 SCORM.set('cmi.core.score.max', 2)
 window.onbeforeunload = () => SCORM.quit()
 
+// https://scorm.com/scorm-explained/technical-scorm/run-time/run-time-reference/#section-2
+
 console.log({
     name: SCORM.get('cmi.core.student_name').split(', ').pop(),
     status: SCORM.get('cmi.core.lesson_status'),

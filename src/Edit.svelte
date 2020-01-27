@@ -85,7 +85,16 @@
 </script>
 <section class="editor">
     <nav>
-        <Link to={`/users/${uid}`}>Exit</Link>
+        <Link to={`/users/${uid}`}>
+            <button>Exit</button>
+        </Link>
+        <button disabled={saving} on:click={onSave}>Save{saving ? "ing..." : ""}</button>
+        <button on:click={togglePreview}>{showPreview ? 'Editor' : 'Preview'}</button>
+        <button disabled={page === 0 && !showPreview} on:click={prevPage}>Prev</button>
+        <button disabled={page === _package.pages.length - 1 && !showPreview} on:click={nextPage}>Next</button>
+        <button disabled={saving} on:click={addPage}>Add Page</button>
+        <button disabled={saving} on:click={removePage}>Delete Page</button>
+        <button>{_package.title} {page + 1} of {_package.pages.length}</button>
     </nav>
     <section class="editor-flip-frame" style="transform: rotateY({showPreview ? "180" : "0"}deg);">
         {#await promise}
@@ -94,26 +103,15 @@
             </article>
         {:then}
             <article class="edit">
-                <h1>{_package.title} {page + 1} of {_package.pages.length}</h1>
                 <div id="markdown">
                     <textarea name="markdown" focus=true bind:value={current.markdown} rows="25"></textarea>
                 </div>
-                <nav>
-                    <button disabled={saving} on:click={onSave}>Save{saving ? "ing..." : ""}</button>
-                    <button on:click={togglePreview}>Preview</button>
-                    <button disabled={page === 0 && !showPreview} on:click={prevPage}>prev</button>
-                    <button disabled={page === _package.pages.length - 1 && !showPreview} on:click={nextPage}>next</button>
-                    <button disabled={saving} on:click={addPage}>+</button>
-                    <button disabled={saving} on:click={removePage}>delete</button>
-                </nav>
             </article>
             <article class="preview">
-                <article id="html">{@html html}</article>
-                <nav>
-                    <button disabled={page === 0} on:click={prevPage}>prev</button>
-                    <button on:click={togglePreview}>Exit Preview</button>
-                    <button disabled={page === _package.pages.length - 1} on:click={nextPage}>next</button>
-                </nav>
+                <article id="html">
+                    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.10.0/css/tachyons.min.css"/>
+                    {@html html}
+                </article>
             </article>
         {/await}
     </section>
@@ -121,36 +119,34 @@
 <style>
     .editor {
         margin: auto;
-        background-color: transparent;
-        width: 95vw;
+        background-color: var(--wh-bg-gray-light);
+        width: 100vw;
         height: 90vh;
         perspective: 2000px;
     }
     .editor-flip-frame {
+        top: 1rem;
         position: relative;
-        width: 100%;
+        width: 90%;
+        margin: auto;
         height: 100%;
-        border: solid 2px black;
+        border: solid 1px var(--wh-gray-light);
         box-sizing: border-box;
-        text-align: center;
-        transition: transform 0.6s cubic-bezier(0.13, 0.77, 0.81, 1.21);
+        transition: transform 0.3s cubic-bezier(0.13, 0.77, 0.81, 1.21);
         transform-style: preserve-3d;
+        box-shadow: 1px 1px 6px -2px gray;
     }
     .edit, .preview {
         position: absolute;
         width: 100%;
         height: 100%;
         backface-visibility: hidden;
-        background-color: hotpink;
+        background-color: white;
         display: flex;
         flex-direction: column;
     }
-    .edit h1 {
-        padding: 0;
-        margin: 0;
-    }
     .preview {
-        background-color: lime;
+        background-color: white;
         transform: rotateY(180deg);
     }
     #markdown, #html {
@@ -163,30 +159,54 @@
         width: 100%;
         height: 100%;
         resize: none;
-        background-color: salmon;
+        background-color: white;
         padding: 1rem;
         font-family: 'courier new', 'Courier New', Courier, monospace;
         font-size: 1.25rem;
         line-height: 1.25rem;
+        outline: none;
     }
     #html {
         padding: 2rem;
+        background-image: url(/icons/wh-blue-wave.svg);
+        background-size: 100% 16rem;
+        background-repeat: no-repeat;
+        background-position: left -8rem;
+        padding-top: 8rem;
+        line-height: 1.5rem;
+        -webkit-text-size-adjust: 100%;
     }
-    nav {
+    .editor nav {
+        font-size: .75rem;
+        padding: .75rem 1.5rem;
         backface-visibility: hidden;
-        background-color: blue;
+        background-color: white;
+        display: flex;
+        align-items: center;
+        font-weight: 500;
+        color: var(--wh-gray);
+    }
+    .editor nav button {
+        color: var(--wh-gray);
+        display: inline-block;
+        cursor: pointer;
+        padding: .75rem;
+        background-color: transparent;
+        border: solid 0px transparent;
+        box-shadow: 0 0 0 0 transparent;
+    }
+    .editor nav button:hover {
+        background-color: rgba(200, 200, 200, 0.1);
+    }
+    .editor nav button:last-child {
+        text-align: right;
+        flex: auto;
+    }
+    .editor nav button:last-child:hover {
+        background-color: transparent;
     }
     nav > a {
         color: white !important;
-    }
-    button {
-        width: 7rem;
-        background-color: red;
-        color: white;
-        border-color: transparent;
-        padding: 0.5rem;
-        margin: 0.25rem;
-        border-radius: 2px;
     }
     button:disabled {
         opacity: 0.4;

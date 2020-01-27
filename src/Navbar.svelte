@@ -3,6 +3,7 @@
 
     const signout = evt => {
         evt.preventDefault()
+        console.log(gapi)
         gapi.load('auth2', () => {
             const client_id = document.querySelector('meta[name="google-signin-client_id"]').content
             gapi.auth2.init({client_id})
@@ -16,7 +17,7 @@
     {#if user}
         <img src={user.picture} alt="user avatar" />
         <div>{user.name}</div>
-        <button onclick={signout}>Sign out</button>
+        <button on:click={signout}>Sign out</button>
     {:else}
         ...
     {/if}
@@ -36,5 +37,8 @@
     }
     nav div {
         flex: 1 1 auto;
+    }
+    nav button {
+        font-size: .75rem;
     }
 </style>

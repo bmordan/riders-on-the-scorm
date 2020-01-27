@@ -91,8 +91,8 @@
 						<h2>{title}</h2>
 					</main>
 					<footer>
-						<button value={uid} on:click={deletePackage} class="wh-bg-red" disabled={downloading && downloading === uid}>Delete</button>
-						<button value={uid} on:click={downloadPackage} class="wh-bg-green" disabled={downloading && downloading === uid}>Download</button>
+						<button value={uid} on:click={deletePackage} class="wh-bg-light-purple" disabled={downloading && downloading === uid}>Delete</button>
+						<button value={uid} on:click={downloadPackage} class="wh-bg-purple" disabled={downloading && downloading === uid}>Download</button>
 					</footer>
 				</article>
 			</Link>
@@ -107,11 +107,16 @@
     {#if showModel}
 		<section id="model" on:click={dismissModel}>
 			<form on:submit={createPackage}>
-				<h1>Create a new SCORM package</h1>
+				<main>
+					<h1><img class="icon" src="/icons/folder.svg" alt="scorm package logo"/></h1>
+					<h2>New package</h2>
+				</main>
 				<article>
 					<input name="title" placeholder="Title" required />
 				</article>
-				<button>Create</button>
+				<footer>
+					<button>Create</button>
+				</footer>
 			</form>
 		</section>
 	{/if}
@@ -134,7 +139,7 @@
 		margin: auto;
 		width: auto;
 		display: grid;
-		grid-template-columns: 13rem 13rem 13rem 13rem;
+		grid-template-columns: 17rem 17rem 17rem 17rem;
 		grid-gap: .5rem;
 	}
     .packages article {
@@ -158,7 +163,7 @@
 	.packages article header small {
 		position: absolute;
 		bottom: 0.25rem;
-		right: 1.5rem;
+		right: 1.75rem;
 		font-size: 0.25rem;
 		color: var(--wh-gray);
 	}
@@ -174,7 +179,7 @@
 		flex: none;
 	}
 	.packages article main h2 {
-		font-size: 1rem;
+		font-size: .75rem;
 		flex: 1 1 auto;
 		min-width: 0; min-height: 0;
 		color: var(--wh-gray);
@@ -194,16 +199,17 @@
 	}
 	.packages article footer button:first-child {
 		border-radius: 0 0 0 12px;
+		color: var(--wh-purple);
 	}
 	.packages article footer button:last-child {
 		border-radius: 0 0 12px 0;
 	}
-    article.create-package {
+    .create-package {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		text-align: center;
-		background-color: rgba(255, 255, 255, 0.3);
+		background-color: rgba(255, 255, 255, 0.2) !important;
 		border-style: dashed;
     }
     #model {
@@ -219,28 +225,53 @@
 		justify-content: center;
 	}
 	#model form {
-		width: 65vw;
-		height: 50vh;
-		border-radius: 3px;
-		border: solid 2px black;
-		padding: 2rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		width: 27vw;
+		height: 27vh;
+		border-radius: 12px;
+		border: solid 1px var(--wh-b--gray-light);
 		display: flex;
 		flex-direction: column;
 		justify-content: end;
 		background-color: white;
 		z-index: 2;
 	}
+	#model form main {
+		flex: none;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 2rem;
+	}
+	#model form main img {
+		margin-right: 1rem;
+	}
+	#model form main h2 {
+		font-size: .75rem;
+		color: var(--wh-gray);
+	}
 	#model form article {
+		padding: 2rem;
 		width: auto;
 		flex: 1 1 auto;
 		min-width: 0;
 		min-height: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 	#model form > article input {
 		width: calc(100% - 2rem);
 		padding: 1rem;
-		font-size: 2rem;
+		font-size: 1rem;
 		border: solid 0px transparent;
-		border-bottom: solid 2px black;
+		border-bottom: solid 1px var(--wh-gray-light);
+	}
+	#model form footer {
+		padding: 2rem;
+		flex: none;
+		text-align: right;
 	}
 </style>

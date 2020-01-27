@@ -16,7 +16,7 @@
     --wh-green: #25dd9c;
     --wh-dark-green: #1a9b6d;
     --wh-dark-red: #994949;
-    --wh-red: #BD2E2E;
+    --wh-red: #E23030;
 }
 .wh-bg-near-white {
     background-color: var(--wh-near-white);
@@ -85,4 +85,5 @@ button {
     color: var(--wh-near-white);
     outline: var(--wh-green);
     border-color: transparent;
+    font-size: .75rem;
 }

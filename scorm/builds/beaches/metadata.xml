@@ -5,7 +5,7 @@
     <metadataSchema>ADL SCORM 1.2</metadataSchema>
     <identifier>
       <catalog>URI</catalog>
-      <entry>BM.WhiteHat.Beaches.588c8ef9-b93c-4926-85cc-eb4063e44515</entry>
+      <entry>BM.WhiteHat.Beaches.5deff2de-8975-48c9-ae29-70cdfc54fb3f</entry>
     </identifier>
     <language>en-EN</language>
     <contribute>
@@ -21,9 +21,9 @@ ORG:WhiteHat
 END:VCARD  ]]>
       </entity>
       <date>
-        <dateTime>2020-01-23</dateTime>
+        <dateTime>2020-01-27</dateTime>
         <description language="en-EN">
-          <![CDATA[1579801967414]]>
+          <![CDATA[1580156936126]]>
         </description>
       </date>
     </contribute>
@@ -31,7 +31,7 @@ END:VCARD  ]]>
   <general>
     <identifier>
       <catalog>URI</catalog>
-      <entry>BM.WhiteHat.Beaches.588c8ef9-b93c-4926-85cc-eb4063e44515</entry>
+      <entry>BM.WhiteHat.Beaches.5deff2de-8975-48c9-ae29-70cdfc54fb3f</entry>
     </identifier>
     <title>
       <string language="en-EN">
@@ -70,9 +70,9 @@ ORG:WhiteHat
 END:VCARD  ]]>
       </entity>
       <date>
-        <dateTime>2020-01-23</dateTime>
+        <dateTime>2020-01-27</dateTime>
         <description language="en-EN">
-          <![CDATA[1579801967414]]>
+          <![CDATA[1580156936126]]>
         </description>
       </date>
     </contribute>
@@ -89,9 +89,9 @@ ORG:WhiteHat
 END:VCARD  ]]>
       </entity>
       <date>
-        <dateTime>2020-01-23</dateTime>
+        <dateTime>2020-01-27</dateTime>
         <description language="en-EN">
-          <![CDATA[1579801967414]]>
+          <![CDATA[1580156936126]]>
         </description>
       </date>
     </contribute>
@@ -109,9 +109,9 @@ ORG:WhiteHat
 END:VCARD  ]]>
       </entity>
       <date>
-        <dateTime>2020-01-23</dateTime>
+        <dateTime>2020-01-27</dateTime>
         <description language="en-EN">
-          <![CDATA[1579801967414]]>
+          <![CDATA[1580156936126]]>
         </description>
       </date>
     </contribute>
@@ -128,9 +128,9 @@ ORG:WhiteHat
 END:VCARD  ]]>
       </entity>
       <date>
-        <dateTime>2020-01-23</dateTime>
+        <dateTime>2020-01-27</dateTime>
         <description language="en-EN">
-          <![CDATA[1579801967414]]>
+          <![CDATA[1580156936126]]>
         </description>
       </date>
     </contribute>
@@ -139,7 +139,7 @@ END:VCARD  ]]>
     <format>text/html</format>
     <format>application/x-javascript</format>
     <format>text/css</format>
-    <size>42251</size>
+    <size>42344</size>
     <location>index.html</location>
     <duration>
       <duration>PT0H0M0S</duration>
