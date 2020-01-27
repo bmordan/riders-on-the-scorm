@@ -33,6 +33,7 @@
     "downloadjs": "^1.4.7",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
+    "flat-color-icons": "^1.1.0",
     "google-auth-library": "^5.8.0",
     "grpc": "^1.24.2",
     "markdown-it": "^10.0.0",

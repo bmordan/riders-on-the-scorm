@@ -1,6 +1,7 @@
 * {
     padding: 0;
     margin: 0;
+    text-decoration: none;
 }
 @font-face {
     font-family: 'Roboto';
@@ -15,6 +16,7 @@
     --wh-green: #25dd9c;
     --wh-dark-green: #1a9b6d;
     --wh-dark-red: #994949;
+    --wh-red: #BD2E2E;
 }
 .wh-bg-near-white {
     background-color: var(--wh-near-white);
@@ -52,6 +54,9 @@
 }
 .wh-bg-dark-green {
     background-color: var(--wh-dark-green);
+}
+.wh-bg-red {
+    background-color: var(--wh-red);
 }
 .wh-bg-dark-red {
     background-color: var(--wh-dark-red);

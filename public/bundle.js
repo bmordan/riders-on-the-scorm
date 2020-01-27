@@ -2200,31 +2200,37 @@ var app = (function () {
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[10] = list[i].uid;
-    	child_ctx[11] = list[i].title;
-    	child_ctx[12] = list[i].createdAt;
-    	child_ctx[13] = list[i].pages;
+    	child_ctx[11] = list[i].uid;
+    	child_ctx[12] = list[i].title;
+    	child_ctx[13] = list[i].createdAt;
+    	child_ctx[14] = list[i].pages;
     	return child_ctx;
     }
 
-    // (75:3) <Link to={`/users/${user.uid}/packages/${uid}/editor`}>
+    // (84:3) <Link to={`/users/${user.uid}/packages/${uid}/editor`}>
     function create_default_slot(ctx) {
     	let article;
-    	let h2;
-    	let t0_value = /*title*/ ctx[11] + "";
+    	let header;
+    	let small;
+    	let t0_value = /*formatDate*/ ctx[8](/*createdAt*/ ctx[13]) + "";
     	let t0;
     	let t1;
-    	let small;
-    	let t2_value = /*createdAt*/ ctx[12] + "";
+    	let main;
+    	let img;
+    	let img_src_value;
     	let t2;
+    	let h2;
+    	let t3_value = /*title*/ ctx[12] + "";
     	let t3;
-    	let button0;
     	let t4;
+    	let footer;
+    	let button0;
+    	let t5;
     	let button0_value_value;
     	let button0_disabled_value;
-    	let t5;
-    	let button1;
     	let t6;
+    	let button1;
+    	let t7;
     	let button1_value_value;
     	let button1_disabled_value;
     	let dispose;
@@ -2232,27 +2238,46 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			article = element("article");
-    			h2 = element("h2");
+    			header = element("header");
+    			small = element("small");
     			t0 = text(t0_value);
     			t1 = space();
-    			small = element("small");
-    			t2 = text(t2_value);
-    			t3 = space();
+    			main = element("main");
+    			img = element("img");
+    			t2 = space();
+    			h2 = element("h2");
+    			t3 = text(t3_value);
+    			t4 = space();
+    			footer = element("footer");
     			button0 = element("button");
-    			t4 = text("Delete");
-    			t5 = space();
+    			t5 = text("Delete");
+    			t6 = space();
     			button1 = element("button");
-    			t6 = text("Download");
-    			add_location(h2, file$1, 76, 5, 1859);
-    			add_location(small, file$1, 77, 5, 1881);
-    			button0.value = button0_value_value = /*uid*/ ctx[10];
-    			button0.disabled = button0_disabled_value = /*downloading*/ ctx[3] && /*downloading*/ ctx[3] === /*uid*/ ctx[10];
-    			add_location(button0, file$1, 78, 5, 1913);
-    			button1.value = button1_value_value = /*uid*/ ctx[10];
-    			button1.disabled = button1_disabled_value = /*downloading*/ ctx[3] && /*downloading*/ ctx[3] === /*uid*/ ctx[10];
-    			add_location(button1, file$1, 79, 5, 2025);
-    			attr_dev(article, "class", "svelte-i0haw0");
-    			add_location(article, file$1, 75, 4, 1844);
+    			t7 = text("Download");
+    			attr_dev(small, "class", "svelte-n0u8cw");
+    			add_location(small, file$1, 86, 6, 2254);
+    			attr_dev(header, "class", "svelte-n0u8cw");
+    			add_location(header, file$1, 85, 5, 2239);
+    			attr_dev(img, "class", "icon svelte-n0u8cw");
+    			if (img.src !== (img_src_value = "/icons/opened_folder.svg")) attr_dev(img, "src", img_src_value);
+    			attr_dev(img, "alt", "scorm package logo");
+    			add_location(img, file$1, 89, 6, 2326);
+    			attr_dev(h2, "class", "svelte-n0u8cw");
+    			add_location(h2, file$1, 90, 6, 2412);
+    			attr_dev(main, "class", "svelte-n0u8cw");
+    			add_location(main, file$1, 88, 5, 2313);
+    			button0.value = button0_value_value = /*uid*/ ctx[11];
+    			attr_dev(button0, "class", "wh-bg-red svelte-n0u8cw");
+    			button0.disabled = button0_disabled_value = /*downloading*/ ctx[3] && /*downloading*/ ctx[3] === /*uid*/ ctx[11];
+    			add_location(button0, file$1, 93, 6, 2462);
+    			button1.value = button1_value_value = /*uid*/ ctx[11];
+    			attr_dev(button1, "class", "wh-bg-green svelte-n0u8cw");
+    			button1.disabled = button1_disabled_value = /*downloading*/ ctx[3] && /*downloading*/ ctx[3] === /*uid*/ ctx[11];
+    			add_location(button1, file$1, 94, 6, 2593);
+    			attr_dev(footer, "class", "svelte-n0u8cw");
+    			add_location(footer, file$1, 92, 5, 2447);
+    			attr_dev(article, "class", "svelte-n0u8cw");
+    			add_location(article, file$1, 84, 4, 2224);
 
     			dispose = [
     				listen_dev(button0, "click", /*deletePackage*/ ctx[6], false, false, false),
@@ -2261,35 +2286,40 @@ var app = (function () {
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, article, anchor);
-    			append_dev(article, h2);
-    			append_dev(h2, t0);
+    			append_dev(article, header);
+    			append_dev(header, small);
+    			append_dev(small, t0);
     			append_dev(article, t1);
-    			append_dev(article, small);
-    			append_dev(small, t2);
-    			append_dev(article, t3);
-    			append_dev(article, button0);
-    			append_dev(button0, t4);
-    			append_dev(article, t5);
-    			append_dev(article, button1);
-    			append_dev(button1, t6);
+    			append_dev(article, main);
+    			append_dev(main, img);
+    			append_dev(main, t2);
+    			append_dev(main, h2);
+    			append_dev(h2, t3);
+    			append_dev(article, t4);
+    			append_dev(article, footer);
+    			append_dev(footer, button0);
+    			append_dev(button0, t5);
+    			append_dev(footer, t6);
+    			append_dev(footer, button1);
+    			append_dev(button1, t7);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*packages*/ 4 && t0_value !== (t0_value = /*title*/ ctx[11] + "")) set_data_dev(t0, t0_value);
-    			if (dirty & /*packages*/ 4 && t2_value !== (t2_value = /*createdAt*/ ctx[12] + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*packages*/ 4 && t0_value !== (t0_value = /*formatDate*/ ctx[8](/*createdAt*/ ctx[13]) + "")) set_data_dev(t0, t0_value);
+    			if (dirty & /*packages*/ 4 && t3_value !== (t3_value = /*title*/ ctx[12] + "")) set_data_dev(t3, t3_value);
 
-    			if (dirty & /*packages*/ 4 && button0_value_value !== (button0_value_value = /*uid*/ ctx[10])) {
+    			if (dirty & /*packages*/ 4 && button0_value_value !== (button0_value_value = /*uid*/ ctx[11])) {
     				prop_dev(button0, "value", button0_value_value);
     			}
 
-    			if (dirty & /*downloading, packages*/ 12 && button0_disabled_value !== (button0_disabled_value = /*downloading*/ ctx[3] && /*downloading*/ ctx[3] === /*uid*/ ctx[10])) {
+    			if (dirty & /*downloading, packages*/ 12 && button0_disabled_value !== (button0_disabled_value = /*downloading*/ ctx[3] && /*downloading*/ ctx[3] === /*uid*/ ctx[11])) {
     				prop_dev(button0, "disabled", button0_disabled_value);
     			}
 
-    			if (dirty & /*packages*/ 4 && button1_value_value !== (button1_value_value = /*uid*/ ctx[10])) {
+    			if (dirty & /*packages*/ 4 && button1_value_value !== (button1_value_value = /*uid*/ ctx[11])) {
     				prop_dev(button1, "value", button1_value_value);
     			}
 
-    			if (dirty & /*downloading, packages*/ 12 && button1_disabled_value !== (button1_disabled_value = /*downloading*/ ctx[3] && /*downloading*/ ctx[3] === /*uid*/ ctx[10])) {
+    			if (dirty & /*downloading, packages*/ 12 && button1_disabled_value !== (button1_disabled_value = /*downloading*/ ctx[3] && /*downloading*/ ctx[3] === /*uid*/ ctx[11])) {
     				prop_dev(button1, "disabled", button1_disabled_value);
     			}
     		},
@@ -2303,20 +2333,20 @@ var app = (function () {
     		block,
     		id: create_default_slot.name,
     		type: "slot",
-    		source: "(75:3) <Link to={`/users/${user.uid}/packages/${uid}/editor`}>",
+    		source: "(84:3) <Link to={`/users/${user.uid}/packages/${uid}/editor`}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (74:2) {#each packages as {uid, title, createdAt, pages}}
+    // (83:2) {#each packages as {uid, title, createdAt, pages}}
     function create_each_block(ctx) {
     	let current;
 
     	const link = new Link({
     			props: {
-    				to: `/users/${/*user*/ ctx[0].uid}/packages/${/*uid*/ ctx[10]}/editor`,
+    				to: `/users/${/*user*/ ctx[0].uid}/packages/${/*uid*/ ctx[11]}/editor`,
     				$$slots: { default: [create_default_slot] },
     				$$scope: { ctx }
     			},
@@ -2333,9 +2363,9 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			const link_changes = {};
-    			if (dirty & /*user, packages*/ 5) link_changes.to = `/users/${/*user*/ ctx[0].uid}/packages/${/*uid*/ ctx[10]}/editor`;
+    			if (dirty & /*user, packages*/ 5) link_changes.to = `/users/${/*user*/ ctx[0].uid}/packages/${/*uid*/ ctx[11]}/editor`;
 
-    			if (dirty & /*$$scope, packages, downloading*/ 65548) {
+    			if (dirty & /*$$scope, packages, downloading*/ 131084) {
     				link_changes.$$scope = { dirty, ctx };
     			}
 
@@ -2359,14 +2389,14 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(74:2) {#each packages as {uid, title, createdAt, pages}}",
+    		source: "(83:2) {#each packages as {uid, title, createdAt, pages}}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (88:4) {#if showModel}
+    // (107:4) {#if showModel}
     function create_if_block$1(ctx) {
     	let section;
     	let form;
@@ -2390,21 +2420,21 @@ var app = (function () {
     			t2 = space();
     			button = element("button");
     			button.textContent = "Create";
-    			attr_dev(h1, "class", "svelte-i0haw0");
-    			add_location(h1, file$1, 90, 4, 2387);
+    			attr_dev(h1, "class", "svelte-n0u8cw");
+    			add_location(h1, file$1, 109, 4, 3103);
     			attr_dev(input, "name", "title");
     			attr_dev(input, "placeholder", "Title");
     			input.required = true;
-    			attr_dev(input, "class", "svelte-i0haw0");
-    			add_location(input, file$1, 92, 5, 2442);
-    			attr_dev(article, "class", "svelte-i0haw0");
-    			add_location(article, file$1, 91, 4, 2427);
-    			add_location(button, file$1, 94, 4, 2513);
-    			attr_dev(form, "class", "svelte-i0haw0");
-    			add_location(form, file$1, 89, 3, 2350);
+    			attr_dev(input, "class", "svelte-n0u8cw");
+    			add_location(input, file$1, 111, 5, 3158);
+    			attr_dev(article, "class", "svelte-n0u8cw");
+    			add_location(article, file$1, 110, 4, 3143);
+    			add_location(button, file$1, 113, 4, 3229);
+    			attr_dev(form, "class", "svelte-n0u8cw");
+    			add_location(form, file$1, 108, 3, 3066);
     			attr_dev(section, "id", "model");
-    			attr_dev(section, "class", "svelte-i0haw0");
-    			add_location(section, file$1, 88, 2, 2302);
+    			attr_dev(section, "class", "svelte-n0u8cw");
+    			add_location(section, file$1, 107, 2, 3018);
 
     			dispose = [
     				listen_dev(form, "submit", /*createPackage*/ ctx[5], false, false, false),
@@ -2432,7 +2462,7 @@ var app = (function () {
     		block,
     		id: create_if_block$1.name,
     		type: "if",
-    		source: "(88:4) {#if showModel}",
+    		source: "(107:4) {#if showModel}",
     		ctx
     	});
 
@@ -2440,12 +2470,17 @@ var app = (function () {
     }
 
     function create_fragment$3(ctx) {
-    	let section;
-    	let center;
+    	let section1;
+    	let section0;
     	let t0;
     	let article;
+    	let main;
+    	let h1;
+    	let img;
+    	let img_src_value;
+    	let t1;
     	let h2;
-    	let t2;
+    	let t3;
     	let current;
     	let dispose;
     	let each_value = /*packages*/ ctx[2];
@@ -2463,8 +2498,8 @@ var app = (function () {
 
     	const block = {
     		c: function create() {
-    			section = element("section");
-    			center = element("center");
+    			section1 = element("section");
+    			section0 = element("section");
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				each_blocks[i].c();
@@ -2472,39 +2507,56 @@ var app = (function () {
 
     			t0 = space();
     			article = element("article");
+    			main = element("main");
+    			h1 = element("h1");
+    			img = element("img");
+    			t1 = space();
     			h2 = element("h2");
-    			h2.textContent = "new";
-    			t2 = space();
+    			h2.textContent = "New package";
+    			t3 = space();
     			if (if_block) if_block.c();
-    			add_location(h2, file$1, 84, 3, 2243);
-    			attr_dev(article, "class", "create-package svelte-i0haw0");
-    			add_location(article, file$1, 83, 2, 2174);
-    			attr_dev(center, "class", "packages svelte-i0haw0");
-    			add_location(center, file$1, 72, 1, 1702);
-    			attr_dev(section, "class", "packages-wrapper svelte-i0haw0");
-    			add_location(section, file$1, 71, 0, 1666);
-    			dispose = listen_dev(article, "click", /*click_handler*/ ctx[9], false, false, false);
+    			attr_dev(img, "class", "icon svelte-n0u8cw");
+    			if (img.src !== (img_src_value = "/icons/folder.svg")) attr_dev(img, "src", img_src_value);
+    			attr_dev(img, "alt", "scorm package logo");
+    			add_location(img, file$1, 101, 8, 2861);
+    			attr_dev(h1, "class", "svelte-n0u8cw");
+    			add_location(h1, file$1, 101, 4, 2857);
+    			attr_dev(h2, "class", "svelte-n0u8cw");
+    			add_location(h2, file$1, 102, 4, 2939);
+    			attr_dev(main, "class", "svelte-n0u8cw");
+    			add_location(main, file$1, 100, 3, 2846);
+    			attr_dev(article, "class", "create-package svelte-n0u8cw");
+    			add_location(article, file$1, 99, 2, 2777);
+    			attr_dev(section0, "class", "packages svelte-n0u8cw");
+    			add_location(section0, file$1, 81, 1, 2081);
+    			attr_dev(section1, "class", "packages-wrapper svelte-n0u8cw");
+    			add_location(section1, file$1, 80, 0, 2045);
+    			dispose = listen_dev(article, "click", /*click_handler*/ ctx[10], false, false, false);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, section, anchor);
-    			append_dev(section, center);
+    			insert_dev(target, section1, anchor);
+    			append_dev(section1, section0);
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
-    				each_blocks[i].m(center, null);
+    				each_blocks[i].m(section0, null);
     			}
 
-    			append_dev(center, t0);
-    			append_dev(center, article);
-    			append_dev(article, h2);
-    			append_dev(section, t2);
-    			if (if_block) if_block.m(section, null);
+    			append_dev(section0, t0);
+    			append_dev(section0, article);
+    			append_dev(article, main);
+    			append_dev(main, h1);
+    			append_dev(h1, img);
+    			append_dev(main, t1);
+    			append_dev(main, h2);
+    			append_dev(section1, t3);
+    			if (if_block) if_block.m(section1, null);
     			current = true;
     		},
     		p: function update(ctx, [dirty]) {
-    			if (dirty & /*user, packages, downloading, downloadPackage, deletePackage*/ 205) {
+    			if (dirty & /*user, packages, downloading, downloadPackage, deletePackage, formatDate*/ 461) {
     				each_value = /*packages*/ ctx[2];
     				let i;
 
@@ -2518,7 +2570,7 @@ var app = (function () {
     						each_blocks[i] = create_each_block(child_ctx);
     						each_blocks[i].c();
     						transition_in(each_blocks[i], 1);
-    						each_blocks[i].m(center, t0);
+    						each_blocks[i].m(section0, t0);
     					}
     				}
 
@@ -2537,7 +2589,7 @@ var app = (function () {
     				} else {
     					if_block = create_if_block$1(ctx);
     					if_block.c();
-    					if_block.m(section, null);
+    					if_block.m(section1, null);
     				}
     			} else if (if_block) {
     				if_block.d(1);
@@ -2563,7 +2615,7 @@ var app = (function () {
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(section);
+    			if (detaching) detach_dev(section1);
     			destroy_each(each_blocks, detaching);
     			if (if_block) if_block.d();
     			dispose();
@@ -2630,6 +2682,30 @@ var app = (function () {
     		}).catch(console.error);
     	}
 
+    	const formatDate = ISOstring => {
+    		const date = new Date(ISOstring);
+    		const wday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][date.getDay()];
+    		const day = date.getDate();
+
+    		const month = [
+    			"Jan",
+    			"Feb",
+    			"Mar",
+    			"Apr",
+    			"May",
+    			"Jun",
+    			"Jul",
+    			"Aug",
+    			"Sep",
+    			"Oct",
+    			"Nov",
+    			"Dec"
+    		][date.getMonth()];
+
+    		const year = date.getFullYear();
+    		return [wday, day, month, year].join(" ");
+    	};
+
     	const writable_props = ["user"];
 
     	Object.keys($$props).forEach(key => {
@@ -2684,6 +2760,7 @@ var app = (function () {
     		createPackage,
     		deletePackage,
     		downloadPackage,
+    		formatDate,
     		selected,
     		click_handler
     	];
