@@ -1,8 +1,8 @@
 <script>
 	import download from "downloadjs"
-    import {Link} from "svelte-routing"
+	import {Link} from "svelte-routing"
 
-    export let user
+    export let user;
 
     $: showModel = false
 	$: packages = user.packages || []
@@ -69,12 +69,9 @@
 	}
 
 </script>
-<section>
-    <h1>
-        <img src={user.picture} alt="avatar" /> {user.name}
-    </h1>
-	<section class="packages">
-		{#each packages as {uid, title, createdAt}}
+<section class="packages-wrapper">
+	<center class="packages">
+		{#each packages as {uid, title, createdAt, pages}}
 			<Link to={`/users/${user.uid}/packages/${uid}/editor`}>
 				<article>
 					<h2>{title}</h2>
@@ -87,7 +84,7 @@
 		<article class="create-package" on:click={e => showModel = true}>
 			<h2>new</h2>
 		</article>
-	</section>
+	</center>
     {#if showModel}
 		<section id="model" on:click={dismissModel}>
 			<form on:submit={createPackage}>
@@ -101,35 +98,28 @@
 	{/if}
 </section>
 <style>
+	section.packages-wrapper {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		min-height: 33vh;
+	}
     h1 {
         display: flex;
         align-items: center;
     }
-    h1 img {
-        margin-right: 1rem;
-        width: 2rem;
-        height: 2rem;
-        border-radius: 50%;
-        border: solid 2px black;
-    }
 	.packages {
-		display: flex;
-		flex-wrap: wrap;
+		margin: auto;
+		width: auto;
+		display: grid;
+		grid-template-columns: 13rem 13rem 13rem 13rem;
+		grid-gap: .25rem;
 	}
     .packages article {
-        width: 12rem;
-        height: 8rem;
-        background-color: salmon;
-        border-radius: 3px;
-        padding: 1rem;
-		margin: 0.5rem;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
+		border: solid 1px var(--wh-gray-light);
 	}
     article.create-package {
-        cursor: pointer;
-        opacity: 0.5;
+
     }
     #model {
 		background-color: rgba(0,0,0,0.7);
@@ -168,13 +158,4 @@
 		border: solid 0px transparent;
 		border-bottom: solid 2px black;
 	}
-	button {
-        width: 7rem;
-        background-color: red;
-        color: white;
-        border-color: transparent;
-        padding: 0.5rem;
-        margin: 0.25rem;
-        border-radius: 2px;
-    }
 </style>
