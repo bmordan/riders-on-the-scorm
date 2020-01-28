@@ -91,8 +91,14 @@
 						<h2>{title}</h2>
 					</main>
 					<footer>
-						<button value={uid} on:click={deletePackage} class="wh-bg-light-purple" disabled={downloading && downloading === uid}>Delete</button>
-						<button value={uid} on:click={downloadPackage} class="wh-bg-purple" disabled={downloading && downloading === uid}>Download</button>
+						<button value={uid} on:click={deletePackage} class="wh-bg-light-purple" disabled={downloading && downloading === uid}>
+							<svg version="1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="16" height="16"><path fill="currentColor" d="M30.6 44H17.4c-2 0-3.7-1.4-4-3.4L9 11h30l-4.5 29.6c-.3 2-2 3.4-3.9 3.4z"/><path fill="currentColor" d="M38 13H10c-1.1 0-2-.9-2-2s.9-2 2-2h28c1.1 0 2 .9 2 2s-.9 2-2 2z"/></svg>
+							&nbsp;Delete
+						</button>
+						<button value={uid} on:click={downloadPackage} class="wh-bg-purple" disabled={downloading && downloading === uid}>
+							<svg version="1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="16" height="16"><g fill="currentColor"><path d="M24 37.1L13 24h22zM20 4h8v4h-8zm0 6h8v4h-8z"/><path d="M20 16h8v11h-8zM6 40h36v4H6z"/></g></svg>
+							&nbsp;Download
+						</button>
 					</footer>
 				</article>
 			</Link>
@@ -188,6 +194,7 @@
 		border-top: solid 1px var(--wh-gray-light);
 		display: flex;
 		color: white;
+		align-items: center;
 	}
 	.packages article footer button {
 		border: solid 0px transparent;
@@ -196,10 +203,13 @@
 		width: 50%;
 		height: 100%;
 		padding: 1rem 0;
+		color: white;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 	.packages article footer button:first-child {
 		border-radius: 0 0 0 12px;
-		color: var(--wh-purple);
 	}
 	.packages article footer button:last-child {
 		border-radius: 0 0 12px 0;

@@ -39,6 +39,13 @@
         flex: 1 1 auto;
     }
     nav button {
+        font-size: .75rem !important;
+        padding: 0.5rem .75rem;
+        border-radius: 3px;
+        background-color: var(--wh-dark-green);
+        color: var(--wh-near-white);
+        outline: var(--wh-green);
+        border-color: transparent;
         font-size: .75rem;
     }
 </style>

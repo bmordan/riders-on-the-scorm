@@ -42,8 +42,7 @@ async function getGoogleUser(token) {
     } else {
         const ticket = await gapi.verifyIdToken({
             idToken: token,
-            audience: GOOGLE_CLIENT_ID,
-            hd: 'whitehat.org.uk'
+            audience: GOOGLE_CLIENT_ID
         })
         payload = ticket.getPayload()
     }

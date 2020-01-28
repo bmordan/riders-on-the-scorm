@@ -1,8 +1,3 @@
-* {
-    padding: 0;
-    margin: 0;
-    text-decoration: none;
-}
 @font-face {
     font-family: 'Roboto';
     src: url('./Roboto-Regular.ttf');
@@ -76,14 +71,55 @@
 body {
     font-family: 'Roboto', sans-serif;
     background-color: var(--wh-near-white);
+    margin: 0 !important;
 }
-button {
-    padding: 0.5rem .75rem;
-    border-radius: 3px;
-    box-shadow: 1px 1px 1px 0px gray;
-    background-color: var(--wh-dark-green);
-    color: var(--wh-near-white);
-    outline: var(--wh-green);
-    border-color: transparent;
-    font-size: .75rem;
+h1 {
+   margin-block-start: 2rem;
+   margin-block-end: 2rem;;
 }
+blockquote {
+    background-color: var(--wh-near-white);
+    font-style: italic;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+}
+a {
+    text-decoration: none;
+}
+.scorm-quiz {
+    margin: 2rem 0;
+    width: 90%;
+    max-width: 75%;
+    margin: auto;
+}
+.scorm-quiz article {
+    margin:0.25rem 0;
+    padding:1rem;
+    
+}
+.scorm-quiz-question {
+    color: white;
+    background-color: var(--wh-purple);
+}
+.scorm-quiz-answer {
+    color: var(--wh-purple);
+    background-color:white;
+    border: dashed 1px var(--wh-purple);
+    cursor: pointer;
+}
+.scorm-quiz-answer:hover {
+    color: var(--wh-purple);
+    background-color:var(--wh-light-purple);
+    border: solid 1px var(--wh-purple);
+}
+code.hljs {
+    padding: 2rem;
+}
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Old versions of Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+  }

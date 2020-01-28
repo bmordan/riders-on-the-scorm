@@ -1,6 +1,6 @@
 <script>
     import { Link } from "svelte-routing"
-    import markedex from "./marked-extended"
+    import Preview from "./Preview.svelte"
     
     export let uid
     export let pid
@@ -10,7 +10,7 @@
     $: page = 0
     $: showPreview = false
     $: current = _package.pages[page]
-    $: html = showPreview ? markedex(_package.pages[page].markdown) : ""
+    $: html = showPreview ? _package.pages[page].markdown : ""
     $: saving = false
 
     const togglePreview = () => (showPreview = !showPreview)
@@ -63,7 +63,6 @@
 
     function removePage () {
         saving = true
-        // many breaks here
         const pgid = _package.pages[page].uid
 
         fetch(`/users/${uid}/packages/${pid}/pages/${pgid}/delete`)
@@ -85,9 +84,7 @@
 </script>
 <section class="editor">
     <nav>
-        <Link to={`/users/${uid}`}>
-            <button>Exit</button>
-        </Link>
+        <Link to={`/users/${uid}`}><button>Exit</button></Link>
         <button disabled={saving} on:click={onSave}>Save{saving ? "ing..." : ""}</button>
         <button on:click={togglePreview}>{showPreview ? 'Editor' : 'Preview'}</button>
         <button disabled={page === 0 && !showPreview} on:click={prevPage}>Prev</button>
@@ -108,10 +105,7 @@
                 </div>
             </article>
             <article class="preview">
-                <article id="html">
-                    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.10.0/css/tachyons.min.css"/>
-                    {@html html}
-                </article>
+                <Preview content={html} />
             </article>
         {/await}
     </section>
@@ -128,6 +122,7 @@
         top: 1rem;
         position: relative;
         width: 90%;
+        max-width: 52rem;
         margin: auto;
         height: 100%;
         border: solid 1px var(--wh-gray-light);
@@ -149,32 +144,23 @@
         background-color: white;
         transform: rotateY(180deg);
     }
-    #markdown, #html {
+    #markdown {
         flex: 1 1 auto;
         overflow-y: scroll;
         text-align: left;
     }
     #markdown textarea {
         border-color: transparent;
-        width: 100%;
+        width: 90%;
         height: 100%;
         resize: none;
         background-color: white;
-        padding: 1rem;
+        padding: 2rem;
         font-family: 'courier new', 'Courier New', Courier, monospace;
         font-size: 1.25rem;
         line-height: 1.25rem;
         outline: none;
-    }
-    #html {
-        padding: 2rem;
-        background-image: url(/icons/wh-blue-wave.svg);
-        background-size: 100% 16rem;
-        background-repeat: no-repeat;
-        background-position: left -8rem;
-        padding-top: 8rem;
-        line-height: 1.5rem;
-        -webkit-text-size-adjust: 100%;
+        white-space: pre-wrap;
     }
     .editor nav {
         font-size: .75rem;
@@ -204,9 +190,6 @@
     }
     .editor nav button:last-child:hover {
         background-color: transparent;
-    }
-    nav > a {
-        color: white !important;
     }
     button:disabled {
         opacity: 0.4;
