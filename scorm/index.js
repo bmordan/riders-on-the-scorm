@@ -6,8 +6,11 @@ const markdown = require('../src/marked-extended')
 
 const scormify = (_package, user) => {
     return new Promise((resolve, reject) => {
-        const package_dir = path.join(__dirname, 'builds', encodeURIComponent(_package.title).toLowerCase())
+        
+        const title = _package.title.toLowerCase().split(" ").join("_")
+        const package_dir = path.join(__dirname, 'builds', title)
         const output_dir = path.join(__dirname, '..', 'public', 'packages')
+        
         try {
             execSync(`rm -fr ${package_dir}`)
             fs.mkdirSync(package_dir)
@@ -19,10 +22,8 @@ const scormify = (_package, user) => {
     
         fs.writeFile(path.join(package_dir, 'pages.json'), JSON.stringify(pages), 'utf8', err => {
             if (err) return reject(err)
-            
-            execSync(`cp ${path.join(__dirname, 'templates', 'index.html')} ${package_dir}/index.html`)
-            execSync(`cp ${path.join(__dirname, 'templates', 'main.js')} ${package_dir}/main.js`)
-            execSync(`cp ${path.join(__dirname, 'templates', 'highlight.css')} ${package_dir}/highlight.css`)
+
+            execSync(`npm run scormify -- --name=${title}`)
             
             scopackager({
                 version: '1.2',
@@ -39,7 +40,7 @@ const scormify = (_package, user) => {
                     author: user.name
                 }
             }, function() {
-                const package_name = `${_package.title.split(" ").join("")}_v0.1.0_${new Date().toISOString().substring(0,10)}_${Number(new Date().getTime().toString().substring(0,10))}`
+                const package_name = `${title}_v0.1.0_${new Date().toISOString().substring(0,10)}_${Number(new Date().getTime().toString().substring(0,10))}`
                 
                 const poll = () => {
                     fs.readdir(output_dir, (err, files) => {
