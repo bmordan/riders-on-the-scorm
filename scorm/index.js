@@ -40,11 +40,12 @@ const scormify = (_package, user) => {
                     author: user.name
                 }
             }, function() {
-                const package_name = `${title}_v0.1.0_${new Date().toISOString().substring(0,10)}_${Number(new Date().getTime().toString().substring(0,10))}`
+                const package_name = `${title.split("_").join("")}_v0.1.0_${new Date().toISOString().substring(0,10)}_${Number(new Date().getTime().toString().substring(0,10))}`
                 
                 const poll = () => {
                     fs.readdir(output_dir, (err, files) => {
                         const [file] = files.filter(f => f.includes(package_name))
+                        console.log(files)
                         return file ? resolve(path.join(output_dir, file)) : poll()
                     })
                 }

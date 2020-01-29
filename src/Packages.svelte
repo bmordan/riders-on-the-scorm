@@ -59,11 +59,13 @@
 			})
 			.then(blob => {
 				download(blob, filename, 'application/zip')
+				downloading = false
 				setTimeout(() => {
 					// there is no other way to know that the file has been downloaded
-					fetch(`/users/${user.uid}/packages/${pid}/download/${filename}/remove`)
-					downloading = false
-				}, 9000)
+					return fetch(`/users/${user.uid}/packages/${pid}/download/${filename}/remove`)
+						.then(res => res.json())
+						.then(console.log)
+				}, 6000)
 			})
 			.catch(console.error)
 	}
@@ -283,5 +285,8 @@
 		padding: 2rem;
 		flex: none;
 		text-align: right;
+	}
+	button:disabled {
+		opacity: 0.4;
 	}
 </style>

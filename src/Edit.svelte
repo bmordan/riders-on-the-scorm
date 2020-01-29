@@ -1,6 +1,7 @@
 <script>
     import { Link } from "svelte-routing"
     import Preview from "./Preview.svelte"
+    import Navpages from "./Navpages.svelte"
     
     export let uid
     export let pid
@@ -79,16 +80,13 @@
             })
     }
 
-    const nextPage = () => {page + 1 > _package.pages.length - 1 ? page = page : page += 1}
-    const prevPage = () => {page - 1 < 0 ? page = 0 : page -= 1}
+    const setPage = number => (page = Math.min(_package.pages.length, Math.max(0, number)))
 </script>
 <section class="editor">
     <nav>
-        <Link to={`/users/${uid}`}><button>Exit</button></Link>
+        <Link to={`/users/${uid}`} class="noselect" style="text-decoration:none;"><button>Exit</button></Link>
         <button disabled={saving} on:click={onSave}>Save{saving ? "ing..." : ""}</button>
         <button on:click={togglePreview}>{showPreview ? 'Editor' : 'Preview'}</button>
-        <button disabled={page === 0 && !showPreview} on:click={prevPage}>Prev</button>
-        <button disabled={page === _package.pages.length - 1 && !showPreview} on:click={nextPage}>Next</button>
         <button disabled={saving} on:click={addPage}>Add Page</button>
         <button disabled={saving} on:click={removePage}>Delete Page</button>
         <button>{_package.title} {page + 1} of {_package.pages.length}</button>
@@ -99,14 +97,18 @@
                 <p>... fetching package {pid}</p>
             </article>
         {:then}
-            <article class="edit">
-                <div id="markdown">
-                    <textarea name="markdown" focus=true bind:value={current.markdown} rows="25"></textarea>
-                </div>
-            </article>
-            <article class="preview">
-                <Preview content={html} />
-            </article>
+                <article class="edit">
+                    <Navpages setPage={setPage} pages={_package.pages} page={page} mode={!showPreview}>
+                        <div id="markdown">
+                            <textarea name="markdown" focus=true bind:value={current.markdown} rows="25"></textarea>
+                        </div>
+                    </Navpages>
+                </article>
+                <article class="preview">
+                    <Navpages setPage={setPage} pages={_package.pages} page={page}>
+                        <Preview content={html} />
+                    </Navpages>
+                </article>
         {/await}
     </section>
 </section>
@@ -115,7 +117,7 @@
         margin: auto;
         background-color: var(--wh-bg-gray-light);
         width: 100vw;
-        height: 90vh;
+        height: 87.5vh;
         perspective: 2000px;
     }
     .editor-flip-frame {
@@ -172,23 +174,25 @@
         font-weight: 500;
         color: var(--wh-gray);
     }
-    .editor nav button {
+    button {
         color: var(--wh-gray);
+        text-decoration: none;
         display: inline-block;
         cursor: pointer;
         padding: .75rem;
         background-color: transparent;
         border: solid 0px transparent;
         box-shadow: 0 0 0 0 transparent;
+        outline: none;
     }
-    .editor nav button:hover {
+    button:hover {
         background-color: rgba(200, 200, 200, 0.1);
     }
-    .editor nav button:last-child {
+    button:last-child {
         text-align: right;
         flex: auto;
     }
-    .editor nav button:last-child:hover {
+    button:last-child:hover {
         background-color: transparent;
     }
     button:disabled {

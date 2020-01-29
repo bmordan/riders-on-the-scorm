@@ -10,7 +10,7 @@ import copy from 'rollup-plugin-copy'
 export default args => {
 	const dest = `scorm/builds/${encodeURIComponent(args.name).toLowerCase()}/`
 	return {
-		input: 'scorm/src/loadpackage.js',
+		input: 'scorm/src/entry.js',
 		output: {
 			sourcemap: false,
 			format: 'iife',
@@ -30,7 +30,10 @@ export default args => {
 			copy({
 				targets: [
 					{src: 'scorm/templates/index.html', dest},
-					{src: 'scorm/templates/pipwerks.js', dest}
+					{src: 'scorm/templates/pipwerks.js', dest},
+					{src: 'public/global.css', dest},
+					{src: 'public/reset.css', dest},
+					{src: 'public/Roboto-Regular.ttf', dest}
 				]
 			}),
 			commonjs(),

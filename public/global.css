@@ -84,7 +84,7 @@ blockquote {
     border-radius: 12px;
 }
 a {
-    text-decoration: none;
+    text-decoration: none !important;
 }
 .scorm-quiz {
     margin: 2rem 0;

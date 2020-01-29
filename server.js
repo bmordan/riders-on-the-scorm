@@ -132,7 +132,9 @@ app.get("/users/:uid/packages/:pid/download", (req, res) => {
         })
 })
 app.get("/users/:uid/packages/:pid/download/:filename/remove", (req) => {
-    fs.unlink(path.join(__dirname, 'public', 'packages', req.params.filename), console.error)
+    fs.unlink(path.join(__dirname, 'public', 'packages', req.params.filename), err => {
+        return res.send(err || {removed: req.params.filename})
+    })
 })
 app.get("/users/:uid/packages/:pid", (req, res) => {
     dgraph.getPackageByUid(req.params.pid)
