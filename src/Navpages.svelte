@@ -2,7 +2,7 @@
     export let setPage
     export let pages
     export let page
-    export let mode
+    export let mode = false
 </script>
 <slot></slot>
 <footer class={mode ? "editmode" : ""}>

@@ -1,8 +1,6 @@
 <script>
     import markedex from "./marked-extended"
-    export let content
-
-
+    export let content = ""
 </script>
 <section id="html">
     <link href="/reset.css" rel="stylesheet">

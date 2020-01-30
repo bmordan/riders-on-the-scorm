@@ -47448,20 +47448,20 @@ var app = (function () {
     			main = element("main");
     			attr_dev(link, "href", "/reset.css");
     			attr_dev(link, "rel", "stylesheet");
-    			add_location(link, file$3, 7, 4, 113);
+    			add_location(link, file$3, 5, 4, 116);
     			attr_dev(path, "d", "M0 0h560v94.913C456 74.575 360.667 69.49 274 79.66 144 94.913 62 123 0 116.947");
     			attr_dev(path, "fill", "#16264D");
     			attr_dev(path, "fill-rule", "evenodd");
-    			add_location(path, file$3, 9, 70, 238);
+    			add_location(path, file$3, 7, 70, 241);
     			attr_dev(svg, "viewBox", "0 0 560 118");
     			attr_dev(svg, "xmlns", "http://www.w3.org/2000/svg");
-    			add_location(svg, file$3, 9, 8, 176);
-    			add_location(header, file$3, 8, 4, 159);
+    			add_location(svg, file$3, 7, 8, 179);
+    			add_location(header, file$3, 6, 4, 162);
     			attr_dev(main, "class", "svelte-kjwr8f");
-    			add_location(main, file$3, 11, 4, 388);
+    			add_location(main, file$3, 9, 4, 391);
     			attr_dev(section, "id", "html");
     			attr_dev(section, "class", "svelte-kjwr8f");
-    			add_location(section, file$3, 6, 0, 89);
+    			add_location(section, file$3, 4, 0, 92);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -47498,7 +47498,7 @@ var app = (function () {
     }
 
     function instance$5($$self, $$props, $$invalidate) {
-    	let { content } = $$props;
+    	let { content = "" } = $$props;
     	const writable_props = ["content"];
 
     	Object.keys($$props).forEach(key => {
@@ -47531,13 +47531,6 @@ var app = (function () {
     			options,
     			id: create_fragment$5.name
     		});
-
-    		const { ctx } = this.$$;
-    		const props = options.props || ({});
-
-    		if (/*content*/ ctx[0] === undefined && !("content" in props)) {
-    			console.warn("<Preview> was created without expected prop 'content'");
-    		}
     	}
 
     	get content() {
@@ -47579,7 +47572,7 @@ var app = (function () {
     			t0 = text("page ");
     			t1 = text(t1_value);
     			attr_dev(article, "class", article_class_value = "" + (null_to_empty(/*page*/ ctx[2] === /*i*/ ctx[9] ? "active" : "") + " svelte-1roxps2"));
-    			add_location(article, file$4, 10, 12, 209);
+    			add_location(article, file$4, 10, 12, 217);
     			dispose = listen_dev(article, "click", click_handler, false, false, false);
     		},
     		m: function mount(target, anchor) {
@@ -47654,23 +47647,23 @@ var app = (function () {
     			t3 = text(" WhiteHat");
     			t4 = text(" © 2020");
     			attr_dev(nav, "class", "svelte-1roxps2");
-    			add_location(nav, file$4, 8, 4, 161);
+    			add_location(nav, file$4, 8, 4, 169);
     			attr_dev(path, "d", "M19.33 6.095h-1.702c-.264 0-.28-.233-.372-.613-.22-.894-.753-1.898-1.396-2.745C15.217 1.89 13.036 0 10.213 0 7.389 0 5.53 1.453 4.536 2.57c-.994 1.118-1.469 2.525-1.57 3.045-.104.533-.375.48-.444.48H.162c-.185 0-.161.06-.161.284v1.355c0 .278.004.266.213.266h7.294c.292 0 .256-.18.256-.276v-1.35c0-.318-.112-.28-.332-.28H5.207c-.509 0-.347-.3-.088-.918.447-1.14 2.117-3.235 4.988-3.235 2.87 0 4.314 1.969 4.804 2.832.49.862.62 1.73.62 1.906v1.03c0 .299.027.29.223.29h3.986c.275 0 .221-.227.202-.303-.019-.077-.27-1.121-.323-1.365-.053-.243-.168-.236-.289-.236z");
     			attr_dev(path, "fill", "currentColor");
     			attr_dev(path, "fill-rule", "evenodd");
-    			add_location(path, file$4, 14, 66, 528);
+    			add_location(path, file$4, 14, 66, 536);
     			attr_dev(svg, "width", "20");
     			attr_dev(svg, "height", "8");
     			attr_dev(svg, "xmlns", "http://www.w3.org/2000/svg");
-    			add_location(svg, file$4, 14, 4, 466);
+    			add_location(svg, file$4, 14, 4, 474);
     			attr_dev(a, "href", "https://whitehat.org.uk");
     			attr_dev(a, "target", "_blank");
     			attr_dev(a, "class", "svelte-1roxps2");
-    			add_location(a, file$4, 13, 81, 411);
+    			add_location(a, file$4, 13, 81, 419);
     			attr_dev(small, "class", "svelte-1roxps2");
-    			add_location(small, file$4, 13, 4, 334);
+    			add_location(small, file$4, 13, 4, 342);
     			attr_dev(footer, "class", footer_class_value = "" + (null_to_empty(/*mode*/ ctx[3] ? "editmode" : "") + " svelte-1roxps2"));
-    			add_location(footer, file$4, 7, 0, 117);
+    			add_location(footer, file$4, 7, 0, 125);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -47762,7 +47755,7 @@ var app = (function () {
     	let { setPage } = $$props;
     	let { pages } = $$props;
     	let { page } = $$props;
-    	let { mode } = $$props;
+    	let { mode = false } = $$props;
     	const writable_props = ["setPage", "pages", "page", "mode"];
 
     	Object.keys($$props).forEach(key => {
@@ -47820,10 +47813,6 @@ var app = (function () {
     		if (/*page*/ ctx[2] === undefined && !("page" in props)) {
     			console.warn("<Navpages> was created without expected prop 'page'");
     		}
-
-    		if (/*mode*/ ctx[3] === undefined && !("mode" in props)) {
-    			console.warn("<Navpages> was created without expected prop 'mode'");
-    		}
     	}
 
     	get setPage() {
@@ -47864,7 +47853,7 @@ var app = (function () {
     const { console: console_1$2 } = globals;
     const file$5 = "src/Edit.svelte";
 
-    // (87:8) <Link to={`/users/${uid}`} class="noselect" style="text-decoration:none;">
+    // (87:8) <Link to={`/users/${uid}`} >
     function create_default_slot_2(ctx) {
     	let button;
 
@@ -47872,8 +47861,8 @@ var app = (function () {
     		c: function create() {
     			button = element("button");
     			button.textContent = "Exit";
-    			attr_dev(button, "class", "svelte-23bwtu");
-    			add_location(button, file$5, 86, 82, 2496);
+    			attr_dev(button, "class", "noselect svelte-23bwtu");
+    			add_location(button, file$5, 86, 36, 2450);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -47887,7 +47876,7 @@ var app = (function () {
     		block,
     		id: create_default_slot_2.name,
     		type: "slot",
-    		source: "(87:8) <Link to={`/users/${uid}`} class=\\\"noselect\\\" style=\\\"text-decoration:none;\\\">",
+    		source: "(87:8) <Link to={`/users/${uid}`} >",
     		ctx
     	});
 
@@ -47954,9 +47943,9 @@ var app = (function () {
     			article1 = element("article");
     			create_component(navpages1.$$.fragment);
     			attr_dev(article0, "class", "edit svelte-23bwtu");
-    			add_location(article0, file$5, 99, 16, 3206);
+    			add_location(article0, file$5, 99, 16, 3177);
     			attr_dev(article1, "class", "preview svelte-23bwtu");
-    			add_location(article1, file$5, 106, 16, 3600);
+    			add_location(article1, file$5, 106, 16, 3571);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, article0, anchor);
@@ -48032,10 +48021,10 @@ var app = (function () {
     			attr_dev(textarea, "focus", "true");
     			attr_dev(textarea, "rows", "25");
     			attr_dev(textarea, "class", "svelte-23bwtu");
-    			add_location(textarea, file$5, 102, 28, 3405);
+    			add_location(textarea, file$5, 102, 28, 3376);
     			attr_dev(div, "id", "markdown");
     			attr_dev(div, "class", "svelte-23bwtu");
-    			add_location(div, file$5, 101, 24, 3357);
+    			add_location(div, file$5, 101, 24, 3328);
     			dispose = listen_dev(textarea, "input", /*textarea_input_handler*/ ctx[15]);
     		},
     		m: function mount(target, anchor) {
@@ -48125,9 +48114,9 @@ var app = (function () {
     			p = element("p");
     			t0 = text("... fetching package ");
     			t1 = text(/*pid*/ ctx[1]);
-    			add_location(p, file$5, 96, 16, 3117);
+    			add_location(p, file$5, 96, 16, 3088);
     			attr_dev(article, "class", "edit svelte-23bwtu");
-    			add_location(article, file$5, 95, 12, 3078);
+    			add_location(article, file$5, 95, 12, 3049);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, article, anchor);
@@ -48193,8 +48182,6 @@ var app = (function () {
     	const link = new Link({
     			props: {
     				to: `/users/${/*uid*/ ctx[0]}`,
-    				class: "noselect",
-    				style: "text-decoration:none;",
     				$$slots: { default: [create_default_slot_2] },
     				$$scope: { ctx }
     			},
@@ -48243,22 +48230,22 @@ var app = (function () {
     			info.block.c();
     			button0.disabled = /*saving*/ ctx[8];
     			attr_dev(button0, "class", "svelte-23bwtu");
-    			add_location(button0, file$5, 87, 8, 2533);
+    			add_location(button0, file$5, 87, 8, 2504);
     			attr_dev(button1, "class", "svelte-23bwtu");
-    			add_location(button1, file$5, 88, 8, 2623);
+    			add_location(button1, file$5, 88, 8, 2594);
     			button2.disabled = /*saving*/ ctx[8];
     			attr_dev(button2, "class", "svelte-23bwtu");
-    			add_location(button2, file$5, 89, 8, 2710);
+    			add_location(button2, file$5, 89, 8, 2681);
     			button3.disabled = /*saving*/ ctx[8];
     			attr_dev(button3, "class", "svelte-23bwtu");
-    			add_location(button3, file$5, 90, 8, 2781);
+    			add_location(button3, file$5, 90, 8, 2752);
     			attr_dev(button4, "class", "svelte-23bwtu");
-    			add_location(button4, file$5, 91, 8, 2858);
+    			add_location(button4, file$5, 91, 8, 2829);
     			attr_dev(nav, "class", "svelte-23bwtu");
     			add_location(nav, file$5, 85, 4, 2408);
     			attr_dev(section0, "class", "editor-flip-frame svelte-23bwtu");
     			set_style(section0, "transform", "rotateY(" + (/*showPreview*/ ctx[5] ? "180" : "0") + "deg)");
-    			add_location(section0, file$5, 93, 4, 2945);
+    			add_location(section0, file$5, 93, 4, 2916);
     			attr_dev(section1, "class", "editor svelte-23bwtu");
     			add_location(section1, file$5, 84, 0, 2379);
 

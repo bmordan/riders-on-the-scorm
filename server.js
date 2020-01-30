@@ -131,7 +131,7 @@ app.get("/users/:uid/packages/:pid/download", (req, res) => {
             res.send(err)
         })
 })
-app.get("/users/:uid/packages/:pid/download/:filename/remove", (req) => {
+app.get("/users/:uid/packages/:pid/download/:filename/remove", (req, res) => {
     fs.unlink(path.join(__dirname, 'public', 'packages', req.params.filename), err => {
         return res.send(err || {removed: req.params.filename})
     })

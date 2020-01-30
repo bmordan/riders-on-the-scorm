@@ -45,7 +45,6 @@ const scormify = (_package, user) => {
                 const poll = () => {
                     fs.readdir(output_dir, (err, files) => {
                         const [file] = files.filter(f => f.includes(package_name))
-                        console.log(files)
                         return file ? resolve(path.join(output_dir, file)) : poll()
                     })
                 }

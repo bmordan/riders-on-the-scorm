@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="generator" content="Claude" />
+<style type="text/css">
+body {
+    background-color: rgb(240,240,230); color: black;
+    margin-top: 0px; margin-left: 0px;
+    padding-top: 5px; padding-left: 5px; padding-bottom: 0px;
+    font-size: small;font-family: Verdana, Arial, Helvetica, Sans-Serif;
+}
+.sample {
+    font-family: Courier New, Courier, Monospace; font-size: small 
+}
+.uismall { 
+font-size: x-small;font-family: Verdana, Arial, Helvetica, Sans-Serif;
+}
+</style>
+
+<title>SCORM 1.2 Test wrapper Readme file</title>
+</head>
+<body>
+<h1>SCORM 1.2 Test wrapper</h1>
+
+<p><small>Version 0.4 Build 20030502x</small><br />
+Copyright 2000-2003 Click2learn, Inc. -- All rights reserved.</p>
+
+<p>Please review the <a href="#termsofuse">terms of use</a> at the bottom of this page before using this software.</p>
+
+<p>This wrapper can be "wrapped" around a SCO to monitor and log the SCORM API calls from the SCO. The wrapper provides the runtime environment for the SCO, including an API object. It is pure ECMAScript and does not use Java. It does not require any plug-in or ActiveX control. It has been tested with IE 5.5, IE 6 and Mozilla 1.2. It may not work as expected with older browsers.</p>
+
+<p>The wrapper can be used standalone, but it is itself launchable like a SCO, so if you "wrap" it around the SCO to test, it can be launched by a LMS and you can monitor the API calls from that SCO to the LMS. See an example below.</p>
+
+<p>You do not need a LMS to use this wrapper. You can also launch it directly in a browser window, and then launch a SCO inside it.</p>
+
+<p>There are two ways to specify the SCO to launch. One is to just launch the wrapper, and specify the URL of the SCO to load. The other way is to launch the wrapper using a URL with a parameter named "SCO" that specifies the URL of the SCO to launch. For example:<br />
+&nbsp;&nbsp;&nbsp;<span class="sample">SCO12TestWrapSCO.htm?SCO=mySCO.htm</span><br />
+Due to browser security constraints, the SCO must be launched from the same server as the SCO wrapper.</p>
+
+<p>If you launch the wrapper without a SCO parameter, it displays a URL pane in which you can specify the URL of the SCO to launch. Depending on your browser and browser window size, you may have to resize the pane to see all of it. If you launch the wrapper with a SCO parameter, the URL pane is not displayed.</p>
+
+<h4>Notes</h4>
+
+<h5>Standalone mode</h5>
+
+<p>The standalone mode is when the wrapper is launched without a back end runtime service or LMS. Suspend data, location, status and objectives are tracked by the test wrapper in standalone mode, and are available from one session to the next unless you clear them or refresh the wrapper itself. Initial status the first time the SCO is launched in standalone mode is "not attempted". You can clear the stored data and status by clicking a button in the control panel. Interaction data are also recorded but attempting to get back detail information about interactions with LMS_GetValue will not work because SCORM 1.2 does not allow you to read back interaction data anyway.</p>
+
+<p><strong>Launched without a SCO parameter</strong><br />
+You must specify a SCO in the URL pane. You you can unload or reload the SCO as many times as you want; each time a new communication session is initialized.</p>
+
+<p><strong>Launched with a SCO parameter</strong><br />
+The SCO is launched as soon as the wrapper is initialized, and gets closed when you close the wrapper.</p>
+
+<h5>Pass-through mode</h5>
+
+<p>The pass-through mode is when the wrapper is launched as a SCO by a runtime service or LMS. The SCO that is being "wrapped" is then launched inside that SCO. This mode is activated only if the wrapper detects that it is run in a context where it can find an API object. If no API object can be detected, the wrapper runs in "standalone" mode.</p>
+
+<p>In passthrough mode, the wrapper does not store or generate any data. It just forwards all API calls to the other API object, and passes the response back to the SCO.</p>
+
+<p><strong>Launched with a SCO parameter</strong><br />
+The SCO is launched as soon as the wrapper is initialized, and gets closed when you close the wrapper.</p>
+
+<p><strong>Launched without a SCO parameter</strong><br />
+You must specify a SCO in the URL pane. You you can unload or reload the SCO as many times as you want. However, since to the runtime service the wrapper is the SCO, and a SCORM compliant runtime service does not allow a new new communication session to be initiated without reloading the SCO, this is of limited usefulness.</p>
+
+<h5>Logs</h5>
+
+<p>To capture the log, you must select it in the browser, copy it and paste it into your favorite text editor. In Windows environments, you do this by clicking the log text, then Ctrl-A to select all of it, then Ctrl-C to copy it to the clipboard. The log is easier to read if you pop it up in a separate window and resize it. If you are using this wrapper as the actual launch SCO to debug a SCO launched by a LMS, the log window will of course disappear as soon as the LMS unloads the SCO.</p>
+
+<p>You can insert bookmarks into the log. Just type the identifier for the bookmark and click OK. If you don't type in identifiers for bookmarks, generic, sequentially numbered identifiers are generated.</p>
+
+
+<h5>Frame or popup stage window</h5>
+
+<p>If you launched the wrapper without a SCO parameter, you can choose the type of stage window before launching the SCO. This can be useful to test the behavior of a SCO in both kinds of window.</p>
+
+<p>However, if you launched the wrapper with a SCO parameter, this option is not available. You can however still specify the window type with a STAGE parameter that can have one of two values "popup" or "frame". If not specified, the default is "frame". For example:<br />
+<br />
+&nbsp;&nbsp;&nbsp;<span class="sample">SCO12TestWrapSCO.htm?SCO=mySCO.htm&amp;STAGE=popup</span></p>
+
+<h5>File locations</h5>
+
+<p>Due to a problem IE has with managing default paths for multiple windows with local files, it is recommended that you put the wrapper, the SCO and all other required files in the same directory. You do not need to do this if you are launching the wrapper through a HTTP server.</p>
+
+<h5>Stupid SCO tricks</h5>
+
+<p>If are looking for cheap entertainment, you can try to launch this wrapper with no SCO parameter, then launch another instance of it within itself, and then a SCO in the "inner" instance. The "inner" instance will find the API object in the "outer" instance and you will be able to watch the communication between the SCO and the "outer" instance in the log pane of the "inner" window.</p>
+
+<h4>Using the wrapper to test a SCO in a package</h4>
+
+To test a SCO embedded in a package, you must make a "test" version of the package that includes the wrapper, and modify the manifest resource for the SCO to launch the SCO through the wrapper instead of directly. You can use this technique to test a SCO in the SCORM test suite or in a LMS and observe the traffic of API calls between the SCO and the runtime environment. 
+
+<p>For example:</p>
+
+<h6>Original manifest</h6>
+
+<p class="sample">&lt;resource identifier="SCO1"<br />
+&nbsp;&nbsp;type="webcontent" adlcp:scormtype="sco"<br />
+&nbsp;&nbsp;href="SCO1.htm"&gt;<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;&lt;file href="SCO1.htm"/&gt;<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;&lt;file href="SCO1.gif"/&gt;<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;&lt;file href="SCO1.js"/&gt;<br />
+&lt;/resource&gt;</p>
+
+<h6>For testing</h6>
+
+<p class="sample">&lt;resource identifier="SCO1"<br />
+&nbsp;&nbsp;type="webcontent" adlcp:scormtype="sco"<br />
+&nbsp;&nbsp;href="SCO12TestWrapSCO.htm?SCO=SCO1%2Ehtm"&gt;<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;&lt;file href="SCO1.htm"/&gt;<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;&lt;file href="SCO1.gif"/&gt;<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;&lt;file href="SCO1.js"/&gt;<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;&lt;dependency identifierref="SCOR12_TEST_WRAP1"/&gt;<br />
+&lt;/resource&gt;<br />
+&lt;resource identifier="SCOR12_TEST_WRAP1"<br />
+&nbsp;&nbsp;type="webcontent" adlcp:scormtype="asset"&gt;<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;&lt;file href="SCO12TestWrapSCO.htm"/&gt;<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;&lt;file href="SCO12TestWrapCPL.htm"/&gt;<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;&lt;file href="SCO12TestWrapBLNK.htm"/&gt;<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;&lt;file href="SCO12TestWrapSCOLOC.htm"/&gt;<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;&lt;file href="SCO12TestWrapReadMe.htm"/&gt;<br />
+&lt;/resource&gt;</p>
+
+<p>Note that the launch parameter needs to be URL and XML escaped. The ADL SCORM conformance test suite version 1.2.3 does not handle parameters correctly if there is more than one parameter. This is a limitation of the test suite due to an ambiguity in the IMS content packaging specification, which has led to different interpretations of the XML encoding requirements for the parameters. This will be resolved only after implementations get in sync with maintenance updates of the specifications.  
+</p>
+<p>Note also that the resource that describes the test wrapper files does not have a <span class="sample">href</span> attribute because it is included as a reusable asset. This same resource can be used to test any number of SCOs in the package by referencing it through a <span class="sample">&lt;dependency&gt;</span> element in the resource that defines each SCO.<br />
+</p>
+
+<h5>What about SCORM 1.3?</h5>
+
+This wrapper was designed specifically to test SCORM 1.2 SCOs. However it already incorporates some logic based on SCORM 1.3 drafts and on the IEEE drafts that will influence SCORM 1.3. It can be used with the early samples for SCORM 1.3 content and RTE. Until SCORM 1.3 is finalized in late 2003, this is however a moving target and the maintenance effort required to keep this wrapper up to date may not be worth it. 
+
+<hr />
+<a name="termsofuse" id="termsofuse"></a>
+<p align="center"><b>CLICK2LEARN, INC.<br />
+SOFTWARE LICENSE AGREEMENT<br />
+SCORM Demonstration Application</b></p>
+
+
+<p align="center"><b>THIS IS A LEGAL AGREEMENT BETWEEN YOU AND CLICK2LEARN, INC. ("CLICK2LEARN") WHICH GOVERNS YOUR USE OF THIS SOFTWARE. CLICK2LEARN IS WILLING TO LICENSE THE SOFTWARE TO YOU ONLY ON THE CONDITION THAT YOU AGREE TO ALL OF THE TERMS OF THIS AGREEMENT. CAREFULLY READ THIS AGREEMENT BEFORE DOWNLOADING, USING OR DISTRIBUTING THE SOFTWARE. BY DOWNLOADING, USING OR DISTRIBUTING THE SOFTWARE, YOU AGREE TO THE TERMS OF THIS AGREEMENT.</b></p>
+
+<p><b>License and Copyright.</b> This license applies to any version of the Sharable Content Object Reference Model ("SCORM") Demonstration Applications. Under this license you may download, install and use the SCORM Demonstration Application (which is referred to as the "Software") on as many computers as you like. You may also permit the Software to be downloaded from your world wide web page or network file server and you may duplicate and redistribute the Software for use pursuant to this license; provided that in either case the Software may not be modified in any way. You may not: (i) modify, translate, or merge the Software; (ii) reverse-engineer, disassemble, or decompile the Software (except to the extent expressly permitted by the application of local copyright law whose exclusion is precluded); or (iii) transfer, sublicense or lease the Software except as provided in this agreement. The Software is protected by copyright laws and must be treated like any other copyrighted material.</p>
+
+<p><b>DISCLAIMER OF WARRANTY.</b> THIS SOFTWARE IS PROVIDED FREE OF CHARGE. THEREFORE, CLICK2LEARN AND ITS SUPPLIERS EXPRESSLY DISCLAIM ANY AND ALL WARRANTIES (OR CONDITIONS), EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NONINFRINGEMENT. THE SOFTWARE IS PROVIDED "AS IS" AND YOU BEAR ALL OF THE RISK RELATED TO THE USE, DUPLICATION AND DISTRIBUTION OF THE SOFTWARE.</p>
+
+<p><b>LIMITATIONS OF LIABILITY.</b> CLICK2LEARN AND ITS SUPPLIERS ARE NOT LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, CONSEQUENTIAL, SPECIAL OR EXEMPLARY DAMAGES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, WHETHER SUCH DAMAGES ARISE FROM CLAIMS BASED UPON CONTRACT, WARRANTY, TORT OR OTHERWISE. Some jurisdictions do not allow limitation or exclusion of incidental or consequential damages, so the above limitation or exclusion may not apply to you to the extent that liability is by law incapable of exclusion or restriction.</p>
+
+<p><b>General.</b> You agree not to directly or indirectly export or re-export the Software or the direct product thereof except as authorized by the laws and regulations of the United States and any other applicable jurisdiction. This license and your right to use the Software terminate automatically if you violate any part of this agreement. In the event of termination, you must immediately destroy all copies of the Software or return them to Click2learn. This agreement constitutes the entire agreement between you and Click2learn. It shall not be modified except by written agreement dated subsequent to the date of this agreement signed by an authorized Click2learn representative. Click2learn is not bound by any provision of any purchase order, confirmation, correspondence or otherwise, unless Click2learn specifically agrees to the provision in writing. This agreement is governed by the internal laws of the State of Washington, U.S.A., and specifically excludes the United Nations Convention on Contracts for the International Sale of Goods.</p>
+
+<p>[Rev.4-28-03]</p>
+</body>
+</html>
+
