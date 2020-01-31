@@ -1,5 +1,6 @@
 node_modules
 .DS_Store
-public/bundle.*
-public/packages/*.zip
+public/bundle*
+public/bundle.*.map
+public/packages
 scorm/builds
