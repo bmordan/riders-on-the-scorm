@@ -55,6 +55,7 @@ const createPackage = async (uid, package) => {
                 {
                     title: package.title,
                     createdAt: new Date().toISOString(),
+                    score: 0,
                     pages: [
                         {
                             markdown: `# ${package.title}\n`,
@@ -116,6 +117,11 @@ const updatePages = async (pid, update) => {
         uid: pid,
         pages: update.map(page => ({...page, updatedAt: new Date().toISOString()}))
     }
+    const topscore = updateTimestamped.pages.reduce((score, page) => {
+        score += page.markdown.match(/\?\?\?/g || []).length
+        return score
+    }, 0)
+    updateTimestamped.score = topscore / 2
     const txn = dgraphClient.newTxn()
     try {
         const mu = new dgraph.Mutation()

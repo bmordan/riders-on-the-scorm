@@ -2208,42 +2208,46 @@ var app = (function () {
     	const child_ctx = ctx.slice();
     	child_ctx[11] = list[i].uid;
     	child_ctx[12] = list[i].title;
-    	child_ctx[13] = list[i].createdAt;
-    	child_ctx[14] = list[i].pages;
+    	child_ctx[13] = list[i].score;
+    	child_ctx[14] = list[i].createdAt;
+    	child_ctx[15] = list[i].pages;
     	return child_ctx;
     }
 
     // (86:3) <Link to={`/users/${user.uid}/packages/${uid}/editor`}>
     function create_default_slot(ctx) {
     	let article;
-    	let header;
-    	let small;
-    	let t0_value = /*formatDate*/ ctx[8](/*createdAt*/ ctx[13]) + "";
-    	let t0;
-    	let t1;
-    	let main;
-    	let img;
-    	let img_src_value;
-    	let t2;
-    	let h2;
-    	let t3_value = /*title*/ ctx[12] + "";
-    	let t3;
-    	let t4;
-    	let footer;
     	let button0;
     	let svg0;
     	let path0;
     	let path1;
-    	let t5;
     	let button0_value_value;
     	let button0_disabled_value;
+    	let t0;
+    	let header;
+    	let small;
+    	let t1_value = /*formatDate*/ ctx[8](/*createdAt*/ ctx[14]) + "";
+    	let t1;
+    	let t2;
+    	let samp;
+    	let t3_value = /*score*/ ctx[13] + "";
+    	let t3;
+    	let t4;
+    	let main;
+    	let img;
+    	let img_src_value;
+    	let t5;
+    	let h2;
+    	let t6_value = /*title*/ ctx[12] + "";
     	let t6;
+    	let t7;
+    	let footer;
     	let button1;
     	let svg1;
     	let g;
     	let path2;
     	let path3;
-    	let t7;
+    	let t8;
     	let button1_value_value;
     	let button1_disabled_value;
     	let dispose;
@@ -2251,77 +2255,81 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			article = element("article");
-    			header = element("header");
-    			small = element("small");
-    			t0 = text(t0_value);
-    			t1 = space();
-    			main = element("main");
-    			img = element("img");
-    			t2 = space();
-    			h2 = element("h2");
-    			t3 = text(t3_value);
-    			t4 = space();
-    			footer = element("footer");
     			button0 = element("button");
     			svg0 = svg_element("svg");
     			path0 = svg_element("path");
     			path1 = svg_element("path");
-    			t5 = text("\n\t\t\t\t\t\t\t Delete");
-    			t6 = space();
+    			t0 = space();
+    			header = element("header");
+    			small = element("small");
+    			t1 = text(t1_value);
+    			t2 = space();
+    			samp = element("samp");
+    			t3 = text(t3_value);
+    			t4 = space();
+    			main = element("main");
+    			img = element("img");
+    			t5 = space();
+    			h2 = element("h2");
+    			t6 = text(t6_value);
+    			t7 = space();
+    			footer = element("footer");
     			button1 = element("button");
     			svg1 = svg_element("svg");
     			g = svg_element("g");
     			path2 = svg_element("path");
     			path3 = svg_element("path");
-    			t7 = text("\n\t\t\t\t\t\t\t Download");
-    			attr_dev(small, "class", "svelte-8gnf0v");
-    			add_location(small, file$1, 88, 6, 2316);
-    			attr_dev(header, "class", "svelte-8gnf0v");
-    			add_location(header, file$1, 87, 5, 2301);
-    			attr_dev(img, "class", "icon svelte-8gnf0v");
-    			if (img.src !== (img_src_value = "/icons/opened_folder.svg")) attr_dev(img, "src", img_src_value);
-    			attr_dev(img, "alt", "scorm package logo");
-    			add_location(img, file$1, 91, 6, 2388);
-    			attr_dev(h2, "class", "svelte-8gnf0v");
-    			add_location(h2, file$1, 92, 6, 2474);
-    			attr_dev(main, "class", "svelte-8gnf0v");
-    			add_location(main, file$1, 90, 5, 2375);
+    			t8 = text("\n\t\t\t\t\t\t\t Download");
     			attr_dev(path0, "fill", "currentColor");
     			attr_dev(path0, "d", "M30.6 44H17.4c-2 0-3.7-1.4-4-3.4L9 11h30l-4.5 29.6c-.3 2-2 3.4-3.9 3.4z");
-    			add_location(path0, file$1, 96, 102, 2745);
+    			add_location(path0, file$1, 88, 101, 2528);
     			attr_dev(path1, "fill", "currentColor");
     			attr_dev(path1, "d", "M38 13H10c-1.1 0-2-.9-2-2s.9-2 2-2h28c1.1 0 2 .9 2 2s-.9 2-2 2z");
-    			add_location(path1, file$1, 96, 205, 2848);
+    			add_location(path1, file$1, 88, 204, 2631);
     			attr_dev(svg0, "version", "1");
     			attr_dev(svg0, "xmlns", "http://www.w3.org/2000/svg");
     			attr_dev(svg0, "viewBox", "0 0 48 48");
     			attr_dev(svg0, "width", "16");
     			attr_dev(svg0, "height", "16");
-    			add_location(svg0, file$1, 96, 7, 2650);
+    			add_location(svg0, file$1, 88, 6, 2433);
     			button0.value = button0_value_value = /*uid*/ ctx[11];
-    			attr_dev(button0, "class", "wh-bg-light-purple svelte-8gnf0v");
+    			attr_dev(button0, "class", "wh-bg-light-purple svelte-9bs6az");
     			button0.disabled = button0_disabled_value = /*downloading*/ ctx[3] && /*downloading*/ ctx[3] === /*uid*/ ctx[11];
-    			add_location(button0, file$1, 95, 6, 2524);
+    			add_location(button0, file$1, 87, 5, 2308);
+    			attr_dev(small, "class", "svelte-9bs6az");
+    			add_location(small, file$1, 91, 6, 2768);
+    			attr_dev(samp, "class", "svelte-9bs6az");
+    			add_location(samp, file$1, 92, 6, 2813);
+    			attr_dev(header, "class", "svelte-9bs6az");
+    			add_location(header, file$1, 90, 5, 2753);
+    			attr_dev(img, "class", "icon svelte-9bs6az");
+    			if (img.src !== (img_src_value = "/icons/opened_folder.svg")) attr_dev(img, "src", img_src_value);
+    			attr_dev(img, "alt", "scorm package logo");
+    			add_location(img, file$1, 95, 6, 2867);
+    			attr_dev(h2, "class", "svelte-9bs6az");
+    			add_location(h2, file$1, 96, 6, 2953);
+    			attr_dev(main, "class", "svelte-9bs6az");
+    			add_location(main, file$1, 94, 5, 2854);
     			attr_dev(path2, "d", "M24 37.1L13 24h22zM20 4h8v4h-8zm0 6h8v4h-8z");
-    			add_location(path2, file$1, 100, 125, 3232);
+    			add_location(path2, file$1, 100, 125, 3243);
     			attr_dev(path3, "d", "M20 16h8v11h-8zM6 40h36v4H6z");
-    			add_location(path3, file$1, 100, 180, 3287);
+    			add_location(path3, file$1, 100, 180, 3298);
     			attr_dev(g, "fill", "currentColor");
-    			add_location(g, file$1, 100, 102, 3209);
+    			add_location(g, file$1, 100, 102, 3220);
     			attr_dev(svg1, "version", "1");
     			attr_dev(svg1, "xmlns", "http://www.w3.org/2000/svg");
     			attr_dev(svg1, "viewBox", "0 0 48 48");
     			attr_dev(svg1, "width", "16");
     			attr_dev(svg1, "height", "16");
-    			add_location(svg1, file$1, 100, 7, 3114);
+    			add_location(svg1, file$1, 100, 7, 3125);
     			button1.value = button1_value_value = /*uid*/ ctx[11];
-    			attr_dev(button1, "class", "wh-bg-purple svelte-8gnf0v");
+    			attr_dev(button1, "class", "wh-bg-purple svelte-9bs6az");
     			button1.disabled = button1_disabled_value = /*downloading*/ ctx[3] && /*downloading*/ ctx[3] === /*uid*/ ctx[11];
-    			add_location(button1, file$1, 99, 6, 2992);
-    			attr_dev(footer, "class", "svelte-8gnf0v");
-    			add_location(footer, file$1, 94, 5, 2509);
-    			attr_dev(article, "class", "svelte-8gnf0v");
-    			add_location(article, file$1, 86, 4, 2286);
+    			add_location(button1, file$1, 99, 6, 3003);
+    			attr_dev(footer, "class", "svelte-9bs6az");
+    			add_location(footer, file$1, 98, 5, 2988);
+    			attr_dev(article, "class", "svelte-9bs6az");
+    			add_location(article, file$1, 86, 4, 2293);
 
     			dispose = [
     				listen_dev(button0, "click", /*deletePackage*/ ctx[6], false, false, false),
@@ -2330,34 +2338,33 @@ var app = (function () {
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, article, anchor);
-    			append_dev(article, header);
-    			append_dev(header, small);
-    			append_dev(small, t0);
-    			append_dev(article, t1);
-    			append_dev(article, main);
-    			append_dev(main, img);
-    			append_dev(main, t2);
-    			append_dev(main, h2);
-    			append_dev(h2, t3);
-    			append_dev(article, t4);
-    			append_dev(article, footer);
-    			append_dev(footer, button0);
+    			append_dev(article, button0);
     			append_dev(button0, svg0);
     			append_dev(svg0, path0);
     			append_dev(svg0, path1);
-    			append_dev(button0, t5);
-    			append_dev(footer, t6);
+    			append_dev(article, t0);
+    			append_dev(article, header);
+    			append_dev(header, small);
+    			append_dev(small, t1);
+    			append_dev(header, t2);
+    			append_dev(header, samp);
+    			append_dev(samp, t3);
+    			append_dev(article, t4);
+    			append_dev(article, main);
+    			append_dev(main, img);
+    			append_dev(main, t5);
+    			append_dev(main, h2);
+    			append_dev(h2, t6);
+    			append_dev(article, t7);
+    			append_dev(article, footer);
     			append_dev(footer, button1);
     			append_dev(button1, svg1);
     			append_dev(svg1, g);
     			append_dev(g, path2);
     			append_dev(g, path3);
-    			append_dev(button1, t7);
+    			append_dev(button1, t8);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*packages*/ 4 && t0_value !== (t0_value = /*formatDate*/ ctx[8](/*createdAt*/ ctx[13]) + "")) set_data_dev(t0, t0_value);
-    			if (dirty & /*packages*/ 4 && t3_value !== (t3_value = /*title*/ ctx[12] + "")) set_data_dev(t3, t3_value);
-
     			if (dirty & /*packages*/ 4 && button0_value_value !== (button0_value_value = /*uid*/ ctx[11])) {
     				prop_dev(button0, "value", button0_value_value);
     			}
@@ -2365,6 +2372,10 @@ var app = (function () {
     			if (dirty & /*downloading, packages*/ 12 && button0_disabled_value !== (button0_disabled_value = /*downloading*/ ctx[3] && /*downloading*/ ctx[3] === /*uid*/ ctx[11])) {
     				prop_dev(button0, "disabled", button0_disabled_value);
     			}
+
+    			if (dirty & /*packages*/ 4 && t1_value !== (t1_value = /*formatDate*/ ctx[8](/*createdAt*/ ctx[14]) + "")) set_data_dev(t1, t1_value);
+    			if (dirty & /*packages*/ 4 && t3_value !== (t3_value = /*score*/ ctx[13] + "")) set_data_dev(t3, t3_value);
+    			if (dirty & /*packages*/ 4 && t6_value !== (t6_value = /*title*/ ctx[12] + "")) set_data_dev(t6, t6_value);
 
     			if (dirty & /*packages*/ 4 && button1_value_value !== (button1_value_value = /*uid*/ ctx[11])) {
     				prop_dev(button1, "value", button1_value_value);
@@ -2391,7 +2402,7 @@ var app = (function () {
     	return block;
     }
 
-    // (85:2) {#each packages as {uid, title, createdAt, pages}}
+    // (85:2) {#each packages as {uid, title, score, createdAt, pages}}
     function create_each_block(ctx) {
     	let current;
 
@@ -2416,7 +2427,7 @@ var app = (function () {
     			const link_changes = {};
     			if (dirty & /*user, packages*/ 5) link_changes.to = `/users/${/*user*/ ctx[0].uid}/packages/${/*uid*/ ctx[11]}/editor`;
 
-    			if (dirty & /*$$scope, packages, downloading*/ 131084) {
+    			if (dirty & /*$$scope, packages, downloading*/ 262156) {
     				link_changes.$$scope = { dirty, ctx };
     			}
 
@@ -2440,7 +2451,7 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(85:2) {#each packages as {uid, title, createdAt, pages}}",
+    		source: "(85:2) {#each packages as {uid, title, score, createdAt, pages}}",
     		ctx
     	});
 
@@ -2482,34 +2493,34 @@ var app = (function () {
     			footer = element("footer");
     			button = element("button");
     			button.textContent = "Create";
-    			attr_dev(img, "class", "icon svelte-8gnf0v");
+    			attr_dev(img, "class", "icon svelte-9bs6az");
     			if (img.src !== (img_src_value = "/icons/folder.svg")) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "scorm package logo");
-    			add_location(img, file$1, 118, 9, 3771);
-    			attr_dev(h1, "class", "svelte-8gnf0v");
-    			add_location(h1, file$1, 118, 5, 3767);
-    			attr_dev(h2, "class", "svelte-8gnf0v");
-    			add_location(h2, file$1, 119, 5, 3850);
-    			attr_dev(main, "class", "svelte-8gnf0v");
-    			add_location(main, file$1, 117, 4, 3755);
+    			add_location(img, file$1, 118, 9, 3782);
+    			attr_dev(h1, "class", "svelte-9bs6az");
+    			add_location(h1, file$1, 118, 5, 3778);
+    			attr_dev(h2, "class", "svelte-9bs6az");
+    			add_location(h2, file$1, 119, 5, 3861);
+    			attr_dev(main, "class", "svelte-9bs6az");
+    			add_location(main, file$1, 117, 4, 3766);
     			attr_dev(input, "name", "title");
     			attr_dev(input, "pattern", "^[a-zA-Z0-9_\\s]*$");
     			attr_dev(input, "title", "only use letters spaces and underscores");
     			attr_dev(input, "placeholder", "Title");
     			input.required = true;
-    			attr_dev(input, "class", "svelte-8gnf0v");
-    			add_location(input, file$1, 122, 5, 3902);
-    			attr_dev(article, "class", "svelte-8gnf0v");
-    			add_location(article, file$1, 121, 4, 3887);
-    			attr_dev(button, "class", "svelte-8gnf0v");
-    			add_location(button, file$1, 125, 5, 4063);
-    			attr_dev(footer, "class", "svelte-8gnf0v");
-    			add_location(footer, file$1, 124, 4, 4049);
-    			attr_dev(form, "class", "svelte-8gnf0v");
-    			add_location(form, file$1, 116, 3, 3718);
+    			attr_dev(input, "class", "svelte-9bs6az");
+    			add_location(input, file$1, 122, 5, 3913);
+    			attr_dev(article, "class", "svelte-9bs6az");
+    			add_location(article, file$1, 121, 4, 3898);
+    			attr_dev(button, "class", "svelte-9bs6az");
+    			add_location(button, file$1, 125, 5, 4074);
+    			attr_dev(footer, "class", "svelte-9bs6az");
+    			add_location(footer, file$1, 124, 4, 4060);
+    			attr_dev(form, "class", "svelte-9bs6az");
+    			add_location(form, file$1, 116, 3, 3729);
     			attr_dev(section, "id", "model");
-    			attr_dev(section, "class", "svelte-8gnf0v");
-    			add_location(section, file$1, 115, 2, 3670);
+    			attr_dev(section, "class", "svelte-9bs6az");
+    			add_location(section, file$1, 115, 2, 3681);
 
     			dispose = [
     				listen_dev(form, "submit", /*createPackage*/ ctx[5], false, false, false),
@@ -2595,21 +2606,21 @@ var app = (function () {
     			h2.textContent = "New package";
     			t3 = space();
     			if (if_block) if_block.c();
-    			attr_dev(img, "class", "icon svelte-8gnf0v");
+    			attr_dev(img, "class", "icon svelte-9bs6az");
     			if (img.src !== (img_src_value = "/icons/folder.svg")) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "scorm package logo");
-    			add_location(img, file$1, 109, 8, 3513);
-    			attr_dev(h1, "class", "svelte-8gnf0v");
-    			add_location(h1, file$1, 109, 4, 3509);
-    			attr_dev(h2, "class", "svelte-8gnf0v");
-    			add_location(h2, file$1, 110, 4, 3591);
-    			attr_dev(main, "class", "svelte-8gnf0v");
-    			add_location(main, file$1, 108, 3, 3498);
-    			attr_dev(article, "class", "create-package svelte-8gnf0v");
-    			add_location(article, file$1, 107, 2, 3429);
-    			attr_dev(section0, "class", "packages svelte-8gnf0v");
+    			add_location(img, file$1, 109, 8, 3524);
+    			attr_dev(h1, "class", "svelte-9bs6az");
+    			add_location(h1, file$1, 109, 4, 3520);
+    			attr_dev(h2, "class", "svelte-9bs6az");
+    			add_location(h2, file$1, 110, 4, 3602);
+    			attr_dev(main, "class", "svelte-9bs6az");
+    			add_location(main, file$1, 108, 3, 3509);
+    			attr_dev(article, "class", "create-package svelte-9bs6az");
+    			add_location(article, file$1, 107, 2, 3440);
+    			attr_dev(section0, "class", "packages svelte-9bs6az");
     			add_location(section0, file$1, 83, 1, 2143);
-    			attr_dev(section1, "class", "packages-wrapper svelte-8gnf0v");
+    			attr_dev(section1, "class", "packages-wrapper svelte-9bs6az");
     			add_location(section1, file$1, 82, 0, 2107);
     			dispose = listen_dev(article, "click", /*click_handler*/ ctx[10], false, false, false);
     		},
@@ -2636,7 +2647,7 @@ var app = (function () {
     			current = true;
     		},
     		p: function update(ctx, [dirty]) {
-    			if (dirty & /*user, packages, downloading, downloadPackage, deletePackage, formatDate*/ 461) {
+    			if (dirty & /*user, packages, downloading, downloadPackage, formatDate, deletePackage*/ 461) {
     				each_value = /*packages*/ ctx[2];
     				let i;
 
@@ -47559,7 +47570,7 @@ var app = (function () {
     			article = element("article");
     			t0 = text("page ");
     			t1 = text(t1_value);
-    			attr_dev(article, "class", article_class_value = "" + (null_to_empty(/*page*/ ctx[2] === /*i*/ ctx[9] ? "active" : "") + " svelte-1roxps2"));
+    			attr_dev(article, "class", article_class_value = "" + (null_to_empty(/*page*/ ctx[2] === /*i*/ ctx[9] ? "active" : "") + " svelte-119pq1x"));
     			add_location(article, file$4, 10, 12, 217);
     			dispose = listen_dev(article, "click", click_handler, false, false, false);
     		},
@@ -47571,7 +47582,7 @@ var app = (function () {
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
 
-    			if (dirty & /*page*/ 4 && article_class_value !== (article_class_value = "" + (null_to_empty(/*page*/ ctx[2] === /*i*/ ctx[9] ? "active" : "") + " svelte-1roxps2"))) {
+    			if (dirty & /*page*/ 4 && article_class_value !== (article_class_value = "" + (null_to_empty(/*page*/ ctx[2] === /*i*/ ctx[9] ? "active" : "") + " svelte-119pq1x"))) {
     				attr_dev(article, "class", article_class_value);
     			}
     		},
@@ -47634,7 +47645,7 @@ var app = (function () {
     			path = svg_element("path");
     			t3 = text(" WhiteHat");
     			t4 = text(" © 2020");
-    			attr_dev(nav, "class", "svelte-1roxps2");
+    			attr_dev(nav, "class", "svelte-119pq1x");
     			add_location(nav, file$4, 8, 4, 169);
     			attr_dev(path, "d", "M19.33 6.095h-1.702c-.264 0-.28-.233-.372-.613-.22-.894-.753-1.898-1.396-2.745C15.217 1.89 13.036 0 10.213 0 7.389 0 5.53 1.453 4.536 2.57c-.994 1.118-1.469 2.525-1.57 3.045-.104.533-.375.48-.444.48H.162c-.185 0-.161.06-.161.284v1.355c0 .278.004.266.213.266h7.294c.292 0 .256-.18.256-.276v-1.35c0-.318-.112-.28-.332-.28H5.207c-.509 0-.347-.3-.088-.918.447-1.14 2.117-3.235 4.988-3.235 2.87 0 4.314 1.969 4.804 2.832.49.862.62 1.73.62 1.906v1.03c0 .299.027.29.223.29h3.986c.275 0 .221-.227.202-.303-.019-.077-.27-1.121-.323-1.365-.053-.243-.168-.236-.289-.236z");
     			attr_dev(path, "fill", "currentColor");
@@ -47646,11 +47657,11 @@ var app = (function () {
     			add_location(svg, file$4, 14, 4, 474);
     			attr_dev(a, "href", "https://whitehat.org.uk");
     			attr_dev(a, "target", "_blank");
-    			attr_dev(a, "class", "svelte-1roxps2");
+    			attr_dev(a, "class", "svelte-119pq1x");
     			add_location(a, file$4, 13, 81, 419);
-    			attr_dev(small, "class", "svelte-1roxps2");
+    			attr_dev(small, "class", "svelte-119pq1x");
     			add_location(small, file$4, 13, 4, 342);
-    			attr_dev(footer, "class", footer_class_value = "" + (null_to_empty(/*mode*/ ctx[3] ? "editmode" : "") + " svelte-1roxps2"));
+    			attr_dev(footer, "class", footer_class_value = "" + (null_to_empty(/*mode*/ ctx[3] ? "editmode" : "") + " svelte-119pq1x"));
     			add_location(footer, file$4, 7, 0, 125);
     		},
     		l: function claim(nodes) {
@@ -47707,7 +47718,7 @@ var app = (function () {
     				each_blocks.length = each_value.length;
     			}
 
-    			if (!current || dirty & /*mode*/ 8 && footer_class_value !== (footer_class_value = "" + (null_to_empty(/*mode*/ ctx[3] ? "editmode" : "") + " svelte-1roxps2"))) {
+    			if (!current || dirty & /*mode*/ 8 && footer_class_value !== (footer_class_value = "" + (null_to_empty(/*mode*/ ctx[3] ? "editmode" : "") + " svelte-119pq1x"))) {
     				attr_dev(footer, "class", footer_class_value);
     			}
     		},

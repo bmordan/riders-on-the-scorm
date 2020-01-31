@@ -60,7 +60,7 @@ footer small {
 }
 .editmode nav {
     border-bottom: solid 1px black;
-    margin-bottom: -0.1rem;
+    margin-top: .1rem;
 }
 .editmode article {
     font-family: 'Courier New', Courier, monospace;

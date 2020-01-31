@@ -13,6 +13,7 @@ module.exports = {
             packages {
                 uid
                 title
+                score
                 createdAt
                 sharedwith {
                     uid
@@ -27,6 +28,7 @@ module.exports = {
             packages @filter(eq(title, $title)) {
                 uid
                 title
+                score
                 createdAt
                 sharedwith {
                     uid
@@ -40,6 +42,7 @@ module.exports = {
         _package(func: uid($uid)) {
             uid
             title
+            score
             createdAt
             pages {
                 uid

@@ -147,7 +147,7 @@ app.get("/users/:uid/packages/:pid", (req, res) => {
         })
 })
 app.get("/users/:uid/packages/:pid/pages/new", (req, res) => {
-    const {uid, pid} = req.params
+    const {pid} = req.params
     dgraph.createPage(pid)
         .then(pid => dgraph.getPackageByUid(pid))
         .then(_package => res.send(_package))

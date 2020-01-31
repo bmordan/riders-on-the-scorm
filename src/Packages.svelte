@@ -82,21 +82,21 @@
 </script>
 <section class="packages-wrapper">
 	<section class="packages">
-		{#each packages as {uid, title, createdAt, pages}}
+		{#each packages as {uid, title, score, createdAt, pages}}
 			<Link to={`/users/${user.uid}/packages/${uid}/editor`}>
 				<article>
+					<button value={uid} on:click={deletePackage} class="wh-bg-light-purple" disabled={downloading && downloading === uid}>
+						<svg version="1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="16" height="16"><path fill="currentColor" d="M30.6 44H17.4c-2 0-3.7-1.4-4-3.4L9 11h30l-4.5 29.6c-.3 2-2 3.4-3.9 3.4z"/><path fill="currentColor" d="M38 13H10c-1.1 0-2-.9-2-2s.9-2 2-2h28c1.1 0 2 .9 2 2s-.9 2-2 2z"/></svg>
+					</button>
 					<header>
 						<small>{formatDate(createdAt)}</small>
+						<samp>{score}</samp>
 					</header>
 					<main>
 						<img class="icon" src="/icons/opened_folder.svg" alt="scorm package logo"/>				
 						<h2>{title}</h2>
 					</main>
 					<footer>
-						<button value={uid} on:click={deletePackage} class="wh-bg-light-purple" disabled={downloading && downloading === uid}>
-							<svg version="1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="16" height="16"><path fill="currentColor" d="M30.6 44H17.4c-2 0-3.7-1.4-4-3.4L9 11h30l-4.5 29.6c-.3 2-2 3.4-3.9 3.4z"/><path fill="currentColor" d="M38 13H10c-1.1 0-2-.9-2-2s.9-2 2-2h28c1.1 0 2 .9 2 2s-.9 2-2 2z"/></svg>
-							&nbsp;Delete
-						</button>
 						<button value={uid} on:click={downloadPackage} class="wh-bg-purple" disabled={downloading && downloading === uid}>
 							<svg version="1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="16" height="16"><g fill="currentColor"><path d="M24 37.1L13 24h22zM20 4h8v4h-8zm0 6h8v4h-8z"/><path d="M20 16h8v11h-8zM6 40h36v4H6z"/></g></svg>
 							&nbsp;Download
@@ -144,19 +144,32 @@
         align-items: center;
     }
 	.packages {
-		margin: auto;
+		margin: .5rem auto;
 		width: auto;
 		display: grid;
-		grid-template-columns: 17rem 17rem 17rem 17rem;
+		grid-template-columns:  19.7rem 19.7rem 19.7rem;
 		grid-gap: .5rem;
 	}
     .packages article {
+		position: relative;
 		border: solid 1px var(--wh-gray-light);
 		border-radius: 12px;
 		height: 13rem;
 		display: flex;
 		flex-direction: column;
 		background-color: white;
+	}
+	.packages article > button {
+		position: absolute;
+		top: -0.5rem;
+		right: 1rem;
+		border: solid 1px var(--wh-red);
+		width: 2rem;
+		height: 2rem;
+		color: var(--wh-gray-light);
+		background-color: var(--wh-red);
+		border-radius: 50%;
+		z-index: 2;
 	}
 	.packages article header {
 		height: 42%;
@@ -171,9 +184,23 @@
 	.packages article header small {
 		position: absolute;
 		bottom: 0.25rem;
-		right: 1.75rem;
+		right: 2.25rem;
 		font-size: 0.25rem;
 		color: var(--wh-gray);
+	}
+	.packages article header samp {
+		position: absolute;
+		top: -0.5rem;
+		left: 1rem;
+		border: solid 1px var(--wh-green);
+		border-radius: 50%;
+		height: 2rem;
+		width: 2rem;
+		background-color: white;
+		color: var(--wh-green);
+		text-align: center;
+		box-sizing: border-box;
+		font-size: 1.9rem;
 	}
 	.packages article main {
 		display: flex;
@@ -202,19 +229,14 @@
 		border: solid 0px transparent;
 		box-shadow: 0px 0px 0px 0px transparent;
 		border-radius: 0;
-		width: 50%;
+		width: 100%;
 		height: 100%;
 		padding: 1rem 0;
 		color: white;
 		display: flex;
 		justify-content: center;
 		align-items: center;
-	}
-	.packages article footer button:first-child {
-		border-radius: 0 0 0 12px;
-	}
-	.packages article footer button:last-child {
-		border-radius: 0 0 12px 0;
+		border-radius: 0 0 12px 12px;
 	}
     .create-package {
 		display: flex;
