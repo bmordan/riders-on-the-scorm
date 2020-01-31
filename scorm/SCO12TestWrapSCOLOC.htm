@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="generator" content="Claude" />
+<style type="text/css">
+body {
+    background-color: silver; color: black;
+    margin-top: 0px; margin-left: 0px;
+    padding-top: 0px; padding-left: 2px; padding-bottom: 0px;
+    font-size: xx-small;font-family: Verdana, Arial, Helvetica, Sans-Serif;
+}
+.uismall { 
+font-size: xx-small;font-family: Verdana, Arial, Helvetica, Sans-Serif;
+}
+</style>
+
+<script type="text/javascript">
+ 
+function SetShownLocation(url) {
+	document.forms[0].URLSCO.value = url
+	//if (document.forms[0].URLSCO.value != url){
+	//	alert ("Could not set location")
+	//}
+
+}
+function loadSCO() {
+    var s = document.forms[0].URLSCO.value;
+    //alert ("process function: " + s);
+
+    if ((window.parent) && (typeof(window.parent.LoadSCO) == "function")) {
+				if (!window.parent.LoadSCO(s)) {
+            alert("Oops. Try again.")
+        } else {
+            window.parent.SetCookie("URLSCO", s)
+						//alert("cookie set")
+        }
+		}
+}
+
+function unloadSCO() {
+    window.parent.UnloadSCO() 
+}
+
+function init() {
+    if ((window.parent) && (typeof(window.parent.GetCookie) == "function")) {
+        SetShownLocation(window.parent.GetCookie("URLSCO"))
+    }
+}
+
+</script>
+
+<title>Generic Ask page</title>
+</head>
+<body topmargin="0" leftmargin="2" bgcolor="#b0b0b0" onload="init()">
+<form onSubmit="loadSCO()"><small>SCO URL <input type="Text" class="uismall" size="70" name="URLSCO" id="URLSCO" value="" /><input type="SUBMIT" class="uismall" name="Load" value="Load" />
+<!--<input type="file" class="uismall" id="URLSCO" name="URLSCO" size="50" onchange="loadSCO()"/>-->
+ <input type="BUTTON" class="uismall" name="Unload" value="Unload" onclick="unloadSCO()" />
+</small></form>
+</body>
+</html>
+

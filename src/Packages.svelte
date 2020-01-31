@@ -59,11 +59,13 @@
 			})
 			.then(blob => {
 				download(blob, filename, 'application/zip')
+				downloading = false
 				setTimeout(() => {
 					// there is no other way to know that the file has been downloaded
-					fetch(`/users/${user.uid}/packages/${pid}/download/${filename}/remove`)
-					downloading = false
-				}, 9000)
+					return fetch(`/users/${user.uid}/packages/${pid}/download/${filename}/remove`)
+						.then(res => res.json())
+						.then(console.log)
+				}, 6000)
 			})
 			.catch(console.error)
 	}
@@ -118,7 +120,7 @@
 					<h2>New package</h2>
 				</main>
 				<article>
-					<input name="title" placeholder="Title" required />
+					<input name="title" pattern="^[a-zA-Z0-9_\s]*$" title="only use letters spaces and underscores" placeholder="Title" required />
 				</article>
 				<footer>
 					<button>Create</button>
@@ -238,8 +240,8 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-end;
-		width: 27vw;
-		height: 27vh;
+		width: 370px;
+		height: 320px;
 		border-radius: 12px;
 		border: solid 1px var(--wh-b--gray-light);
 		display: flex;
@@ -283,5 +285,8 @@
 		padding: 2rem;
 		flex: none;
 		text-align: right;
+	}
+	button:disabled {
+		opacity: 0.4;
 	}
 </style>

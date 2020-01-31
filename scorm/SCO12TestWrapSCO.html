@@ -1,0 +1,1439 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="description" 
+ content="A test wrap for SCORM 1.2 SCOs. Copyright 2001-2003 by Click2learn, Inc." />
+<meta name="generator" content="Claude Ostyn (by hand)" />
+<title>SCO Test Wrap for SCORM 1.2</title>
+
+<script type="text/javascript" language="JavaScript">
+// Concocted by Claude Ostyn 2003-04-15
+// Copyright 2001-2003 Click2learn, Inc. All rights reserved
+// No part of this script or associated files and documents may be
+// reproduced or sold without written approval from the
+// copyright owner.
+// This script if the private API housekeeping script for the wrapper SCO 
+
+var STR_VERSION = "200305021632";
+
+var B_SHOW_API_ERRORS = false;
+var STR_API_NOT_FOUND = "SCORM Test wrapper initialization:\n\nBack end Management system interface not found.";
+var STR_API_FOUND = "SCORM Test wrapper initialization:\n\nBack end Management system interface has been found.";
+var STR_API_TOO_DEEP = "SCORM Test wrapper initialization:\n\nCannot find back end API - too deeply nested.";
+var STR_API_INIT_FAILED = "SCORM Test wrapper initialization:\n\nFound back end API but LMSInitialize failed.";
+var STR_THIS_APP_TITLE_IN_CAPS = "SCORM TEST WRAPPER";
+
+var STR_EXPLAIN_CANNOT_RESET_DATA = "Cannot reset the data that persist between launches of the SCO because this information is managed by the back end API in the runtime service that launched this wrapper.\n\nIf the wrapper was running in standalone mode, without a back end, it would maintain a small store of such data.";
+
+var STR_CONFIRM_COULD_RESET_DATA = "OK.\n\nBecause it is running without a back-end API implementation, the test wrapper maintains a small store of data that would persist in an API implementation between launches of the SCO. This information has now been cleared.\n\nNote that in any case this information will not persist between launches of the wrapper, only if you launch the same SCO inside the wrapper without unloading the wrapper.";
+
+var STR_CONFIRM_LOAD_URL = "The test wrapper will attempt to load the SCO\n\n%1\n\nusing the full URL\n\n%2\n\nin %3.";
+var STR_IN_STAGE_FRAME = "the stage frame";
+var STR_IN_POPUP_WINDOW = "a popup window";
+
+function GetVersion() {
+	return STR_VERSION
+}
+
+// This string contains placeholders
+// %1 = line break  %2 = non break space %3= copyright symbol
+var STR_ABOUT_ME = "Click2learn, Inc.%1API%2Test%2Wrapper for SCORM%21.2%1";
+STR_ABOUT_ME += "Build " + STR_VERSION ;
+STR_ABOUT_ME += "%1Copyright %3%22001-2003 Click2learn,%2Inc.";
+STR_ABOUT_ME += " All%2rights%2reserved.";
+
+</script>
+<script language="javascript">
+
+function StrAboutThisAsHTML() {
+	return ExpandString(STR_ABOUT_ME,"<br />","&nbsp;","&copy;")
+}
+
+function StrAboutThisAsText() {
+	return ExpandString(STR_ABOUT_ME,"\n"," ","©")
+}
+
+function AboutMe() {
+	var s = StrAboutThisAsText();
+	s += '\n\n';
+	s += 'Click OK to view the release notes and terms of use in a separate window.';
+	s += '\n\n';
+	s += 'If you have not reviewed the terms of use yet, please click OK now.';
+	if (confirm(s)){
+		window.open("./SCO12TestWrapReadMe.htm")
+	}
+}
+
+function ExpandString(s){
+	var re = new RegExp("%","g")
+	for (i = arguments.length-1; i > 0; i--){
+		s2 = "%" + i;
+		if (s.indexOf(s2) > -1){
+			re.compile(s2,"g")
+			s = s.replace(re, arguments[i]);
+		}
+	}
+	return s
+}
+
+
+/////////// API INTERFACE INITIALIZATION AND CATCHER FUNCTIONS ////////
+
+// Overall behavior controls
+var zbConfirmLoadedURL = true;
+var zbRerunOK = false;
+var zbWrapperInitsCommunicationWithBackend = false;
+
+var znFindAPITries = 0;
+var zobjAPI = null;
+var zbInitDone = false;
+var zbFinishDone = false;
+
+
+function AlertUserOfAPIError(strText) {
+	if (B_SHOW_API_ERRORS) {alert(strText)}
+}
+
+function FindAPI(win) {
+	while ((win.API == null) && (win.parent != null) && (win.parent != win)) {
+		znFindAPITries ++;
+		if (znFindAPITries > 500) {
+			if (B_SHOW_API_ERRORS) AlertUserOfAPIError(STR_API_TOO_DEEP);
+			return null;
+		} 
+		win = win.parent;
+	}
+	return win.API;
+}
+
+function APIOK() {
+	return ((typeof(zobjAPI)!= "undefined") && (zobjAPI != null))
+}
+
+function LMSInitialize(parm) {
+	var err = "true"
+	if (!zbInitDone)
+	{
+		if ((window.parent != null) && (window.parent != window)) {
+			zobjAPI = FindAPI(window.parent)
+		}
+		if ((zobjAPI == null) && (window.opener != null)){
+			zobjAPI = FindAPI(window.opener)
+			// alert("opener tested")
+		}
+		if (!APIOK()) {
+
+			if (B_SHOW_API_ERRORS) AlertUserOfAPIError(STR_API_NOT_FOUND);
+			err = false
+		} else {
+			if (zbWrapperInitsCommunicationWithBackend) {
+				err = zobjAPI.LMSInitialize("");
+      }
+			if (err != "true") {
+				if (B_SHOW_API_ERRORS) AlertUserOfAPIError(STR_API_INIT_FAILED)
+			}
+		}
+	}
+
+	return (err + "") // Force type to string
+}
+
+function LMSFinish(parm) {
+	if ((APIOK()) && (zbFinishDone == false)) {
+		if (typeof(SaveData) != "undefined"){
+			// The SaveData function can be defined in another script of the SCO
+			SaveData();
+		}
+		if (zbWrapperInitsCommunicationWithBackend) {
+			zbFinishDone = (zobjAPI.LMSFinish("") != "false");
+		} else {
+			// ?
+		}
+	}
+	return (zbFinishDone + "" ) // Force type to string
+}
+// Call these catcher functions rather than trying to call the API adapter directly
+function LMSSetValue(n,v)			{return ((APIOK())?zobjAPI.LMSSetValue(n,v):"false")}
+function LMSGetValue(nam)			{return ((APIOK())?zobjAPI.LMSGetValue(nam):"")}
+function LMSCommit(parm)			{return ((APIOK())?zobjAPI.LMSCommit(""):"false")}
+function LMSGetLastError(parm){return ((APIOK())?zobjAPI.LMSGetLastError(""):"-1")}
+function LMSGetErrorString(n)	{return ((APIOK())?zobjAPI.LMSGetErrorString(n):"JavaScript")}
+function LMSGetDiagnostic(n)	{return ((APIOK())?zobjAPI.LMSGetDiagnostic(n):"JavaScript")}
+
+////////////////////////////////
+</script>
+
+
+<script type="text/javascript" language="JavaScript">
+// This is the test harness
+
+// Test option flags
+var zbAlertOnAPICall = false;
+var zbAlertOnCommProtocolErr = false;
+
+// SCORM protocol logic flags and other housekeeping stuff
+var strSCOToTestHref = "";
+var strDeadPage = "SCO12TestWrapBLNK.htm"
+var zbTestInitDone = false;
+var zbTestFinishDone = false;
+var zbTestInSession = false;
+var zbIgnoreParam2IsNotAString = false;
+
+// Parse any parameters passed on command line
+
+var gaURLParams = new Array();
+
+function URLParams2Array() { 
+	var nameVal   = "";                 // Holds array for a single name-value pair. 
+	var inString  = location.search;    // Strips query string from URL. 
+	var i = 0; 
+	var a = 0;
+	var v = "";
+
+	// If URL contains a query string, grabs it. 
+	if (inString.charAt(0) == "?") { 
+        // Removes "?" character from query string. 
+        inString = inString.substring(1, inString.length);
+	}
+	if (inString.length > 0) { 
+   	var aKeypairs = inString.split("&") 
+   	// Loops through name-value pairs. 
+   	for (i=0;i<aKeypairs.length;i++) { 
+		// Splits name-value into array (nameVal[0]=name, nameVal[1]=value). 
+			nameVal = aKeypairs[i].split("=");
+			v = nameVal[1]
+			while (v.indexOf('+') > -1) {
+				//Got to do this the hard way because of IE 
+				//bug with 'g' in regular expression /+/g 
+				v = v.substring(0,v.indexOf('+')) + ' ' + v.substring(v.indexOf('+') + 1);
+			}//while
+			nameVal[1]= unescape(v); 
+			nameVal[0] = nameVal[0].toUpperCase();
+			gaURLParams[gaURLParams.length] = nameVal;
+		}
+	} 
+} 
+
+URLParams2Array();
+
+function GetURLParam(nam) {
+	nam=nam.toUpperCase();
+	for (i=0;i<gaURLParams.length;i++){
+		if (gaURLParams[i][0]==nam){
+			return gaURLParams[i][1]
+		}
+	}
+	return ""
+}
+
+/////// Generic cookie functions
+
+var zdateCookieExpirationDate = new Date();
+zdateCookieExpirationDate.toGMTString();
+
+// Mac date bug fix
+function FixCookieDate (date) {
+  var base = new Date(0);
+  var skew = base.getTime();
+  if (skew > 0) date.setTime (date.getTime() - skew);
+}
+
+// Parses document's cookie for a named value
+function GetCookie (name) {
+
+  //alert (document.cookie)
+
+  var arg = name + "=";
+  var arglen = arg.length;
+  var clen = document.cookie.length;
+  var i = 0;
+  while (i < clen) {
+    var j = i + arglen;
+    if (document.cookie.substring(i, j) == arg) {
+      //return getCookieVal (j);
+  		var p3 = document.cookie.indexOf (";", j);
+  		if (p3 < 0) p3 = document.cookie.length;
+  		return unescape(document.cookie.substring(j, p3));
+		}
+    i = document.cookie.indexOf(" ", i) + 1;
+    if (i == 0) break; 
+  }
+  return null;
+}
+
+
+function SetCookie (name,value,expires,path,domain,secure) {
+// first 2 params are required, others optional
+	if (!(expires)) { expires = zdateCookieExpirationDate ;}
+  document.cookie = name + "=" + escape (value) +
+    ((expires) ? "; expires=" + expires.toGMTString() : "") +
+    ((path) ? "; path=" + path : "") +
+    ((domain) ? "; domain=" + domain : "") +
+    ((secure) ? "; secure" : "");
+	//alert('cookie set to expire ' + expires + ' : ' + GetCookie(name))
+}
+
+function DeleteCookie (name,path,domain) {
+  if (GetCookie(name)) {
+    document.cookie = name + "=" +
+      ((path) ? "; path=" + path : "") +
+      ((domain) ? "; domain=" + domain : "") +
+      "; expires=Thu, 01-Jan-70 00:00:01 GMT";
+  }
+}
+
+function clearCookies(aNames) {
+	if (aNames) {
+		for (i=0;i<aNames.length;i++){
+			DeleteCookie(aNames[i])
+		}
+	}
+}
+
+FixCookieDate (zdateCookieExpirationDate); 
+// Correct for Mac date bug - call only once for given Date object!
+
+// Arbitrary expiration date set to 300 days for this mockup. 
+zdateCookieExpirationDate.setTime (zdateCookieExpirationDate.getTime() + (300 * 24 * 60 * 60 * 1000)); 
+
+// End of generic cookie functions
+
+////////////// Pseudo persistent store used if there is no back end LMS
+
+zaPersist = new Array();
+
+function SetPersistValue(nam, v, bOverride)
+{
+	var aReadOnly = new Array("core.total_time","comments_from_lms",  "core.credit", "core.entry", "core.lesson_mode",  "core.student_id", "core.student_name", "core.total_time", "core.launch_data", "student_data.mastery_score", "student_data.max_time_allowed", "student_data.time_limit_action"); 
+  var aDMKeywords = new Array("core._children", "core.score._children", "student_data._children", "student_preference._children");
+
+	ResetError();
+	if (nam.indexOf("cmi.objectives.") == 0) return SetObjectiveData(nam,v);
+	if (nam.indexOf("cmi.interactions.") == 0) return SetInteractionData(nam,v);
+	if (nam.indexOf("cmi.core.session_time") == 0) return SetTimeData(nam,v);
+	if (nam.indexOf("cmi.comments") == 0) return SetCommentsData(nam,v);
+	if ((!(bOverride)) & (nam.indexOf("cmi.") == 0)) {
+		for (i=0;i < aReadOnly.length;i++){
+			if (nam.indexOf(aReadOnly[i]) == 4) {
+				znLastError = 403; // read only
+				return "false"
+			}
+		}
+	}
+	if ((!(bOverride)) & (nam.indexOf("cmi.") == 0)) {
+		for (i=0;i < aDMKeywords.length;i++){
+			if (nam.indexOf(aDMKeywords[i]) == 4) {
+				znLastError = 402; // element is keyword
+				return "false"
+			}
+		}
+		if ((nam.indexOf("_count") != -1)||(nam.indexOf("_version") != -1)){
+				znLastError = 402; // element is keyword
+				return "false"
+		}
+	}
+	if ((nam.indexOf(".score") != -1) ||(nam.indexOf(".weighting") != -1)) {
+		var n = parseFloat(v);
+		if (isNaN(n)){
+		  znLastError = 201;
+			return "false"
+		}
+	}	// Here could add a test for validity of moredata types for value in v
+	return StorePersistValue(nam,v)
+}
+
+function StorePersistValue(nam,v) {
+	var i = GetPersistValueIndex(nam);
+	//alert("i = " +  i)
+	if (i < 0){
+		i = zaPersist.length
+		var a = new Array(nam, v)
+		zaPersist[i] = a;
+	} else {
+		zaPersist[i][1] = v
+		//alert("update persist item: " + zaPersist[i][0] + "\nv : " + zaPersist[i][1])
+	}
+	return "true";
+}
+
+function GetCommentFromLMS(){
+  var a = new Array("I admire your patience.", "SCORM, SCORM everywhere and nothing to drink!", "Don't forget to look out the window.", "The limits of ignorance are unknowable.", "There is no LMS here. No comment.", "I'm not a real LMS; I just pretend to be one.", "For one brief moment, it suddenly all made sense.", "Life is short. Eat dessert first.");
+	return a[Math.round(Math.random() * (a.length-1))]
+}
+
+function GetPersistValue(nam, bOverride)
+{
+	var s = "";
+	if (nam.indexOf("cmi.objectives.") == 0) return GetObjectiveData(nam);
+	if (nam.indexOf("cmi.interactions.") == 0) return GetInteractionData(nam);
+
+	var aWriteOnly = new Array("core.exit"); 
+	if (nam.indexOf("cmi.core.session_time") == 0) return GetTimeData(nam);
+	if ((!(bOverride)) & (nam.indexOf("cmi.") == 0)) {
+		for (i=0;i < aWriteOnly.length;i++){
+			if (nam.indexOf(aWriteOnly[i]) == 4) {
+				znLastError = 403; // read only
+				return "false"
+			}
+		}
+	}
+
+	switch (nam) {
+		case "cmi.core._children" :
+			s = "student_id,student_name,credit,lesson_status,lesson_location,entry,score,exit,lesson_mode,launch_data";
+			break;
+		case "cmi.comments_from_lms" : 
+			s = GetCommentFromLMS();
+			break;
+		case "cmi.core.score._children" : 
+			s = "raw,min,max";
+			break;
+		case "cmi.core.credit" :
+			s = "true"; // hard wired
+			break;
+		case "cmi.core.lesson_mode" :
+			s = "normal"; // hard wired
+			break;
+		case "cmi.core.student_name" :
+			s = "Victor Hugo"; // hard wired
+			break;
+		case "cmi.core.student_id" :
+			for (i=0;i<255;i++){
+				s+= Math.round(Math.random()*9); 
+			}// hard wired to stress SCO
+			break;
+		case "cmi.core.total_time" :
+			s = "13:27:45.5"; // hard wired to stress SCO
+			break;
+		case "cmi.student_data._children" :
+			s = "mastery_score";
+			break;
+		case "cmi.student_data.mastery_score" :
+			s = "75" + ""; // hard wired
+			break;
+		default :
+			var i = GetPersistValueIndex(nam);
+			if (i >= 0) {
+				s = zaPersist[i][1]
+			} else {
+				switch(nam) {
+					case "cmi.score.min" : s = "0"; break;
+					case "cmi.score.max" : s = "100"; break;
+					default: s = s; 
+						// we're not accounting for all possible data element names yet
+				}
+			}
+		}
+		return s;
+}
+
+function GetPersistValueIndex(nam)
+{
+	//alert("GetPersistValueIndex for " + nam)
+	for (i=0;i<zaPersist.length;i++){
+		if (zaPersist[i][0] == nam){
+			//alert("found at " + i)
+			return i
+		}
+	}
+	//alert ("not found")
+	return -1
+}
+
+// Pseudo-store for SCO objectives
+var zaPersistObjectives = new Array();
+
+// Pseudo-store for SCO interaction data
+var zaPersistInteractions = new Array();
+
+// Pseudo-store for duration info
+var zDateBeginTime = null;
+var znAccumulatedDuration = 0;
+
+// Set Initial Persist Values
+SetPersistValue("cmi.core.lesson_status", "not attempted", true);
+SetPersistValue("cmi.core.entry", "ab-initio", true);
+SetPersistValue("cmi.core.total_time", "0000:00:00.00", true);
+
+function ClearPersistValues() {
+	var s = STR_THIS_APP_TITLE_IN_CAPS + "\n\n";
+	if (APIOK()) {
+		s += STR_EXPLAIN_CANNOT_RESET_DATA
+	} else {
+		NewAttempt();
+		for (i=0;i<zaPersist.length;i++){
+			for (j=0;j<2;j++){
+				zaPersist[i][j] = null
+			}
+		}
+		zaPersist = null;
+		zaPersist = new Array();
+		SetPersistValue("cmi.core.lesson_status", "not attempted", true);
+		SetPersistValue("cmi.core.entry", "ab-initio", true);
+		SetPersistValue("cmi.core.total_time", "0000:00:00.00", true);
+		zaPersistObjectives = null;
+		zaPersistObjectives = new Array();
+		zaPersistInteractions = null;
+		zaPersistInteractions = new Array();
+		zDateBeginTime = null;
+		znAccumulatedDuration = 0;
+		ResetError(); 
+		s += STR_CONFIRM_COULD_RESET_DATA
+	}
+	alert(s)
+}
+
+
+function SetObjectiveData(what,v) {
+	var a = what.split(".");
+	ResetError(); 
+	if (a[2] == "_count") {
+		znLastError = 403; // read only
+	} else {
+		var iObj = a[2];
+		if ((isNaN(iObj)) || (iObj < 0) || (iObj > (zaPersistObjectives.length))) {
+			// invalid index, too low or too high
+			znLastError = 101; 
+		} else if ((a[3] != "id") && (a[3] != "status") && (a[3] != "score")) {
+			znLastError = 201; 
+		} else {
+			if (iObj >= zaPersistObjectives.length) {
+				iObj = zaPersistObjectives.length; // catch outlier if not caught before
+				var adata = new Array(5)
+			} else {
+				var adata = zaPersistObjectives[iObj]
+			}
+			var j = -1;
+			switch (a[3]) {
+				case "id" : j = 0; break; 
+				case "status" : j = 1; break;
+				case "score" : 
+					switch (a[4]) {
+						case "raw" : j = 2; break;
+
+						case "min" : j = 3; break;
+						case "max" : j = 4; break;
+						default : znLastError = 201;
+					} //switch (a[4]
+				default : znLastError = 201; 
+			} //switch (a[3])
+			if (j > -1) {
+				adata[j] = v;
+				zaPersistObjectives[iObj] = adata
+
+				return "true"
+			}//if
+		}
+	}
+	if (ResetError()) return "true"
+	else return "false"
+}
+
+function GetObjectiveData(what) {
+	//alert("GetObjectiveData: " + what)
+	var s = "";
+	var a = what.split(".");
+	ResetError();
+	switch (a[2]) {
+		case "_children" :
+			s = "id,status,score";
+			break;
+		case "_count" :
+			s = (zaPersistObjectives.length + "");
+			break;
+		default :
+			var iObj = a[2];
+			if ((isNaN(iObj)) || (iObj < 0) || (iObj > zaPersistObjectives.length-1)) {
+				znLastError = 201; // bad element name
+				return "";
+			} else {
+				var adata = zaPersistObjectives[iObj]
+				var j = -1;
+				switch (a[3]) {
+					case "id" : j = 0; break; 
+					case "status" : j = 1; break;
+					case "score" :
+						switch (a[4]) {
+							case "raw" : j = 2; break;
+							case "min" : j = 3; break;
+							case "max" : j = 4; break;
+							case "_children" : s = "min,max,raw"; break;
+							default: 
+								znLastError = 201; // bad element name
+						} //switch(a[4])
+						break;
+					default:
+						znLastError = 201; // bad element name
+			} //else
+		} //switch (a[3])
+		if (j > -1) {
+			s = adata[j]
+		}//if
+	}//switch (a[2])
+	if (znLastError != 0) s = "";
+	return s
+}
+
+function SetTimeData(what,v) {
+	// here update total session time.
+	// Real soon now TBD
+	return ("true")
+}
+
+function SetCommentsData(nam, v) {
+	if ((v) && (v.length > 4096)) {
+		// TBD too long
+	}
+	var s = GetPersistValue(nam);
+	if (s.length > 0){
+		s += v;
+	} else {
+		s = v;
+	}
+	if (s.length > 4096){
+		s="[...]" + s.substr(5,4091)
+	}
+	return StorePersistValue(nam, s);
+}
+
+function SetInteractionData(what,v) {
+	// just pretending to record here, no validation done
+	var a = what.split(".");
+	ResetError(); 
+	if (a[2] == "_count") {
+		znLastError = 403; // read only
+	} else {
+		var iObj = a[2];
+		if ((isNaN(iObj)) || (iObj < 0) || (iObj > zaPersistInteractions.length)) {
+			// invalid index, too low or too high
+			znLastError = 101; 
+		} else {
+			if (iObj >= zaPersistInteractions.length) {
+				iObj = zaPersistInteractions.length; // catch outlier if not caught before
+				var adata = new Array(10)
+			} else {
+				var adata = zaPersistInteractions[iObj]
+			}
+			var j = -1;
+			switch (a[3]) {
+				case "id" : j = 1; break;
+				case "objectives" : j = 2; break; 
+				case "time" : j = 3; break;
+				case "type" : j = 4; break;
+				case "correct_responses" : j = 5; break;
+				case "weighting" : j = 6; break;
+				case "student_response" : j = 7; break;
+				case "result" : j = 8; break;
+				case "latency" : j = 9; break;
+				default : znLastError = 201; 
+			} //switch (a[3])
+			if (j > -1) {
+				adata[0] = what;
+				adata[j] = v;
+				zaPersistInteractions[iObj] = adata;
+				return "true"
+			}//if
+		}
+	}
+	if (ResetError()) return "true"
+	else return "false"
+}
+
+function GetInteractionData(what) {
+	var s = "";
+	var a = what.split(".");
+	ResetError();
+	switch (a[2]) {
+		case "_children" :
+			s = "id,objectives,time,type,correct_responses,weighting,student_response,result,latency";
+			break;
+		case "_count" :
+			s = (zaPersistInteractions.length + "");
+			break;
+		default :
+			znLastError = 404; // write only
+	}
+	return s
+}
+
+////////  SCORM Error trapping and handling
+
+var znLastError = 0;
+var zstrErrorDiag = "";
+
+function ResetError() {
+	znLastError = 0;
+	zstrErrorDiag = ""
+}
+
+function ErrorStringFromErrorNumber(errNo) {
+	var s = ""
+	var n = parseInt(errNo); 
+	if (isNaN(n)) {
+		return (errNo + ' is an invalid error value.')
+	}
+	switch(n) {
+		case 0 : 
+			s = "0 No error."; break; 
+		case 101 : 
+			s = "101 General exception."; break;
+		case 201 : 
+			s = "201 Invalid argument error."; break;
+		case 202 : 
+			s = "202 Element cannot have children"; break;
+		case 203 : 
+
+			s = "203 Element not an array - cannot have count"; break;
+		case 301 : 
+			s = "301 Not initialized"; break;
+		case 401 : 
+			s = "401 Not implemented error"; break;
+		case 402 : 
+			s = "402 Invalid set value, element is a keyword"; break;
+		case 403 : 
+			s = "403 Element is read only"; break;
+		case 404 : 
+			s = "404 Element is write only"; break;
+		case 405 : 
+			s = "405 Incorrect Data Type"; break;
+		default :
+			s = n + " Undefined error"; break;
+	}
+	return s + "";
+}
+
+
+//////// Reset for another run
+
+function NewAttempt(){
+	zbTestInitDone = false;
+	zbTestFinishDone = false;
+	zbTestInSession = false;
+	zbIgnoreParam2IsNotAString = false;
+	ResetError();
+	znCntObjectives = 0;
+}
+
+// Logging functions
+
+var zbLoggingOK = (typeof(WriteLog) == "function");
+zwndPopupLog = null;
+
+var zstrLog = "";
+var znLogMark = 0;
+
+function WriteLog(s,wnd) {
+	var wndLog;
+	var p=1;
+	var s;
+	var re;
+	if (wnd == null) {
+		wndLog = wndLOGWINDOW
+	} else {
+		wndLog = wnd
+	}
+	if (typeof(wndLog) == "undefined") {
+		return false
+	}
+	var p = -1
+	while ((zstrLog.length > 32000) && ( p < 0)) {
+		p = zstrLog.indexOf('<br>');
+		if (p >=0) {
+			zstrLog = '<i>&lt;snip&gt; </i> ' + zstrLog.substr(p + 4)
+		}
+	}
+	re = /\n/gi;
+	s = s.replace(re, "<br>&gt;"); // Use > char to indicate sub-entries
+	if (zstrLog.length > 0) zstrLog += '<br><hr>';
+	zstrLog += s;
+	s = '<html><head><title>Log</title></head><body bgcolor="#E0E0E0" color="black" onload="window.scrollTo(0,9999999)"><font face="verdana"><small><small>';
+	s += zstrLog;
+	s += '</small></small></font></body></html>';
+	if ((wndLog) && (!wndLog.closed)) {
+		wndLog.document.open();
+		wndLog.document.write(s);
+		wndLog.document.close();
+		wndLog.scrollTo(0,90000000);
+	}
+	wndLog = zwndPopupLog;
+	if ((wndLog) && (!wndLog.closed)) {
+		wndLog.document.open();
+		wndLog.document.write(s);
+		wndLog.document.close();
+		wndLog.scrollTo(0,90000000);
+	}
+}
+
+function ClearLog(wnd){
+	zstrLog = "";
+	znLogMark = 0;
+	WriteLog(zstrLog,wnd);
+}
+
+function InsertLogMarker(s) {
+	if ((s == null) || (s == "")) {
+		znLogMark++;
+		s = znLogMark.toString()
+	}
+	WriteLog("\/* " + s + " *\/")
+}
+
+function PrintLog() {
+	if (window.wndLOGWINDOW.print){
+		window.wndLOGWINDOW.print();
+	}
+}
+
+function PopupLog(){
+		var w = 400;
+		var h = 600;
+		var wndLog = zwndPopupLog;
+		if ((!wndLog) || (wndLog.closed)) {
+			window.status = "Opening popup log window";
+			var loaderurl = MakeLongURL("SCO12TestWrapBLNK.htm");
+			var features = "width=" + w + ",height=" + h + ",scrollbars,resizable,menubar,toolbar,dependent";
+			wndLog = window.open(loaderurl,"WndPopupLog",features);
+		}
+		s = '<html><head><title>'+ STR_THIS_APP_TITLE_IN_CAPS + ' LOG</title></head>'
+		s += '<body bgcolor="#E0E0E0" color="black" onload="window.scrollTo(0,9999999)"><font face="verdana"><small><small>';
+		s += zstrLog;
+		s += '</small></small></font></body></html>';
+		if ((wndLog) && (!wndLog.closed)) {
+			wndLog.document.open();
+			wndLog.document.write(s);
+			wndLog.document.close();
+			wndLog.scrollTo(0,90000000);
+		}
+		if (wndLog.opener) wndLog.opener = self;
+		wndLog.focus();
+		if (wndLog.activate) wndLog.activate();
+		zwndPopupLog = wndLog
+}
+
+function ReportCatch(evnt,p1,p2,err){
+	var bErr = ((err != null) && (err.length > 0));
+	var s = 'API call detected: ' + evnt;
+	if (p1 != null) {
+		s += '\nParam1="' + p1 + '"'
+	}
+	if (p2 != null) {
+		s += '\nParam2="' + p2 + '"'
+	}
+	if (bErr) s+= '\n' + err;
+	if (zbLoggingOK) WriteLog(s);
+	if ((zbAlertOnAPICall) || ((zbAlertOnCommProtocolErr) && (bErr))){
+		alert(STR_THIS_APP_TITLE_IN_CAPS + "\n\n" + s)
+	}
+}
+ 
+////////  Instantiate the API adapter exposed by this wrapper SCO to its "client" SCO.
+
+var API = new Object();
+
+function catchLMSInitialize(parm) 
+{
+	var err = "true";
+	ResetError(); 
+	if (APIOK()) {
+		if (!zbWrapperInitsCommunicationWithBackend) {
+			// We let the SCO do the initialization on demand
+			ReportCatch("LMSInitialize", parm, null, zstrErrorDiag)
+			err = zobjAPI.LMSInitialize(parm);
+			if (zbLoggingOK) WriteLog('API end returns: "' + err + '" to the SCO.');
+			if (err == "true") {
+				zbTestInitDone = true;
+				zbTestInSession = true;
+				window.status = "Communication session initialized."
+			}
+			znLastError = zobjAPI.LMSGetLastError();
+			return err
+		}
+	}
+	// We are managing LMSInitialize by the SCO
+	if (zbTestFinishDone) {
+		znLastError = 101; 
+		zstrErrorDiag = "Attempting to reinitialize after LMSFinish.";
+		err = "false"
+	} else if ((zbTestInitDone) || (zbTestInSession)) {
+		zstrErrorDiag = "Extra call to LMSInitialize.";
+		znLastError = 101; 
+		err = "false"
+	}
+	if ((parm == null) || (parm.length > 0)) {
+		zstrErrorDiag = 'LMSFinish parameter is null should be "".';
+		znLastError = 201;
+		err = "false"
+	} 
+	ReportCatch("LMSInitialize", parm, null, zstrErrorDiag);
+
+	if (znLastError == 0) {
+		if (APIOK()) {
+			if (zbLoggingOK) WriteLog('Not forwarding LMSInitialize to the API object since the test wrapper is already initialized as a SCO.')
+		}
+		zbTestInitDone = true;
+		zbTestInSession = true;
+		window.status = "Communication session initialized."
+	}
+	if (zbLoggingOK) WriteLog('API returns "' + err + '" to the SCO.');
+	return err
+}
+
+function catchLMSFinish(parm) 
+{
+	var err = "true";
+	ResetError(); 
+	if (APIOK()) {
+		if (!zbWrapperInitsCommunicationWithBackend) {
+			// We let the SCO do the initialization on demand
+			ReportCatch("LMSFinish", parm, null, zstrErrorDiag)
+			err = zobjAPI.LMSFinish(parm);
+			if (zbLoggingOK) WriteLog('API end returns: "' + err + '" to the SCO.');
+			if (err == "true") {
+				zbTestFinishDone = true;
+				zbTestInSession = false;
+				window.status = "Communication session terminated."
+			}
+			znLastError = zobjAPI.LMSGetLastError();
+			return err
+		}
+	}
+	// We are managing LMSFinish attempt by the SCO
+
+	//alert("lmsfinish reported")
+
+	if ((parm == null) || (parm.length > 0)) {
+		zstrErrorDiag  ='LMSFinish parameter is null should be "".';
+		znLastError = 201;
+		err = "false"
+	} else if (zbTestFinishDone) {
+		zstrErrorDiag = "Extra call to LMSFinish.";
+		znLastError = 101; 
+		err = "false"
+	} else if (!zbTestInitDone) {
+		zstrErrorDiag = "Called LMSFinish before LMSInitialize.";
+		znLastError = 301; 
+		err = "false"
+	}
+
+	ReportCatch("LMSFinish", parm, null, zstrErrorDiag)
+	if (znLastError == 0) {
+		if (APIOK())
+		{
+			if (zbLoggingOK) WriteLog('Not forwarding LMSFinish to the API object since the wrapper is itself a SCO and will call LMSFinish when unloaded.');
+		}
+		zbTestFinishDone = true;
+		zbTestInSession = false;
+		window.status = "Communication session terminated."
+		if (GetPersistValue("cmi.core.exit") == "suspend", true) {
+ 			SetPersistValue("cmi.core.entry", "resume", true);
+		} else {
+			SetPersistValue("cmi.core.entry", "", true);
+		}
+		SetPersistValue("cmi.core.exit", "", true);
+		// Need to override error that may have been set by the
+		// above, since it is us and not the SCO who did the override.
+		ResetError();
+	}
+	if (zbLoggingOK) WriteLog('API returns "' + err + '" to the SCO.');
+	return err
+}
+
+function catchLMSSetValue(n,v)
+{
+	var err = "true";
+	var v2 = v; // force this to be a string
+	var typv = (typeof v);
+	var s = "";
+
+	ResetError();
+ 
+	if (typv != "string") {
+		s = 'Invalid parameter type. Parameter 2 type should be "string", it is "%1".' 
+		zstrErrorDiag = ExpandString(s, typv)
+	}
+
+	ReportCatch("LMSSetValue", n, (v + "").substr(0,4096), zstrErrorDiag)
+
+	if (typv != "string") {
+		if (!zbIgnoreParam2IsNotAString) {
+			s = zstrErrorDiag + ' (Note that parameters are always converted to string for display between quotes in the log.)\n\n';
+			s += 'This error is ignored by the SCORM 1.2 test suite 1.2.3 and by many LMS implementations, but will probably cause interoperability problems in the future.';
+			s += '\n\n';
+			s += 'Click OK to continue to trap the error, or Cancel to convert the parameter to string and bypass the error if it happens again during this communication session.';
+			if (!confirm(s)) {
+				zbIgnoreParam2IsNotAString = true;
+			}
+		}
+		if (zbIgnoreParam2IsNotAString) {
+			v2 =  v + "";
+			typv = (typeof v2);
+			zstrErrorDiag = ""
+		}
+	}
+
+	if (APIOK()) {
+		err = zobjAPI.LMSSetValue(n,v2);
+		znLastError = zobjAPI.LMSGetLastError();
+		if (zbLoggingOK) WriteLog('Back end returns: ' + err);
+	}	else if (!zbTestInitDone) {
+		zstrErrorDiag = "Called LMSSetValue before LMSInitialize.";
+		znLastError = 301; 
+		err = "false"
+	} else if (!zbTestInSession) {
+		zstrErrorDiag = "Called LMSSetValue after LMSFinish."
+		znLastError = 101; 
+		err = "false"
+	} else if (n.length < 1) {
+		zstrErrorDiag = "Called LMSsetValue without an element name."
+		znLastError = 201; 
+		err = "false"
+	} else if (typv != "string") {
+		//zstrErrorDiag = "Param 2 is incorrect type: Not a string."
+		znLastError = 405; 
+		err = "false"
+	} else {
+		err = SetPersistValue(n, v2.substr(0,4096))
+	}
+	if (zbLoggingOK) WriteLog('API returns "' + err + '" to the SCO.');
+	return err
+}
+
+function catchLMSGetValue(nam)
+{
+
+
+	var r = "";
+	ResetError(); 
+	ReportCatch("LMSGetValue", nam)
+	if (APIOK()) {
+		r = zobjAPI.LMSGetValue(nam);
+		znLastError = zobjAPI.LMSGetLastError()
+		if (zbLoggingOK) WriteLog('Back end returns: ' + r);
+	}	else if (!zbTestInitDone) {
+		zstrErrorDiag = "Called LMSGetValue before LMSInitialize.";
+		znLastError = 301; 
+		err = "false"
+	} else if (!zbTestInSession) {
+		zstrErrorDiag = "Called LMSGetValue after LMSFinish."
+		znLastError = 101; 
+		err = "false"
+	} else if (nam.length < 1) {
+		zstrErrorDiag = "Called LMSGetValue without an element name."
+		znLastError = 201; 
+		r ="" 
+	} else {
+		r = GetPersistValue(nam)
+	}
+	if (zbLoggingOK) WriteLog('API returns "' + r + '" to the SCO.');
+	return r
+}
+
+function catchLMSCommit(parm)
+{
+	var err = "true";
+	ResetError(); 
+	ReportCatch("LMSCommit", parm)
+	if ((parm == null) || (parm.length > 0)) {
+		zstrErrorDiag = 'LMSCommit parameter is null should be "".';
+		znLastError = 201;
+		err = "false";
+	} else if (zbTestFinishDone) {
+		znLastError = 101; 
+		zstrErrorDiag = "Attempting to commit after LMSFinish.";
+		err = "false"
+	} else if (!zbTestInSession) {
+		znLastError = 301; 
+		zstrErrorDiag = "Attempting to commit before LMSInitialize.";
+		err = "false"
+	}
+	ReportCatch("LMSCommit", parm, null, zstrErrorDiag)
+
+	if (APIOK()) {
+		err = zobjAPI.LMSCommit(parm);
+		znLastError = zobjAPI.LMSGetLastError()
+	}
+	if (zbLoggingOK) WriteLog('API returns "' + err + '" to the SCO.');
+	return err
+}
+function catchLMSGetLastError(parm)
+{
+	var err = "";
+	ReportCatch("LMSGetLastError", parm)
+	if (parm != null) {
+		if (zbLoggingOK) WriteLog('GetLastError called with non-null parameter');
+		znLastError = 201;
+		err = "false";
+	} 
+	if (APIOK()) {
+		err = zobjAPI.LMSGetLastError(parm);
+		znLastError = zobjAPI.LMSGetLastError()
+	} else {
+		err = znLastError + ""
+	}
+	if (zbLoggingOK) WriteLog('API returns "' + err + '" to the SCO.');
+	return err
+}
+function catchLMSGetErrorString(parm)
+{
+	ReportCatch("LMSGetErrorString", parm)
+	var err = "";
+	if (APIOK()) {
+		err = zobjAPI.LMSGetErrorString(parm)
+	} else {
+		err = ErrorStringFromErrorNumber(parm)
+	}
+	if (zbLoggingOK) WriteLog('API returns "' + err + '" to the SCO.');
+	return err
+}
+function catchLMSGetDiagnostic(parm)
+{
+	var err = "";
+	var nLastError = znLastError;
+	var strLastErrorDiag = zstrErrorDiag;
+	ResetError();
+	var n = 0;
+	if ((parm) && (parm.length)){
+	  n = parseInt(parm);
+	}
+	ReportCatch("LMSGetDiagnostic", parm)
+
+	if (APIOK()) {
+		err = zobjAPI.LMSGetDiagnostic(parm);
+		znLastError = zobjAPI.LMSGetLastError()
+	} else if ((strLastErrorDiag.length > 0) && ((parm.length == 0) || (n == nLastError))){
+			err = strLastErrorDiag;
+			err += " Note: Different implementations may return different diagnostic information."
+	} else if (!isNaN(n)) {
+			err = catchLMSGetErrorString(n)
+	} else {
+			znLastError = 201;
+			err = "SCO12TestWrapSCO v." + STR_VERSION
+	}
+
+	if (zbLoggingOK) WriteLog('API returns "' + err + '" to the SCO.');
+	return err
+}
+
+API.LMSInitialize=catchLMSInitialize;
+API.LMSFinish=catchLMSFinish;
+API.LMSSetValue=catchLMSSetValue;
+API.LMSGetValue=catchLMSGetValue;
+API.LMSCommit=catchLMSCommit;
+API.LMSGetLastError=catchLMSGetLastError;
+API.LMSGetErrorString=catchLMSGetErrorString;
+API.LMSGetDiagnostic=catchLMSGetDiagnostic;
+
+////////// IE path bug workarounds
+
+// This function is called by clickable objects in the CONTROL frame
+function ThisMainWindowURLPath() {
+		var s = window.location.href;
+		var p1 = s.indexOf("?");
+		if (p1 > 1) {
+			s = s.substr(0,p1)
+		}
+		p1 = s.lastIndexOf("/");
+		if (p1 < 0) { p1 = s.lastIndexOf("\\") }
+		if (p1 > 0) {
+			return s.substr(0,++p1);
+		}
+		return "";
+}
+
+function DosFileNameToUrl(s) {
+	var re = new RegExp("\\\\", "g");
+	var p = s.indexOf(":\\");
+	if (p > 0) {
+		s = "/" + s.substr(0,p) + "|" + s.slice(p+1).replace(re,"\/")
+	} else {
+		s = s.replace(re,"\/")
+	}
+	re.compile(" ","g");
+	s = s.replace(re, "%20"); 
+	s = "FILE://" + s;
+	return s
+}
+
+function MakeLongURL(url) {
+	var bIsDOS = false;
+	var scheme = url.substr(0,7).toUpperCase();
+	if ((scheme != "HTTP://") && (scheme != "FILE://")){
+		var p = url.indexOf("\\")
+		if (p >= 0) {
+			url = DosFileNameToUrl(url)
+		} else {
+			var re = new RegExp(" ", "g");
+			url = url.replace(re, "%20"); 
+			url = ThisMainWindowURLPath() + url
+		}
+	}
+	//alert("Massaged url = " + url)
+	return url 
+}
+
+////////// Client SCO management
+
+var zMainStageType = "frame" // don't change this!
+var zWndCurrentStage = null;
+var zbOtherWindowPromptShown = false;
+var zSCOLoadDelayTimerID = null;
+var zUrlOfSCOToLoad = null;
+
+function SetStageType(typ) {
+	if ((typ != "frame") && (typ != "popup")) typ = "frame";
+	zMainStageType = typ
+}
+
+function LoadSCO(urlSCO) {
+
+	//alert("LoadSCO:" + urlSCO)
+
+
+
+
+	if (urlSCO == null) {
+		urlSCO = zParam_urlSCO;
+	}
+	if (urlSCO == null || urlSCO == "") return false;
+	var url = MakeLongURL(urlSCO);
+	var s2 = ""
+  if (zMainStageType == "frame") {
+		s2 += STR_IN_STAGE_FRAME
+	} else {
+		s2 += STR_IN_POPUP_WINDOW
+	}
+	var s = ExpandString(STR_CONFIRM_LOAD_URL, urlSCO, url, s2)
+
+	if (zbConfirmLoadedURL) {
+		if (!confirm(s)) {
+			return false
+		}
+	}
+	
+	// force unloading to capture end state
+	wndStage = zWndCurrentStage;
+	if ((wndStage != wndSTAGEFRAME) && (wndStage) && (!(wndStage.closed))) {
+			wndStage.location.href = MakeLongURL("SCO12TestWrapBLNK.htm");
+	} else {
+		wndSTAGEFRAME.location.href = MakeLongURL("SCO12TestWrapBLNK.htm")
+	}
+
+	SetCookie("URLSCO", url);
+
+	// Need to wait 1/2 second here for unload scripts to finish executing--if any
+	zUrlOfSCOToLoad = url;
+
+	if (zSCOLoadDelayTimerID != null) {
+		clearInterval(zSCOLoadDelayTimerID) 
+	}
+	zSCOLoadDelayTimerID = setInterval("DelayedLoadSCO()", 500);
+	return true;
+}
+
+function DelayedLoadSCO() {
+	if (zSCOLoadDelayTimerID != null) {
+		clearInterval(zSCOLoadDelayTimerID) 
+	}
+	if (zUrlOfSCOToLoad != null) {
+		// now we can load the new one
+		NewAttempt();
+		if (zbLoggingOK){WriteLog("Resetting API communication state for new session.") };
+		if (zbLoggingOK){WriteLog("Loading [" + zUrlOfSCOToLoad + "]") };
+		if (!StageOpen()) {
+			alert("There was a problem opening a stage window.")
+		}
+		zWndCurrentStage.location.href = zUrlOfSCOToLoad;
+		if (zMainStageType != "frame") {
+			StartStageFocusTimer()
+		}
+		return true
+	} else return false
+}
+
+function UnloadSCO() {
+	KillStageFocusTimer();
+	StageClose();
+	wndSTAGEFRAME.location.href = MakeLongURL("SCO12TestWrapBLNK.htm")
+}
+
+function StageClose() {
+	if (zWndCurrentStage != wndSTAGEFRAME) {
+		if ((zWndCurrentStage) && (!zWndCurrentStage.closed)) {
+			zWndCurrentStage.close();
+		}
+	}
+}
+
+function StageOpen() {
+	var w,h
+	var wndStage = wndSTAGEFRAME; // by default
+	if (zMainStageType != "frame") {
+		w = 800;
+		h = 600;
+		wndStage = zWndCurrentStage;
+		if ((wndStage == wndSTAGEFRAME) || (!wndStage) || (wndStage.closed)) {
+			window.status = "Opening stage window"
+			var url = MakeLongURL("SCO12TestWrapBLNK.htm");
+			features = "width=" + w + ",height=" + h + ",scrollbars,resizable,status, dependent";
+			wndStage = window.open(url,"WndCurrentStage",features);
+			if (!wndStage.opener) wndStage.opener = self;
+		}
+		wndSTAGEFRAME.location.href = MakeLongURL("SCO12TestWrapBLNK.htm");
+		var s = '<html><head>';
+		s += '<style type="text/css">body {background-color: silver; color: blue;';
+		s += 'font-size: small;font-family: Verdana, Arial, Helvetica, Sans-Serif}';
+		s += '</style></head><body><h3>The SCO was launched in another window.</h3>';
+		s += '</body></html>';
+		wndSTAGEFRAME.document.open();
+		wndSTAGEFRAME.document.write(s);
+		wndSTAGEFRAME.document.close();
+		zbOtherWindowPromptShown = true;
+		wndStage.focus();
+	}
+	zWndCurrentStage = wndStage;
+	return true
+}
+
+function HandleActivate() {
+	// Check whether a stage window was open, and if just got closed
+  // remove the other window warning
+	if (zMainStageType != "frame") {
+		if ((zWndCurrentStage) && (!zWndCurrentStage.closed)) {
+			return null
+		}
+	}
+	if (zbOtherWindowPromptShown) {
+		zbOtherWindowPromptShown = false;
+		wndSTAGEFRAME.location.href = MakeLongURL("SCO12TestWrapBLNK.htm");
+	}
+}
+
+var zPopupStageTimerID = null;
+
+function PopupStageFocus() {
+	if ((zWndCurrentStage != wndSTAGEFRAME) && (zWndCurrentStage) && (!zWndCurrentStage.closed)) {
+		zWndCurrentStage.focus()
+	}
+}
+
+function PopupStageFocusTimer() {
+	// called by timer while a popup stage is open
+	if (zWndCurrentStage != wndSTAGEFRAME){
+		if ((zWndCurrentStage) && (!zWndCurrentStage.closed)){
+			if (!zbOtherWindowPromptShown){
+				wndSTAGEFRAME.location.href = MakeLongURL("SCO12TestWrapBLNK.htm");
+				var s = '<html><head>';
+				s += '<style type="text/css">body {background-color: silver; color: blue;';
+				s += 'font-size: small;font-family: Verdana, Arial, Helvetica, Sans-Serif}';
+				s += '</style></head><body><h3>The SCO was launched in another window.</h3>';
+				s += 'Click <a href="javaScript:window.parent.PopupStageFocus()">';
+				s += 'here</a> to reactivate it.';
+				s += '</body></html>';
+				wndSTAGEFRAME.document.open();
+				wndSTAGEFRAME.document.write(s);
+				wndSTAGEFRAME.document.close();
+				zbOtherWindowPromptShown = true;
+			}
+		} else {
+			KillStageFocusTimer();
+			wndSTAGEFRAME.location.href = MakeLongURL("SCO12TestWrapBLNK.htm")
+		}
+	}
+}
+
+function StartStageFocusTimer() {
+	if (zPopupStageTimerID!= null) { 
+		clearInterval(zPopupStageTimerID) 
+	}
+	zbOtherWindowPromptShown = false;
+	zPopupStageTimerID= setInterval("PopupStageFocusTimer()", 500);
+}
+
+function KillStageFocusTimer() {
+	if (zPopupStageTimerID != null) clearInterval(zPopupStageTimerID); 
+	zbOtherWindowPromptShown = false;
+}
+
+function ErrorFoundAPIInSiblingFrame() {
+	// called if a dummy API adapter was called first
+	alert("Unrecoverable SCO Error\n\nIncorrect API search order. The launched SCO searched for API adapter object in a sibling frame before looking for it in the proper places.")
+}
+
+var zRepairFocusTimerID = null;
+
+function RepairFocus() {
+	if (zRepairFocusTimerID != null) { 
+		clearInterval(zRepairFocusTimerID) 
+	}
+	zRepairFocusTimerID = setInterval("RepairFocusTimer()", 500);
+}
+function RepairFocusTimer() {
+	if (zRepairFocusTimerID != null) clearInterval(zRepairFocusTimerID);
+	wndSTAGEFRAME.focus();
+}
+
+////////// Initialization and cleanup
+
+function WrapperInitialize() {
+	LMSInitialize();
+	urlSCO = GetURLParam("SCO");
+	if (zbLoggingOK) {
+		WriteLog(StrAboutThisAsHTML());
+		if (APIOK()) {
+			WriteLog("Back end API object detected. API calls from the SCO to the API object in the wrapper will be forwarded to the API object in the back end.")
+		} else {
+			WriteLog("No back end API object detected. API calls from the SCO to the API object in the wrapper will be handled locally by the wrapper.")
+		}
+		if ((urlSCO != null) && (urlSCO != "")) {
+			zbConfirmLoadedURL = false;
+		  window.status = "Launch SCO parameter = " + urlSCO;
+			if (LoadSCO(urlSCO)) {
+				if ((zParam_urlSCO == null) || (zParam_urlSCO == "")) { 									wndTOOLBAR.SetShownLocation(unescape(urlSCO))
+				}
+			}
+			WriteLog("Wrapper launched with parameter SCO=" + urlSCO)
+			return true
+		}
+	}
+}
+
+function WrapperFinish() {
+	//wndSTAGEFRAME.location.href="SCO12TestWrapBLNK.htm";
+	LMSFinish();
+}
+
+//alert("SCO wrapper script appears to have loaded correctly.")
+
+</script>
+<script>
+
+zParam_urlSCO = GetURLParam("SCO");
+SetStageType(GetURLParam("STAGE").toLowerCase());
+var s = GetURLParam("RERUNOK").toLowerCase();
+if ((s == "ok") || (s == "yes") || (s == "true")) {
+	zbRerunOK = true;
+	zbWrapperInitsCommunicationWithBackend = true;
+}
+
+s = "";
+s += '<title>Click2learn Demo SCORM 1.2 Test Wrapper</title>';
+s += '</head>';
+s += '<frameset cols="200,*" onload="WrapperInitialize()" onunload="WrapperFinish()" onbeforeunload="WrapperFinish()" onactivate ="HandleActivate()">'
+s += '	<frameset rows="115,*">'
+s += '		<frame src="SCO12TestWrapCPL.htm" name="wndCONTROLPANEL" scrolling="no" />'
+s += '		<frame src="SCO12TestWrapBLNK.htm" name="wndLOGWINDOW" />'
+s += '	</frameset>'
+if ((zParam_urlSCO == null) || (zParam_urlSCO == "")) {
+	s += '	<frameset rows=25,100%">'
+	s += '		<frame src="SCO12TestWrapSCOLOC.htm" name = "wndTOOLBAR" scrolling="no"/>'
+	s += '		<frame src="SCO12TestWrapReadMe.htm" name="wndSTAGEFRAME" />'
+	s += '  </frameset>'
+} else {
+	s += '		<frame src="SCO12TestWrapReadMe.htm" name="wndSTAGEFRAME" />'
+}
+s += '</frameset>'
+document.write(s)
+</script>
+</html>

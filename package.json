@@ -10,7 +10,8 @@
     "roll": "rollup -c",
     "dev": "rollup -c -w && NODE_ENV='development' npm start",
     "prod": "nodemon server.js",
-    "test": "jest"
+    "test": "http-server ./SCORM_test_wrapper/ -p 9292",
+    "scormify": "rollup --config scorm/scormify.config.js"
   },
   "repository": {
     "type": "git",
@@ -42,6 +43,7 @@
     "marked": "^0.8.0",
     "node-fetch": "^2.6.0",
     "nodemon": "^2.0.2",
+    "rollup-plugin-copy": "^3.3.0",
     "simple-scorm-packager": "^0.2.4",
     "svelte-routing": "^1.4.0"
   },
@@ -50,7 +52,7 @@
     "@rollup/plugin-json": "^4.0.1",
     "@rollup/plugin-node-resolve": "^6.0.0",
     "punycode": "^2.1.1",
-    "rollup": "^1.20.0",
+    "rollup": "^1.30.1",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-livereload": "^1.0.0",
     "rollup-plugin-node-builtins": "^2.1.2",

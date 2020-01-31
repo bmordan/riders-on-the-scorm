@@ -84,7 +84,7 @@ blockquote {
     border-radius: 12px;
 }
 a {
-    text-decoration: none;
+    text-decoration: none !important;
 }
 .scorm-quiz {
     margin: 2rem 0;
@@ -111,6 +111,26 @@ a {
     color: var(--wh-purple);
     background-color:var(--wh-light-purple);
     border: solid 1px var(--wh-purple);
+}
+.scorm-quiz.correct .scorm-quiz-question, .scorm-quiz.incorrect .scorm-quiz-question {
+    background-color: var(--wh-gray);
+    color: black;
+}
+.scorm-quiz.correct .scorm-quiz-question::after {
+    content: url(data:image/svg+xml,%3Csvg%20width%3D%2263%22%20height%3D%2264%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20stroke%3D%22%2325DD9C%22%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cellipse%20stroke-width%3D%224%22%20fill%3D%22%23F6F6F6%22%20cx%3D%2231.03%22%20cy%3D%2232%22%20rx%3D%2229.03%22%20ry%3D%2230%22%2F%3E%3Cpath%20d%3D%22M17%2042l10%2010c2-12.667%207.333-25.333%2016-38%22%20stroke-width%3D%228%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E);
+    float: right;
+    transform: translate(0, 12px);
+}
+.scorm-quiz.incorrect .scorm-quiz-question::after {
+    content: url(data:image/svg+xml,%3Csvg%20width%3D%2263%22%20height%3D%2264%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20stroke%3D%22%23E23030%22%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cellipse%20stroke-width%3D%224%22%20fill%3D%22%23F6F6F6%22%20cx%3D%2231.03%22%20cy%3D%2232%22%20rx%3D%2229.03%22%20ry%3D%2230%22%2F%3E%3Cpath%20d%3D%22M14%2019c13.333%2011.917%2025%2020.583%2035%2026M47%2021a710.522%20710.522%200%2001-33%2026%22%20stroke-width%3D%228%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E);
+    float: right;
+    transform: translate(0, 12px);
+}
+.scorm-quiz .scorm-quiz-answer:not([onclick]) {
+    border: solid 1px transparent;
+    background-color: var(--wh-gray-light);
+    color: var(--wh-gray);
+    cursor: initial;
 }
 code.hljs {
     padding: 2rem;
