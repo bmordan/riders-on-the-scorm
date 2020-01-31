@@ -1,14 +1,13 @@
 <script>
-    import markedex from "./marked-extended"
+    import md from "../markdown"
     export let content = ""
 </script>
 <section id="html">
-    <link href="/reset.css" rel="stylesheet">
     <header>
         <svg viewBox="0 0 560 118" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h560v94.913C456 74.575 360.667 69.49 274 79.66 144 94.913 62 123 0 116.947" fill="#16264D" fill-rule="evenodd"/></svg>
     </header>
     <main>
-        {@html markedex(content)}
+        {@html md(content)}
     </main>
 </section>
 <style>

@@ -2,7 +2,7 @@ const scopackager = require('simple-scorm-packager')
 const fs = require('fs')
 const path = require('path')
 const { execSync } = require('child_process')
-const markdown = require('../src/marked-extended')
+const markdown = require('../markdown')
 
 const scormify = (_package, user) => {
     return new Promise((resolve, reject) => {

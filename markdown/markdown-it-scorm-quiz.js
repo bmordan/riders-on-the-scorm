@@ -32,14 +32,13 @@ module.exports = function (md) {
             <section id="${btoa(question)}" class="scorm-quiz">
                 <article class="scorm-quiz-question noselect">${question.substring(4)}</article>
                 ${answers.map((answer) => {
-                    const score = answer.substring(0, 3) === '[#]' ? 1 : 0
-                    const answer_string = answer.substring(4)
-                    return `
-                        <article class="scorm-quiz-answer noselect" onclick="app.run('updateScore', ${score}, '${btoa(question)}', '${btoa(correct_answer)}')">${answer_string}</article>
-                    `
-                }).join('')}
+                    
+                    const onAnswerHandler = `() => {return ['${question}', '${answer}', '${correct_answer}']}`
+                    
+                    return `<article class="scorm-quiz-answer noselect" id="${btoa(answer)}" onclick="onAnswer('${btoa(onAnswerHandler)}')">${answer.substring(4)}</article>`
+                }).join('').trim()}
             </section>
-        `
+        `.trim()
     }
     
     md.core.ruler.push('scorm_quiz', state => {

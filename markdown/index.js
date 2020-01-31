@@ -11,6 +11,4 @@ const md = new Markdown({
 .use(highlightjs)
 .use(scorm_quiz)
 
-module.exports = function (markdown) {
-    return md.render(markdown)
-}
+module.exports = markdown => md.render(markdown)
