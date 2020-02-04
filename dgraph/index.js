@@ -1,8 +1,7 @@
 const dgraph = require('dgraph-js')
 const grpc = require('grpc')
-const queries = require('./queries')
-
-const clientStub = new dgraph.DgraphClientStub("localhost:9080", grpc.credentials.createInsecure())
+const url = process.env.NODE_ENV === 'development' ? 'localhost:9080' : 'alpha:9080'
+const clientStub = new dgraph.DgraphClientStub(url, grpc.credentials.createInsecure())
 const dgraphClient = new dgraph.DgraphClient(clientStub)
 
 async function setSchema() {
@@ -13,6 +12,62 @@ async function setSchema() {
     const op = new dgraph.Operation()
     op.setSchema(schema)
     await dgraphClient.alter(op)
+}
+
+const queries = {
+    getUserByGid: `query user($gid: string) {
+        user(func: eq(gid, $gid)) {
+            uid
+            gid
+        }
+    }`,
+    getUserByUid: `query user($uid: string) {
+        user(func: uid($uid)) {
+            uid
+            name
+            picture
+            packages {
+                uid
+                title
+                score
+                createdAt
+                sharedwith {
+                    uid
+                    name
+                    picture
+                }
+            }
+        }
+    }`,
+    getPackageByUid: `query getPackageByUid($uid: string) {
+        _package(func: uid($uid)) {
+            uid
+            title
+            score
+            createdAt
+            pages {
+                uid
+                markdown
+                html
+                createdAt
+                updatedAt
+            }
+            sharedWith {
+                uid
+                name
+                picture
+            }
+        }
+    }`,
+    getPageByUid: `query getPageByUid($uid: string) {
+        page(func: uid($uid)) {
+            uid
+            markdown
+            html
+            createdAt
+            updatedAt
+        }
+    }`
 }
 
 const getOrCreateUser = async googleUser => {
@@ -33,7 +88,6 @@ const getOrCreateUser = async googleUser => {
             await txn.discard()
         }
     }
-
     return user
 }
 
@@ -45,20 +99,21 @@ const getUser = async uid => {
     return user[0]
 }
 
-const createPackage = async (uid, package) => {
-    let packages = []
+const createPackage = async (uid, {title}) => {
+    let _package = {}
     const txn = dgraphClient.newTxn()
     try {
         const packageData = {
             uid: uid,
             packages: [
                 {
-                    title: package.title,
+                    uid: '_:package',
+                    title: title,
                     createdAt: new Date().toISOString(),
                     score: 0,
                     pages: [
                         {
-                            markdown: `# ${package.title}\n`,
+                            markdown: `# ${title}\n`,
                             createdAt: new Date().toISOString()
                         }
                     ]
@@ -67,15 +122,14 @@ const createPackage = async (uid, package) => {
         }
         const node = new dgraph.Mutation()
         node.setSetJson(packageData)
-        await txn.mutate(node)
-        const newPackageResult = await txn.queryWithVars(queries.getPackageByTitle, {$uid:uid, $title: package.title})
-        const {user} = await newPackageResult.getJson()
-        packages = user[0].packages
+        const mut = await txn.mutate(node)
         await txn.commit()
+        const pid = mut.getUidsMap().get('package')
+        _package = await getPackageByUid(pid)
     } finally {
         await txn.discard()
     }
-    return packages
+    return _package
 }
 
 const getPackageByUid = async pid => {
@@ -83,7 +137,7 @@ const getPackageByUid = async pid => {
     const txn = dgraphClient.newTxn()
     try {
         const result = await txn.queryWithVars(queries.getPackageByUid, {$uid: pid})
-        const { _package } = await result.getJson()
+        const { _package } = result.getJson()
         currentPackage = _package
     } finally {
         await txn.discard()
@@ -118,7 +172,8 @@ const updatePages = async (pid, update) => {
         pages: update.map(page => ({...page, updatedAt: new Date().toISOString()}))
     }
     const topscore = updateTimestamped.pages.reduce((score, page) => {
-        score += page.markdown.match(/\?\?\?/g || []).length
+        const matches = page.markdown.match(/\?{3}/g)
+        score += matches ? matches.length : 0
         return score
     }, 0)
     updateTimestamped.score = topscore / 2

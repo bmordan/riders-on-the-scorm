@@ -66,6 +66,7 @@ footer small {
     font-family: 'Courier New', Courier, monospace;
     box-shadow: 0px 0px 0px 0px transparent;
     border: solid 1px black;
+    margin: 0 .125rem -1px;
 }
 .editmode small {
     visibility: hidden;

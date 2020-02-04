@@ -3,6 +3,7 @@
     src: url('./Roboto-Regular.ttf');
 }
 :root {
+    --wh-navy: #16264D;
     --wh-near-white: #f6f6f6;
     --wh-gray: #797979;
     --wh-gray-light: #e4e4e4;
@@ -142,4 +143,7 @@ code.hljs {
          -moz-user-select: none; /* Old versions of Firefox */
           -ms-user-select: none; /* Internet Explorer/Edge */
               user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
-  }
+}
+img {
+    max-width: 100%;
+}

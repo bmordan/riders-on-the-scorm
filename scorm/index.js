@@ -1,13 +1,13 @@
 const scopackager = require('simple-scorm-packager')
 const fs = require('fs')
 const path = require('path')
-const { execSync } = require('child_process')
+const { exec, execSync } = require('child_process')
 const markdown = require('../markdown')
 
 const scormify = (_package, user) => {
     return new Promise((resolve, reject) => {
         
-        const title = _package.title.toLowerCase().split(" ").join("_")
+        const title = _package.title.split(" ").join("_").toLowerCase()
         const package_dir = path.join(__dirname, 'builds', title)
         const output_dir = path.join(__dirname, '..', 'public', 'packages')
         
@@ -15,6 +15,7 @@ const scormify = (_package, user) => {
             execSync(`rm -fr ${package_dir}`)
             fs.mkdirSync(package_dir)
         } catch(err) {
+            console.error(err)
             return reject(err)
         }
     
@@ -22,35 +23,37 @@ const scormify = (_package, user) => {
     
         fs.writeFile(path.join(package_dir, 'pages.json'), JSON.stringify(pages), 'utf8', err => {
             if (err) return reject(err)
+            exec(`${process.cwd()}/node_modules/rollup/dist/bin/rollup --config ./scorm/scormify.config.js --name="${title}"`, (err, stdout, stderr) => {
+                if (err) return reject(err)
+                
+                scopackager({
+                    version: '1.2',
+                    organization: 'WhiteHat',
+                    title: title,
+                    language: 'en-EN',
+                    identifier: '00',
+                    masteryScore: 80,
+                    startingPage: 'index.html',
+                    source: package_dir,
+                    package: {
+                        zip: true,
+                        outputFolder: output_dir,
+                        author: user.name
+                    }
+                }, function() {
+                    const package_name = `${title.split("_").join("")}_v1.0.0_${new Date().toISOString().substring(0,10)}_${Number(new Date().getTime().toString().substring(0,10))}`
+                    const poll = () => {
+                        fs.readdir(output_dir, (err, files) => {
+                            const [file] = files.filter(f => f.toLowerCase().includes(package_name))
+                            console.log({files, package_name, file})
+                            return file ? resolve(path.join(output_dir, file)) : poll()
+                        })
+                    }
+                    
+                    poll()
+                })
+            })   
 
-            execSync(`npm run scormify -- --name=${title}`)
-            
-            scopackager({
-                version: '1.2',
-                organization: 'WhiteHat',
-                title: _package.title,
-                language: 'en-EN',
-                identifier: '00',
-                masteryScore: 80,
-                startingPage: 'index.html',
-                source: package_dir,
-                package: {
-                    zip: true,
-                    outputFolder: output_dir,
-                    author: user.name
-                }
-            }, function() {
-                const package_name = `${title.split("_").join("")}_v0.1.0_${new Date().toISOString().substring(0,10)}_${Number(new Date().getTime().toString().substring(0,10))}`
-                
-                const poll = () => {
-                    fs.readdir(output_dir, (err, files) => {
-                        const [file] = files.filter(f => f.includes(package_name))
-                        return file ? resolve(path.join(output_dir, file)) : poll()
-                    })
-                }
-                
-                poll()
-            })
         })
     })
 }

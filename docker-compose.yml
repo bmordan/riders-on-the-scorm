@@ -1,14 +1,19 @@
 version: '3'
 services:
-    # app:
-    #     image: bmordan/riders-on-the-scorm
-    #     ports:
-    #         - 3000:3000
-    #     environment:
-    #         - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
-    #         - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
-    #         - NODE_ENV=${NODE_ENV}
-    #         - PORT=3000
+    app:
+        image: bmordan/markdownscorm
+        container_name: app
+        ports:
+            - 3000:3000
+        environment:
+            GOOGLE_CLIENT_ID: 815614717875-a9r31195dd4a1ef5nfk695aetp4hb7fo.apps.googleusercontent.com
+            GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+            NODE_ENV: ${NODE_ENV}
+            PORT: 3000
+            VIRTUAL_HOST: www.markdownscorm.org.uk
+            LETSENCRYPT_HOST: www.markdownscorm.org.uk
+            VIRTUAL_PORT: 3000
+            LETSENCRYPT_EMAIL: bernard.mordan@whitehat.org.uk
     zero:
         image: dgraph/dgraph:latest
         volumes:
@@ -20,6 +25,7 @@ services:
         command: dgraph zero --my=zero:5080
     alpha:
         image: dgraph/dgraph:latest
+        container_name: alpha
         volumes:
             - /tmp/data:/dgraph
         ports:
@@ -32,3 +38,36 @@ services:
         ports:
             - 8000:8000
         command: dgraph-ratel
+    nginx-proxy:
+        image: jwilder/nginx-proxy
+        container_name: nginx-proxy
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - vhost:/etc/nginx/vhost.d
+            - html:/usr/share/nginx/html
+            - certs:/etc/nginx/certs
+            - /var/run/docker.sock:/tmp/docker.sock:ro
+        labels:
+            - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true"
+    letsencrypt:
+        image: jrcs/letsencrypt-nginx-proxy-companion
+        container_name: letsencrypt-nginx-proxy-companion
+        volumes:
+            - vhost:/etc/nginx/vhost.d
+            - html:/usr/share/nginx/html
+            - certs:/etc/nginx/certs
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+        environment:
+            NGINX_PROXY_CONTAINER: nginx-proxy
+networks:
+    default:
+        external:
+            name: nginx-proxy
+    
+volumes:
+    vhost:
+    html:
+    certs:
+    data:

@@ -47,12 +47,12 @@ async function getGoogleUser(token) {
         payload = ticket.getPayload()
     }
 
-    const { error, iss, sub, aud, exp } = payload
-
+    const { error, iss, aud, exp, hd } = payload
     return !error
         && (iss === "https://accounts.google.com" || iss === "accounts.google.com")
         && aud === GOOGLE_CLIENT_ID
         && Number(exp) > Math.floor(new Date().getTime()/1000)
+        && hd === "whitehat.org.uk"
         && payload
 }
 
@@ -96,7 +96,7 @@ app.get("/users/:uid/packages", protect, (req, res) => {
 })
 app.post("/users/:uid/packages", protect, (req, res) => {
     dgraph.createPackage(req.session.uid, req.body)
-        .then(([_package]) => {
+        .then(_package => {
             res.send(_package)
         })
         .catch(err => {
@@ -116,6 +116,7 @@ app.get("/users/:uid/packages/:pid/delete", (req, res) => {
 })
 app.get("/users/:uid/packages/:pid/download", (req, res) => {
     let user
+
     dgraph.getUser(req.params.uid)
         .then(_user => {
             user = _user
@@ -159,7 +160,9 @@ app.get("/users/:uid/packages/:pid/pages/new", (req, res) => {
 app.post("/users/:uid/packages/:pid/pages/update", (req, res) => {
     dgraph.updatePages(req.params.pid, req.body)
         .then(pid => dgraph.getPackageByUid(pid))
-        .then(_package => res.send(_package))
+        .then(_package => {
+            res.send(_package)
+        })
         .catch(err => {
             console.error(err)
             res.send(err)

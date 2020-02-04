@@ -1,15 +1,15 @@
 {
   "name": "riders-on-the-scorm",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "create scorm packages in markdown",
   "main": "server.js",
   "scripts": {
-    "start": "PORT=3000 nodemon --ignore 'public/packages/' --ignore 'scorm/' server.js",
-    "build": "rollup -c && docker build -t bmordan/riders-on-the-scorm .",
+    "start": "NODE_ENV=development PORT=3000 nodemon --ignore 'public/packages/' --ignore 'scorm/' server.js",
+    "build": "rollup -c && docker build -t bmordan/markdownscorm .",
     "docker": "docker run -p 3000:3000 -e GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID} -e GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET} -e NODE_ENV=development -e PORT=3000 -d bmordan/riders-on-the-scorm",
     "roll": "rollup -c",
-    "dev": "rollup -c -w && NODE_ENV='development' npm start",
-    "prod": "nodemon server.js",
+    "dev": "rollup -c -w && npm start",
+    "prod": "rollup -c && node server.js",
     "test": "http-server ./SCORM_test_wrapper/ -p 9292",
     "scormify": "rollup --config scorm/scormify.config.js"
   },
@@ -53,7 +53,6 @@
     "@rollup/plugin-node-resolve": "^6.0.0",
     "punycode": "^2.1.1",
     "rollup": "^1.30.1",
-    "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-livereload": "^1.0.0",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-globals": "^1.4.0",

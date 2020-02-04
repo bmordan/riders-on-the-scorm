@@ -10,10 +10,10 @@
         <link rel='stylesheet' href='/global.css'>
         <link rel='stylesheet' href='/bundle.css'>
 
-        <meta name="google-signin-client_id" content="815614717875-vd394cu2j958j33ihim5q08ns7058lh2.apps.googleusercontent.com">
-        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <meta name="google-signin-client_id" content="815614717875-a9r31195dd4a1ef5nfk695aetp4hb7fo.apps.googleusercontent.com">
+        <script src="https://apis.google.com/js/platform.js?onload=renderLogin" async defer></script>
         <script>
-            function onSignIn(googleUser) {
+            function onSuccess(googleUser) {
                 const tokenid = googleUser.getAuthResponse().id_token
                 fetch('/login', { 
                     method: 'post',
@@ -21,9 +21,22 @@
                     body: JSON.stringify({tokenid})
                 })
                 .then(res => res.json())
-                .then(user => window.location.assign(`/users/${user.uid}`))
-                .then(console.log)
+                .then(user => {
+                    if (!user.status) throw user
+                    window.location.assign(`/users/${user.uid}`)
+                })
                 .catch(console.error)
+            }
+            function renderLogin() {
+                gapi.signin2.render('login', {
+                    scope: 'profile email',
+                    width: 240,
+                    height: 50,
+                    longtitle: true,
+                    theme: 'dark',
+                    onsuccess: onSuccess,
+                    onfailure: console.error
+                })
             }
         </script>
         <style>
@@ -35,8 +48,8 @@
                 justify-content: center;
             }
             .login-page article {
-                width: 27vw;
-                height: 27vh;
+                width: 370px;
+                height: 260px;
                 background: white;
                 display: flex;
                 flex-direction: column;
@@ -56,10 +69,9 @@
     <body>
         <main class="login-page">
             <article>
-                <h1>Riders on the SCORM</h1>
-                <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                <h1>Markdown SCORM</h1>
+                <div id="login"></div>
             </article>
         </main>
-        <!-- <a href="#" onclick="signOut();">Sign out</a> -->
     </body>
 </html>
