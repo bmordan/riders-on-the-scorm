@@ -15,7 +15,8 @@ export default args => {
 			sourcemap: false,
 			format: 'iife',
 			name: 'app',
-			file: dest + 'bundle.js'
+			file: dest + 'bundle.js',
+			extend: true
 		},
 		plugins: [
 			svelte({

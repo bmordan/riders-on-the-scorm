@@ -57,8 +57,9 @@
                 on:click={e => onShift(slice-=1)}>•••</article>
         {/if}
         {#each paginated as _}
-            <article class={`${page === Number(_.page) ? "active" : ""} ${String(_.page) === to ? "drop" : ""}`} draggable="true"
+            <article class={`${page === Number(_.page) ? "active" : ""} ${String(_.page) === to ? "drop" : ""}`}
                 id={_.page}
+                draggable={!!mode}
                 on:dragstart={setFrom}
                 on:dragend={setMove} 
                 on:dragover={setTo}
@@ -71,7 +72,7 @@
                 on:click={e => onShift(slice+=1)}>•••</article>
         {/if}
     </nav>
-    <small>created with care and attention by the coaches and curriculum team at <a href="https://whitehat.org.uk" target="_blank">
+    <small>created with love and care by the coaches and curriculum team at <a href="https://whitehat.org.uk" target="_blank">
     <svg width="20" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M19.33 6.095h-1.702c-.264 0-.28-.233-.372-.613-.22-.894-.753-1.898-1.396-2.745C15.217 1.89 13.036 0 10.213 0 7.389 0 5.53 1.453 4.536 2.57c-.994 1.118-1.469 2.525-1.57 3.045-.104.533-.375.48-.444.48H.162c-.185 0-.161.06-.161.284v1.355c0 .278.004.266.213.266h7.294c.292 0 .256-.18.256-.276v-1.35c0-.318-.112-.28-.332-.28H5.207c-.509 0-.347-.3-.088-.918.447-1.14 2.117-3.235 4.988-3.235 2.87 0 4.314 1.969 4.804 2.832.49.862.62 1.73.62 1.906v1.03c0 .299.027.29.223.29h3.986c.275 0 .221-.227.202-.303-.019-.077-.27-1.121-.323-1.365-.053-.243-.168-.236-.289-.236z" fill="currentColor" fill-rule="evenodd"/></svg> WhiteHat</a> © 2020</small>
 </footer>
 <style>
@@ -103,6 +104,7 @@ article.drop {
 article.button {
     border: solid 1px transparent;
     background-color: transparent;
+    box-shadow: 1px 1px 1px -1px transparent;
 }
 article.button:first-child {
     transform: translate(.5rem,-.02rem);
@@ -148,8 +150,5 @@ footer small {
 }
 .editmode small {
     visibility: hidden;
-}
-.drag-thumb {
-    transform: rotate(7deg);
 }
 </style>
