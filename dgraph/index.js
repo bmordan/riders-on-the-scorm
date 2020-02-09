@@ -212,10 +212,8 @@ const deletePageForUser = async (pid, pgid) => {
         await txn.mutate(mu)
         await txn.commit()
         out_of_order = await getPackageByUid(pid)
-        console.log(out_of_order.pages.map(p => p.page))
         await updatePages(pid, out_of_order.pages)
         updatedPackage = await getPackageByUid(pid)
-        console.log(updatedPackage.pages.map(p => p.page))
     } catch (err) {
         console.error(err)
     } finally {
