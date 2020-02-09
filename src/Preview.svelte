@@ -23,6 +23,5 @@
     }
     main {
         padding: 0 3rem;
-        min-height: 45.6rem;
     }
 </style>

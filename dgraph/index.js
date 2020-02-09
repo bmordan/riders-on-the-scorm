@@ -45,10 +45,10 @@ const queries = {
             title
             score
             createdAt
-            pages {
+            pages (orderasc: page){
                 uid
                 markdown
-                html
+                page
                 createdAt
                 updatedAt
             }
@@ -63,7 +63,7 @@ const queries = {
         page(func: uid($uid)) {
             uid
             markdown
-            html
+            page
             createdAt
             updatedAt
         }
@@ -114,6 +114,7 @@ const createPackage = async (uid, {title}) => {
                     pages: [
                         {
                             markdown: `# ${title}\n`,
+                            page: 0,
                             createdAt: new Date().toISOString()
                         }
                     ]
@@ -145,7 +146,7 @@ const getPackageByUid = async pid => {
     return currentPackage[0]
 }
 
-const createPage = async (pid) => {
+const createPage = async (pid, page) => {
     const txn = dgraphClient.newTxn()
     try {
         const mu = new dgraph.Mutation()
@@ -153,7 +154,8 @@ const createPage = async (pid) => {
             uid: pid,
             pages: [
                 {
-                    markdown: "# New Page",
+                    markdown: `# Page ${Number(page) + 1}`,
+                    page: Number(page),
                     createdAt: new Date().toISOString()
                 }
             ]
@@ -169,7 +171,7 @@ const createPage = async (pid) => {
 const updatePages = async (pid, update) => {
     const updateTimestamped = {
         uid: pid,
-        pages: update.map(page => ({...page, updatedAt: new Date().toISOString()}))
+        pages: update.map((page, i) => ({...page, page: i, updatedAt: new Date().toISOString()}))
     }
     const topscore = updateTimestamped.pages.reduce((score, page) => {
         const matches = page.markdown.match(/\?{3}/g)
@@ -177,6 +179,7 @@ const updatePages = async (pid, update) => {
         return score
     }, 0)
     updateTimestamped.score = topscore / 2
+    // console.log(updateTimestamped.pages)
     const txn = dgraphClient.newTxn()
     try {
         const mu = new dgraph.Mutation()
@@ -208,7 +211,11 @@ const deletePageForUser = async (pid, pgid) => {
         
         await txn.mutate(mu)
         await txn.commit()
+        out_of_order = await getPackageByUid(pid)
+        console.log(out_of_order.pages.map(p => p.page))
+        await updatePages(pid, out_of_order.pages)
         updatedPackage = await getPackageByUid(pid)
+        console.log(updatedPackage.pages.map(p => p.page))
     } catch (err) {
         console.error(err)
     } finally {

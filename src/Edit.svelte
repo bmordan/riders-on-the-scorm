@@ -7,7 +7,7 @@
     export let pid
 
     $: promise = getPackage(pid)
-    $: _package = {pages: [{markdown: ""}]}
+    $: _package = {pages: [{markdown: "", page: 0}]}
     $: page = 0
     $: showPreview = false
     $: current = _package.pages[page]
@@ -22,15 +22,13 @@
             .catch(console.error)
     }
 
-    function onSave () {
+    function onSave (pages = _package.pages) {
         saving = true
-
-        const body = _package.pages
 
         const payload = {
 			method: 'post',
 			headers: new Headers({'content-type': 'application/json'}),
-			body: JSON.stringify(body)
+			body: JSON.stringify(pages)
         }
         
         return fetch(`/users/${uid}/packages/${pid}/pages/update`, payload)
@@ -43,12 +41,13 @@
                 saving = false
                 console.error(err)
             })
+        saving = false
     }
 
     function addPage () {
         saving = true
 
-        fetch(`/users/${uid}/packages/${pid}/pages/new`)
+        fetch(`/users/${uid}/packages/${pid}/pages/${_package.pages.length}/new`)
             .then(res => res.json())
             .then(updatedPackage => {
                 saving = false
@@ -71,7 +70,6 @@
             .then(updatedPackage => {
                 saving = false
                 _package = updatedPackage
-                prevPage(page)
                 current = _package.pages[page]
             })
             .catch(err => {
@@ -80,12 +78,14 @@
             })
     }
 
-    const setPage = number => (page = Math.min(_package.pages.length, Math.max(0, number)))
+    const setPage = number => {
+        page = Math.min(_package.pages.length, Math.max(0, number))
+    }
 </script>
 <section class="editor">
     <nav>
         <Link to={`/users/${uid}`} ><button class="noselect">Exit</button></Link>
-        <button disabled={saving} on:click={onSave}>Save{saving ? "ing..." : ""}</button>
+        <button disabled={saving} on:click={e => onSave()}>Save{saving ? "ing..." : ""}</button>
         <button on:click={togglePreview}>{showPreview ? 'Editor' : 'Preview'}</button>
         <button disabled={saving} on:click={addPage}>Add Page</button>
         <button disabled={saving} on:click={removePage}>Delete Page</button>
@@ -97,18 +97,27 @@
                 <p>... fetching package {pid}</p>
             </article>
         {:then}
-                <article class="edit">
-                    <Navpages setPage={setPage} pages={_package.pages} page={page} mode={!showPreview}>
-                        <div id="markdown">
-                            <textarea name="markdown" focus=true bind:value={current.markdown} rows="25"></textarea>
-                        </div>
-                    </Navpages>
-                </article>
-                <article class="preview">
-                    <Navpages setPage={setPage} pages={_package.pages} page={page}>
-                        <Preview content={html} />
-                    </Navpages>
-                </article>
+            <article class="edit">
+                <Navpages 
+                    setPage={setPage}
+                    pages={_package.pages}
+                    page={page}
+                    onSave={onSave}
+                    mode={!showPreview}>
+                    <div id="markdown">
+                        <textarea name="markdown" focus=true bind:value={current.markdown} rows="25"></textarea>
+                    </div>
+                </Navpages>
+            </article>
+            <article class="preview">
+                <Navpages
+                    setPage={setPage}
+                    pages={_package.pages}
+                    page={page}
+                    onSave={onSave}>
+                    <Preview content={html} />
+                </Navpages>
+            </article>
         {/await}
     </section>
 </section>

@@ -1,14 +1,50 @@
 <script>
+    export let onSave
     export let setPage
     export let pages
     export let page
     export let mode = false
+
+    $: from = undefined
+    $: to = undefined
+
+    const draggingEdit = new Image()
+    draggingEdit.src = "/dragging-page-edit.png"
+
+    const draggingPreview = new Image()
+    draggingPreview.src = "/dragging-page-preview.png"
+
+    const setFrom = evt => {
+        from = evt.target.getAttribute('id')
+        evt.target.style.opacity = 0.1
+        evt.dataTransfer.setDragImage(mode ? draggingEdit : draggingPreview, 16, 32)
+        evt.dataTransfer.setData('text/html', from)
+    }
+
+    const setTo = evt => {
+        to = evt.target.getAttribute('id')
+        return false
+    }
+
+    const setMove = evt => {
+        evt.target.style.opacity = 1
+        pages.splice(to, 0, pages.splice(from, 1).pop())
+        onSave(pages)
+        setPage(to)
+        from = undefined
+        to = undefined
+    }
 </script>
 <slot></slot>
 <footer class={mode ? "editmode" : ""}>
     <nav>
         {#each pages as _, i}
-            <article class={page === i ? "active" : ""} on:click={e => setPage(i)}>page {i + 1}</article>
+            <article class={`${page === i ? "active" : ""} ${String(i) === to ? "drop" : ""}`} draggable="true"
+                id={i}
+                on:dragstart={setFrom}
+                on:dragend={setMove} 
+                on:dragover={setTo}
+                on:click={e => setPage(i)}>page {i + 1}</article>
         {/each}
     </nav>
     <small>created with care and attention by the coaches and curriculum team at <a href="https://whitehat.org.uk" target="_blank">
@@ -37,6 +73,9 @@ article {
 article.active {
     height: 1rem;
 }
+article.drop {
+    margin-left: 2rem !important;
+}
 footer {
     backface-visibility: hidden;
 }
@@ -57,6 +96,7 @@ footer small {
     display: block;
     font-size: 8px;
     color: var(--wh-gray);
+    transform: rotateY(180deg);
 }
 .editmode nav {
     border-bottom: solid 1px black;
@@ -70,5 +110,8 @@ footer small {
 }
 .editmode small {
     visibility: hidden;
+}
+.drag-thumb {
+    transform: rotate(7deg);
 }
 </style>
