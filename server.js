@@ -147,9 +147,9 @@ app.get("/users/:uid/packages/:pid", (req, res) => {
             res.send(err)
         })
 })
-app.get("/users/:uid/packages/:pid/pages/new", (req, res) => {
-    const {pid} = req.params
-    dgraph.createPage(pid)
+app.get("/users/:uid/packages/:pid/pages/:page/new", (req, res) => {
+    const {pid, page} = req.params
+    dgraph.createPage(pid, page)
         .then(pid => dgraph.getPackageByUid(pid))
         .then(_package => res.send(_package))
         .catch(err => {
@@ -174,7 +174,7 @@ app.get("/users/:uid/packages/:pid/pages/:pgid/delete", (req, res) => {
     dgraph.deletePageForUser(pid, pgid)
         .then(_package => {
             if (noPages(_package)) {
-                return dgraph.createPage(pid).then(pid => dgraph.getPackageByUid(pid))
+                return dgraph.createPage(pid, 0).then(pid => dgraph.getPackageByUid(pid))
             } else {
                 return _package
             }
