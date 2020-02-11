@@ -105,7 +105,7 @@ a {
 .scorm-quiz-answer {
     color: var(--wh-purple);
     background-color:white;
-    border: dashed 1px var(--wh-purple);
+    border: solid 1px var(--wh-purple);
     cursor: pointer;
 }
 .scorm-quiz-answer:hover {
@@ -146,4 +146,8 @@ code.hljs {
 }
 img {
     max-width: 100%;
+}
+td {
+    padding: 1rem;
+    vertical-align: top;
 }
