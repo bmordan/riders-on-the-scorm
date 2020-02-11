@@ -191,4 +191,12 @@ app.get("/logout", (req, res) => {
     delete req.session.uid
     res.sendFile(publicRoot("index"))
 })
-app.listen(process.env.PORT, () => console.log(`riders ready on port ${process.env.PORT}`))
+app.listen(process.env.PORT, () => console.log(`
+                                                          #####   #####  ####### ######  #     # 
+ #    #   ##   #####  #    # #####   ####  #    # #    # #     # #     # #     # #     # ##   ## 
+ ##  ##  #  #  #    # #   #  #    # #    # #    # ##   # #       #       #     # #     # # # # # 
+ # ## # #    # #    # ####   #    # #    # #    # # #  #  #####  #       #     # ######  #  #  # 
+ #    # ###### #####  #  #   #    # #    # # ## # #  # #       # #       #     # #   #   #     # 
+ #    # #    # #   #  #   #  #    # #    # ##  ## #   ## #     # #     # #     # #    #  #     # 
+ #    # #    # #    # #    # #####   ####  #    # #    #  #####   #####  ####### #     # #     # 
+port ${process.env.PORT}`))

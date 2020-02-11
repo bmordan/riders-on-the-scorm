@@ -41,7 +41,7 @@ const scormify = (_package, user) => {
                         author: user.name
                     }
                 }, function() {
-                    const package_name = `${title}_v1.0.0_${new Date().toISOString().substring(0,10)}_${Number(new Date().getTime().toString().substring(0,10))}`
+                    const package_name = `${title}_v1.0.0_${new Date().toISOString().substring(0,10)}`
                     
                     let limit = 0
                     

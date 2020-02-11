@@ -3,7 +3,7 @@
 
     export let onSave
     export let setPage
-    export let pages
+    export let pages = [""]
     export let page
     export let mode = false
 
@@ -133,6 +133,9 @@ footer small {
     font-size: 8px;
     color: var(--wh-gray);
     transform: rotateY(180deg);
+}
+#package footer small {
+    transform: rotateY(0deg);
 }
 .editmode nav {
     border-bottom: solid 1px black;

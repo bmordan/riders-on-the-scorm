@@ -22,7 +22,7 @@
         .then(_pages => pages = _pages)
         .catch(console.error)
 </script>
-<Navpages setPage={setPage} pages={pages} page={page} >
+<Navpages setPage={setPage} pages={pages.map( (_, page) => ({page}) )} page={page} onSave={function () {}}>
     <script>
         const onAnswer = evt => {
             const { SCORM } = pipwerks

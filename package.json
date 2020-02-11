@@ -10,7 +10,7 @@
     "roll": "rollup -c",
     "dev": "rollup -c -w && npm start",
     "prod": "rollup -c && node server.js",
-    "test": "http-server ./SCORM_test_wrapper/ -p 9292",
+    "test": "http-server ./scorm -p 9292",
     "scormify": "rollup --config scorm/scormify.config.js"
   },
   "repository": {
