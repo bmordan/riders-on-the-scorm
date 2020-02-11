@@ -51,6 +51,7 @@ const scormify = (_package, user) => {
                                 return reject(new Error(`cant find file that includes ${package_name}`))
                             }
                             const [file] = files.filter(f => f.toLowerCase().includes(package_name))
+                            console.log({file, files, package_name})
                             limit += 1
                             return file ? resolve(path.join(output_dir, file)) : poll()
                         })
