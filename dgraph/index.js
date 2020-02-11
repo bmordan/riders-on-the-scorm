@@ -15,6 +15,13 @@ async function setSchema() {
 }
 
 const queries = {
+    getUsers: `query users() {
+        users(func: has(gid)) {
+            uid
+            name
+            picture
+        }
+    }`,
     getUserByGid: `query user($gid: string) {
         user(func: eq(gid, $gid)) {
             uid
@@ -68,6 +75,17 @@ const queries = {
             updatedAt
         }
     }`
+}
+const getUsers = async () => {
+    let users = []
+    const txn = dgraphClient.newTxn()
+    try {
+        let result = await txn.query(queries.getUsers)
+        users = result.getJson().users
+    } finally {
+        await txn.discard()
+    }
+    return users
 }
 
 const getOrCreateUser = async googleUser => {
@@ -253,6 +271,7 @@ setSchema()
 module.exports = {
     getOrCreateUser,
     getUser,
+    getUsers,
     createPackage,
     getPackageByUid,
     createPage,

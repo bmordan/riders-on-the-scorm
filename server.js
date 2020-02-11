@@ -52,7 +52,7 @@ async function getGoogleUser(token) {
         && (iss === "https://accounts.google.com" || iss === "accounts.google.com")
         && aud === GOOGLE_CLIENT_ID
         && Number(exp) > Math.floor(new Date().getTime()/1000)
-        && hd === "whitehat.org.uk"
+        // && hd === "whitehat.org.uk"
         && payload
 }
 
@@ -77,6 +77,16 @@ app.post("/login", (req, res) => {
         .catch(err => {
             console.error(err)
             res.send({status: false})
+        })
+})
+app.get("/users", protect, (req, res) => {
+    dgraph.getUsers()
+        .then(users => {
+            res.send(users)
+        })
+        .catch(err => {
+            console.error(err)
+            res.send(err)
         })
 })
 app.get("/users/:uid", protect, (req, res) => {

@@ -1,4 +1,5 @@
 <script>
+    import Avatar from "./Avatar.svelte"
     export let user;
 
     const signout = evt => {
@@ -14,31 +15,23 @@
     }
 </script>
 <nav>
-    {#if user}
-        <img src={user.picture} alt="user avatar" />
-        <div>{user.name}</div>
-        <button on:click={signout}>Sign out</button>
-    {:else}
-        ...
-    {/if}
+    <Avatar user={user}></Avatar>
+    <div><button on:click={signout}>Sign out</button></div>
 </nav>
 <style>
     nav {
         padding: 1rem;
         display: flex;
         align-items: center;
+        justify-items: end;
         border-bottom: 1px solid #e4e4e4;
-    }
-    nav img {
-        height: 23px;
-        width: 23px;
-        border-radius: 50%;
-        margin-right: 1rem;
     }
     nav div {
         flex: 1 1 auto;
+        display: flex;
+        justify-content: flex-end;
     }
-    nav button {
+    nav div button {
         font-size: .75rem !important;
         padding: 0.5rem .75rem;
         border-radius: 3px;
