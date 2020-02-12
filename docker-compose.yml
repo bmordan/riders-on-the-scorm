@@ -1,19 +1,19 @@
 version: '3'
 services:
-    # app:
-    #     image: bmordan/markdownscorm
-    #     container_name: app
-    #     ports:
-    #         - 3000:3000
-    #     environment:
-    #         GOOGLE_CLIENT_ID: 815614717875-a9r31195dd4a1ef5nfk695aetp4hb7fo.apps.googleusercontent.com
-    #         GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
-    #         NODE_ENV: ${NODE_ENV}
-    #         PORT: 3000
-    #         VIRTUAL_HOST: www.markdownscorm.org.uk
-    #         LETSENCRYPT_HOST: www.markdownscorm.org.uk
-    #         VIRTUAL_PORT: 3000
-    #         LETSENCRYPT_EMAIL: bernard.mordan@whitehat.org.uk
+    app:
+        image: bmordan/markdownscorm
+        container_name: app
+        ports:
+            - 3000:3000
+        environment:
+            GOOGLE_CLIENT_ID: 815614717875-a9r31195dd4a1ef5nfk695aetp4hb7fo.apps.googleusercontent.com
+            GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+            NODE_ENV: ${NODE_ENV}
+            PORT: 3000
+            VIRTUAL_HOST: www.markdownscorm.org.uk
+            LETSENCRYPT_HOST: www.markdownscorm.org.uk
+            VIRTUAL_PORT: 3000
+            LETSENCRYPT_EMAIL: bernard.mordan@whitehat.org.uk
     zero:
         image: dgraph/dgraph:latest
         volumes:

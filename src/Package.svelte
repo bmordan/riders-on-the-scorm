@@ -1,5 +1,6 @@
 <script>
     import {Link} from "svelte-routing"
+    import download from "downloadjs"
 
     export let user
     export let pack
@@ -205,35 +206,35 @@ ul img:not(:first-child) {
 }
 @-moz-keyframes throbber-loader {
     0% {
-        background: #dde2e7;
+        background: #A18DEE;
     }
     10% {
-        background: #6b9dc8;
+        background: #5D44BE;
     }
     40% {
-        background: #dde2e7;
+        background: #BEAEFE;
     }
 }
 @-webkit-keyframes throbber-loader {
     0% {
-        background: #dde2e7;
+        background: #A18DEE;
     }
     10% {
-        background: #6b9dc8;
+        background: #5D44BE;
     }
     40% {
-        background: #dde2e7;
-}
+        background: #BEAEFE;
+    }
 }
 @keyframes throbber-loader {
     0% {
-        background: #dde2e7;
+        background: #A18DEE;
     }
     10% {
-        background: #6b9dc8;
+        background: #5D44BE;
     }
     40% {
-        background: #dde2e7;
+        background: #BEAEFE;
     }
 }
 /* :not(:required) hides these rules from IE9 and below */

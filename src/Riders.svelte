@@ -19,7 +19,7 @@
         <Route path="/users/:uid" let:params>
         	<Navbar user={user}></Navbar>
             {#await getUser(uid)}
-                <p>...fetching packages</p>
+                <p style="padding:1rem;">...fetching packages</p>
             {:then user}
                 <Packages user={user} />
             {/await}

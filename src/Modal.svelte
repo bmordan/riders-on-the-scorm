@@ -35,9 +35,7 @@
 		height: 320px;
 		border-radius: 12px;
 		border: solid 1px var(--wh-b--gray-light);
-		display: flex;
-		flex-direction: column;
-		justify-content: end;
+		overflow-y: scroll;
 		background-color: white;
 		z-index: 2;
 	}

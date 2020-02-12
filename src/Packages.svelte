@@ -1,7 +1,7 @@
 <script>
 	import Package from "./Package.svelte"
-	import download from "downloadjs"
 	import {Link} from "svelte-routing"
+	import Modal from "./Modal.svelte"
 
 	export let user;
 	
@@ -12,11 +12,6 @@
 	$: sharedwithPackages = user['~sharedwith'] || []
 
 	const setTitle = evt => (title = evt.target.value.match(/[A-Za-z0-9\s_]/g).join("").trim())
-
-    function dismissModel(evt) {
-		evt.stopPropagation()
-		showModel = evt.target.id !== "model"
-	}
 
 	async function createPackage(evt) {
 		evt.preventDefault()
@@ -70,22 +65,20 @@
 		{/each}
 	</section>
 </section>
-{#if showModel}
-	<section id="model" on:click={dismissModel}>
-		<form on:submit={createPackage}>
-			<main>
-				<h1><img class="icon" src="/icons/folder.svg" alt="scorm package logo"/></h1>
-				<h2>New package</h2>
-			</main>
-			<article>
-				<input name="title" on:change={setTitle} bind:value={title} placeholder="Title" required />
-			</article>
-			<footer>
-				<button>Create</button>
-			</footer>
-		</form>
-	</section>
-{/if}
+<Modal showModal={showModel} onDismiss={evt => (showModel = evt)}>
+	<form class="package-modal" on:submit={createPackage}>
+		<main>
+			<h1><img class="icon" src="/icons/folder.svg" alt="scorm package logo"/></h1>
+			<h2>New package</h2>
+		</main>
+		<article>
+			<input name="title" on:change={setTitle} bind:value={title} placeholder="Title" required />
+		</article>
+		<footer>
+			<button>Create</button>
+		</footer>
+	</form>
+</Modal>
 <style>
 	section.packages-wrapper {
 		display: flex;
@@ -133,19 +126,7 @@
 		padding: 1rem;
 		top:.75rem;
 	}
-    #model {
-		background-color: rgba(0,0,0,0.7);
-		position: fixed;
-		top: 0;
-		bottom: 0;
-		right: 0;
-		left: 0;
-		z-index: 1;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-	#model form {
+	form {
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-end;
@@ -159,7 +140,7 @@
 		background-color: white;
 		z-index: 2;
 	}
-	#model button {
+	.package-modal button {
 		font-size: .75rem !important;
         padding: 0.5rem .75rem;
         border-radius: 3px;
@@ -169,21 +150,21 @@
         border-color: transparent;
         font-size: .75rem;
 	}
-	#model form main {
+	form main {
 		flex: none;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		padding: 2rem;
 	}
-	#model form main img {
+	form main img {
 		margin-right: 1rem;
 	}
-	#model form main h2 {
+	form main h2 {
 		font-size: .75rem;
 		color: var(--wh-gray);
 	}
-	#model form article {
+	form article {
 		padding: 2rem;
 		width: auto;
 		flex: 1 1 auto;
@@ -193,17 +174,20 @@
 		align-items: center;
 		justify-content: center;
 	}
-	#model form > article input {
+	form > article input {
 		width: calc(100% - 2rem);
 		padding: 1rem;
 		font-size: 1rem;
 		border: solid 0px transparent;
 		border-bottom: solid 1px var(--wh-gray-light);
 	}
-	#model form footer {
+	form footer {
 		padding: 2rem;
 		flex: none;
 		text-align: right;
+	}
+	.icon {
+		width: 32px;
 	}
 	button:disabled {
 		opacity: 0.4;
