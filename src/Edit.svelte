@@ -154,7 +154,7 @@
         margin: auto;
         background-color: var(--wh-bg-gray-light);
         width: 100vw;
-        height: 87.5vh;
+        height: 105vh;
         perspective: 2000px;
     }
     .editor-flip-frame {

@@ -19,7 +19,7 @@
         -webkit-text-size-adjust: 100%;
         line-height: 1.75rem;
         font-size: 1rem;
-        min-height: 64vh;
+        min-height: 94vh;
     }
     main {
         padding: 0 3rem;
