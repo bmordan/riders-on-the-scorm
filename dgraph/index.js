@@ -8,6 +8,7 @@ async function setSchema() {
     const schema = `
         gid: string @index(exact) .
         title: string @index(exact) .
+        sharedwith: [uid] @reverse .
     `
     const op = new dgraph.Operation()
     op.setSchema(schema)
@@ -38,11 +39,21 @@ const queries = {
                 title
                 score
                 createdAt
+                updatedAt
                 sharedwith {
                     uid
                     name
                     picture
                 }
+            }
+            ~sharedwith {
+                uid
+                name
+                picture
+                title
+                score
+                createdAt
+                updatedAt
             }
         }
     }`,
@@ -59,7 +70,7 @@ const queries = {
                 createdAt
                 updatedAt
             }
-            sharedWith {
+            sharedwith {
                 uid
                 name
                 picture
@@ -197,7 +208,6 @@ const updatePages = async (pid, update) => {
         return score
     }, 0)
     updateTimestamped.score = topscore / 2
-    // console.log(updateTimestamped.pages)
     const txn = dgraphClient.newTxn()
     try {
         const mu = new dgraph.Mutation()
@@ -266,6 +276,31 @@ const deletePackageForUser = async (uid, pid) => {
     return packages
 }
 
+const sharedwith = async (uid, pid, sid) => {
+    const txn = dgraphClient.newTxn()
+    try {
+        const mu = new dgraph.Mutation()
+        mu.setSetJson({
+            uid: uid,
+            packages: [
+                {
+                    uid: pid,
+                    sharedwith: [
+                        {
+                            uid: sid
+                        }
+                    ]
+                }
+            ]
+        })
+        await txn.mutate(mu)
+        await txn.commit()
+    } finally {
+        await txn.discard()
+    }
+    return await getPackageByUid(pid)
+}
+
 setSchema()
 
 module.exports = {
@@ -277,5 +312,6 @@ module.exports = {
     createPage,
     updatePages,
     deletePageForUser,
-    deletePackageForUser
+    deletePackageForUser,
+    sharedwith
 }

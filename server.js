@@ -52,7 +52,7 @@ async function getGoogleUser(token) {
         && (iss === "https://accounts.google.com" || iss === "accounts.google.com")
         && aud === GOOGLE_CLIENT_ID
         && Number(exp) > Math.floor(new Date().getTime()/1000)
-        // && hd === "whitehat.org.uk"
+        && hd === "whitehat.org.uk"
         && payload
 }
 
@@ -118,6 +118,17 @@ app.get("/users/:uid/packages/:pid/delete", (req, res) => {
     dgraph.deletePackageForUser(req.params.uid, req.params.pid)
         .then(packages => {
             res.send(packages)
+        })
+        .catch(err => {
+            console.error(err)
+            res.send(err)
+        })
+})
+app.get("/users/:uid/packages/:pid/share/:sid", protect, (req, res) => {
+    const {uid, pid, sid} = req.params
+    dgraph.sharedwith(uid, pid, sid)
+        .then(_package => {
+            res.send(_package)
         })
         .catch(err => {
             console.error(err)
