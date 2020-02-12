@@ -97,7 +97,7 @@ article > button {
     background-color: transparent;
     width: 2rem;
     height: 2rem;
-    z-index: 2;
+    z-index: 1;
 }
 article > button svg {
     width: 2rem;

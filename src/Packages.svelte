@@ -7,9 +7,11 @@
 	
 	let title = ""
 
-    $: showModel = false
+	$: showModel = false
+	$: showDeleteModal = false
 	$: packages = user.packages || []
 	$: sharedwithPackages = user['~sharedwith'] || []
+	$: pidToDelete = undefined
 
 	const setTitle = evt => (title = evt.target.value.match(/[A-Za-z0-9\s_]/g).join("").trim())
 
@@ -35,10 +37,18 @@
 	
 	function deletePackage (evt) {
 		evt.preventDefault()
+		pidToDelete = this.value
+		showDeleteModal = true
+	}
 
-		return fetch(`/users/${user.uid}/packages/${this.value}/delete`)
+	function actuallyDeletePackage () {
+		return fetch(`/users/${user.uid}/packages/${pidToDelete}/delete`)
 			.then(res => res.json())
-			.then(_packages => (packages = _packages))
+			.then(_packages => {
+				packages = _packages
+				pidToDelete = undefined
+				showDeleteModal = false
+			})
 			.catch(console.error)
 	}
 </script>
@@ -78,6 +88,16 @@
 			<button>Create</button>
 		</footer>
 	</form>
+</Modal>
+<Modal showModal={showDeleteModal} onDismiss={evt => (showDeleteModal = evt)}>
+	<aside>
+		<h2>Are you sure?</h2>
+		<h3>You will not be able to undo this.</h3>
+		<footer>
+			<button on:click={evt => {showDeleteModal = false; pidToDelete = undefined}}>Cancel</button>
+			<button on:click={actuallyDeletePackage}>Delete</button>
+		</footer>
+	</aside>
 </Modal>
 <style>
 	section.packages-wrapper {
@@ -140,7 +160,7 @@
 		background-color: white;
 		z-index: 2;
 	}
-	.package-modal button {
+	button {
 		font-size: .75rem !important;
         padding: 0.5rem .75rem;
         border-radius: 3px;
@@ -181,15 +201,31 @@
 		border: solid 0px transparent;
 		border-bottom: solid 1px var(--wh-gray-light);
 	}
-	form footer {
+	footer {
 		padding: 2rem;
 		flex: none;
-		text-align: right;
+		text-align: center;
 	}
 	.icon {
 		width: 32px;
 	}
 	button:disabled {
 		opacity: 0.4;
+	}
+	aside {
+		flex: 1 1 auto;
+		display: flex;
+		flex-direction: column;
+		padding: 1rem;
+		justify-content: flex-end;
+		align-items: center;
+	}
+	aside button:first-child {
+		background-color: var(--wh-gray-light);
+		color: var(--wh-gray);
+		margin-right: .5rem;
+	}
+	aside button:last-child {
+		background-color: var(--wh-red);
 	}
 </style>
