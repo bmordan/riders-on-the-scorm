@@ -2,6 +2,8 @@
     import { Link } from "svelte-routing"
     import Preview from "./Preview.svelte"
     import Navpages from "./Navpages.svelte"
+    import Modal from "./Modal.svelte"
+    import Avatar from "./Avatar.svelte"
     
     export let uid
     export let pid
@@ -13,6 +15,8 @@
     $: current = _package.pages[page]
     $: html = showPreview ? _package.pages[page].markdown : ""
     $: saving = false
+    $: users = []
+    $: showShareModal = false
 
     const togglePreview = () => (showPreview = !showPreview)
 
@@ -81,6 +85,21 @@
     const setPage = number => {
         page = Math.min(_package.pages.length, Math.max(0, number))
     }
+
+    const shareWith = shareWithId => {
+        showShareModal = false
+        fetch(`/users/${uid}/packages/${pid}/share/${shareWithId}`)
+            .then(res => res.json())
+            .then(result => {
+                console.log(result)
+            })
+            .catch(console.error)
+    }
+
+    fetch('/users')
+        .then(res => res.json())
+        .then(_users => (users = _users.filter(u => u.uid !== uid)))
+        .catch(console.error)
 </script>
 <section class="editor">
     <nav>
@@ -89,7 +108,7 @@
         <button on:click={togglePreview}>{showPreview ? 'Editor' : 'Preview'}</button>
         <button disabled={saving} on:click={addPage}>Add Page</button>
         <button disabled={saving} on:click={removePage}>Delete Page</button>
-        <button>{_package.title} {page + 1} of {_package.pages.length}</button>
+        <button on:click={e => (showShareModal = true)}>Share</button>
     </nav>
     <section class="editor-flip-frame" style="transform: rotateY({showPreview ? "180" : "0"}deg);">
         {#await promise}
@@ -120,6 +139,15 @@
             </article>
         {/await}
     </section>
+    <Modal showModal={showShareModal} onDismiss={evt => showShareModal = evt}>
+        <form>
+            {#each users as user}
+                <article class="select-user" on:click={e => shareWith(user.uid)}>
+                    <Avatar user={user}></Avatar>
+                </article>
+            {/each}
+        </form>
+    </Modal>
 </section>
 <style>
     .editor {
@@ -197,14 +225,15 @@
     button:hover {
         background-color: rgba(200, 200, 200, 0.1);
     }
-    button:last-child {
-        text-align: right;
-        flex: auto;
-    }
-    button:last-child:hover {
-        background-color: transparent;
-    }
     button:disabled {
         opacity: 0.4;
+    }
+    .select-user {
+        padding: 1rem;
+        margin: .25rem;
+        border-radius: 12px;
+    }
+    .select-user:hover {
+        background-color: var(--wh-green);
     }
 </style>

@@ -8,6 +8,7 @@ async function setSchema() {
     const schema = `
         gid: string @index(exact) .
         title: string @index(exact) .
+        sharedwith: [uid] @reverse .
     `
     const op = new dgraph.Operation()
     op.setSchema(schema)
@@ -15,6 +16,13 @@ async function setSchema() {
 }
 
 const queries = {
+    getUsers: `query users() {
+        users(func: has(gid)) {
+            uid
+            name
+            picture
+        }
+    }`,
     getUserByGid: `query user($gid: string) {
         user(func: eq(gid, $gid)) {
             uid
@@ -31,11 +39,21 @@ const queries = {
                 title
                 score
                 createdAt
+                updatedAt
                 sharedwith {
                     uid
                     name
                     picture
                 }
+            }
+            ~sharedwith {
+                uid
+                name
+                picture
+                title
+                score
+                createdAt
+                updatedAt
             }
         }
     }`,
@@ -52,7 +70,7 @@ const queries = {
                 createdAt
                 updatedAt
             }
-            sharedWith {
+            sharedwith {
                 uid
                 name
                 picture
@@ -68,6 +86,17 @@ const queries = {
             updatedAt
         }
     }`
+}
+const getUsers = async () => {
+    let users = []
+    const txn = dgraphClient.newTxn()
+    try {
+        let result = await txn.query(queries.getUsers)
+        users = result.getJson().users
+    } finally {
+        await txn.discard()
+    }
+    return users
 }
 
 const getOrCreateUser = async googleUser => {
@@ -179,7 +208,6 @@ const updatePages = async (pid, update) => {
         return score
     }, 0)
     updateTimestamped.score = topscore / 2
-    // console.log(updateTimestamped.pages)
     const txn = dgraphClient.newTxn()
     try {
         const mu = new dgraph.Mutation()
@@ -248,15 +276,42 @@ const deletePackageForUser = async (uid, pid) => {
     return packages
 }
 
+const sharedwith = async (uid, pid, sid) => {
+    const txn = dgraphClient.newTxn()
+    try {
+        const mu = new dgraph.Mutation()
+        mu.setSetJson({
+            uid: uid,
+            packages: [
+                {
+                    uid: pid,
+                    sharedwith: [
+                        {
+                            uid: sid
+                        }
+                    ]
+                }
+            ]
+        })
+        await txn.mutate(mu)
+        await txn.commit()
+    } finally {
+        await txn.discard()
+    }
+    return await getPackageByUid(pid)
+}
+
 setSchema()
 
 module.exports = {
     getOrCreateUser,
     getUser,
+    getUsers,
     createPackage,
     getPackageByUid,
     createPage,
     updatePages,
     deletePageForUser,
-    deletePackageForUser
+    deletePackageForUser,
+    sharedwith
 }
