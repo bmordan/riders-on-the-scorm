@@ -214,10 +214,11 @@
 	}
 	aside {
 		flex: 1 1 auto;
+		height: 100%;
 		display: flex;
 		flex-direction: column;
 		padding: 1rem;
-		justify-content: flex-end;
+		justify-content: center;
 		align-items: center;
 	}
 	aside button:first-child {
