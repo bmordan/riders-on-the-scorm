@@ -61,7 +61,11 @@ function protect (req, res, next) {
 }
 
 app.get("/", (req, res) => {
-    res.sendFile(publicRoot("index"))
+    if (req.session.uid) {
+        res.redirect(301, `/users/${req.session.uid}`)
+    } else {
+        res.sendFile(publicRoot("index"))
+    }
 })
 app.post("/login", (req, res) => {
     

@@ -145,16 +145,16 @@
             </article>
         {/await}
     </section>
-    <Modal showModal={showShareModal} onDismiss={evt => showShareModal = evt}>
-        <form>
-            {#each users as user}
-                <article class="select-user" on:click={e => shareWith(user.uid)}>
-                    <Avatar user={user}></Avatar>
-                </article>
-            {/each}
-        </form>
-    </Modal>
 </section>
+<Modal showModal={showShareModal} onDismiss={evt => showShareModal = evt}>
+    <section>
+        {#each users as user}
+            <article class="select-user" on:click={e => shareWith(user.uid)}>
+                <Avatar user={user}></Avatar>
+            </article>
+        {/each}
+    </section>
+</Modal>
 <style>
     .editor {
         margin: auto;

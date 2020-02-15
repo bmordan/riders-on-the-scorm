@@ -4,10 +4,13 @@
 
     function dismissModel(evt) {
 		evt.stopPropagation()
-        onDismiss(evt.target.id !== "model")
+		showModal = evt.target.id !== "model"
+		document.body.style.overflow = showModal ? "hidden" : "scroll"
+        onDismiss(showModal)
 	}
 </script>
 {#if showModal}
+	{document.body.style.overflow = showModal ? "hidden" : "scroll"}
     <section id="model" on:click={dismissModel}>
         <main>
             <slot></slot>
@@ -18,8 +21,8 @@
     #model {
 		background-color: rgba(0,0,0,0.7);
 		position: fixed;
-		top: -12rem;
-		bottom: -12rem;
+		top: 0;
+		bottom: 0;
 		right: 0;
 		left: 0;
 		z-index: 1;
