@@ -28,9 +28,6 @@
 		justify-content: center;
 	}
 	#model main {
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-end;
 		width: 370px;
 		height: 320px;
 		border-radius: 12px;

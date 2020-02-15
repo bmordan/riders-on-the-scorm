@@ -18,6 +18,12 @@ const scormify = (_package, user) => {
             console.error(err)
             return reject(err)
         }
+        
+        try {
+            execSync(`rm ${output_dir}/${title}*`)
+        } catch(err) {
+            console.error(`${output_dir}/${title}`, err.message)
+        }
     
         const pages = _package.pages.map(page => markdown(page.markdown))
     

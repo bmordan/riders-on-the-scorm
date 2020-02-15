@@ -17,7 +17,7 @@ async function setSchema() {
 
 const queries = {
     getUsers: `query users() {
-        users(func: has(gid)) {
+        users(func: has(gid), orderasc: name) {
             uid
             name
             picture

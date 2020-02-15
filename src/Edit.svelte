@@ -23,6 +23,7 @@
     async function getPackage (pid) {
         return _package = await fetch(`/users/${uid}/packages/${pid}`)
             .then(res => res.json())
+            .then(getUsersForSharing)
             .catch(console.error)
     }
 
@@ -90,16 +91,21 @@
         showShareModal = false
         fetch(`/users/${uid}/packages/${pid}/share/${shareWithId}`)
             .then(res => res.json())
-            .then(result => {
-                console.log(result)
-            })
             .catch(console.error)
     }
 
-    fetch('/users')
-        .then(res => res.json())
-        .then(_users => (users = _users.filter(u => u.uid !== uid)))
-        .catch(console.error)
+    const getUsersForSharing = usersPackage => {
+        const usersSharedWith = usersPackage.sharedwith || []
+        return fetch('/users')
+            .then(res => res.json())
+            .then(_users => {
+                users = _users
+                    .filter(u => u.uid !== uid)
+                    .filter(u => !usersSharedWith.find(sharedUser => u.uid === sharedUser.uid))
+                return usersPackage
+            })
+            .catch(console.error)
+    }
 </script>
 <section class="editor">
     <nav>
