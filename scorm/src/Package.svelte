@@ -15,6 +15,7 @@
         page = Math.min((pages.length - 1), Math.max(0, number))
         localStorage.setItem('uk.co.whitehat.applied.scorm.page', page)
         window.SCORMrender()
+        document.getElementById('package').scrollIntoView()
     }
     
     fetch('pages.json')

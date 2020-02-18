@@ -23,15 +23,7 @@
     async function getPackage (pid) {
         return _package = await fetch(`/users/${uid}/packages/${pid}`)
             .then(res => res.json())
-            .then(_usersPackage => {
-                // remove the folk this package is already shared with from the share dropdown
-                _usersPackage.sharedwith = _usersPackage.sharedwith || [] 
-                return getUsers(_usersPackage.sharedwith.map(({uid}) => uid))
-                    .then(_users => {
-                        users = _users
-                        return _usersPackage
-                    })
-            })
+            .then(getUsersForSharing)
             .catch(console.error)
     }
 
@@ -99,19 +91,18 @@
         showShareModal = false
         fetch(`/users/${uid}/packages/${pid}/share/${shareWithId}`)
             .then(res => res.json())
-            .then(result => {
-                console.log(result)
-            })
             .catch(console.error)
     }
 
-    const getUsers = (sharedwith) => {
+    const getUsersForSharing = usersPackage => {
+        const usersSharedWith = usersPackage.sharedwith || []
         return fetch('/users')
             .then(res => res.json())
             .then(_users => {
-                return _users
-                    .filter(user => user.uid !== uid)
-                    .filter(user => sharedwith.indexOf(user.uid) < 0)
+                users = _users
+                    .filter(u => u.uid !== uid)
+                    .filter(u => !usersSharedWith.find(sharedUser => u.uid === sharedUser.uid))
+                return usersPackage
             })
             .catch(console.error)
     }
