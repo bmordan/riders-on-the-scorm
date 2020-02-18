@@ -4,9 +4,8 @@ const intro = `
 # How to create a SCORM package
 
 SCORM is an acronym for Sharable Content Object Reference Model. A scorm package can be uploaded onto a compatable managed learning platform like [Moodle](https://moodle.org/). The advantage of a SCORM package is it enables you to interact with the learning platform, and they are easy to share and maintain. This tool lets you create SCORM packages using markdown.
-
-To create a new package click on "New package" on your home screen:
 ![new package](https://user-images.githubusercontent.com/4499581/74726224-00e66700-5237-11ea-864f-b8bd833950b3.png)
+To create a new package click on "New package" on your home screen. Click on the package to open the editor. In the editor you need to create your content using markdown:
 
 ## What is markdown?
 
@@ -67,6 +66,7 @@ section {
     min-height: 33vh;
     max-width: 52rem;
     margin: auto;
+    line-height: 1.5rem;
 }
 p, textarea {
     padding: 1rem;
