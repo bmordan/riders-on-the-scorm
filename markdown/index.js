@@ -59,6 +59,23 @@ function scorm_quiz (md) {
     })
 }
 
+function scorm_comment (md) {
+    md.renderer.rules.scorm_comment = function (tokens, idx, options, env, self) {
+        return `
+            <textarea id="comment-${idx}" class="scorm-comment" name="comment-${idx}" rows="6"></textarea>
+            <button onclick="onSaveComment(${idx})">Submit</button>
+        `.trim()
+    }
+    md.core.ruler.push('scorm_comment', state => {
+        state.tokens.forEach((token, i) => {
+            if (token.type === 'inline'
+            && token.content === "(((comment)))") {
+                state.tokens[i] = new state.Token('scorm_comment', 'p', 0)
+            }
+        })
+    })
+}
+
 const md = new Markdown({
     html: true, 
     breaks: true, 
@@ -67,5 +84,6 @@ const md = new Markdown({
 .use(emoji)
 .use(highlightjs)
 .use(scorm_quiz)
+.use(scorm_comment)
 
 module.exports = markdown => md.render(markdown)
