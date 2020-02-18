@@ -51,9 +51,9 @@
         const onSaveComment = idx => {
             const {value} = document.getElementById(`comment-${idx}`)
             const index = SCORM.get('cmi.interactions._count')
-            SCORM.set(`cmi.interactions.${index}.id`, `comment-${idx}`)
+            const page = Number(localStorage.getItem('uk.co.whitehat.applied.scorm.page')) || 0
+            SCORM.set(`cmi.interactions.${index}.id`, `page-${page + 1}-comment-${idx}`)
             SCORM.set(`cmi.interactions.${index}.time`, new Date().toISOString().substring(11,19) + ".00")
-            SCORM.set(`cmi.interactions.${index}.type`, 'fill-in')
             SCORM.set(`cmi.interactions.${index}.student_response`, value)
             return true
         }

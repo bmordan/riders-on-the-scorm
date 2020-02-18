@@ -62,8 +62,8 @@ function scorm_quiz (md) {
 function scorm_comment (md) {
     md.renderer.rules.scorm_comment = function (tokens, idx, options, env, self) {
         return `
-            <textarea id="comment-${idx}" class="comment" name="comment-${idx}" rows="6"></textarea>
-            <button onclick="onSaveComment(${idx})">Comment</button>
+            <textarea id="comment-${idx}" class="scorm-comment" name="comment-${idx}" rows="6"></textarea>
+            <button onclick="onSaveComment(${idx})">Submit</button>
         `.trim()
     }
     md.core.ruler.push('scorm_comment', state => {
