@@ -49,14 +49,27 @@
             questions[btoa(question)] = [btoa(answer), btoa(correct_answer)].join("|")
             localStorage.setItem('uk.co.whitehat.applied.scorm.questions', JSON.stringify(questions))
         }
+        const getInteractions = () => {
+            const interactions = localStorage.getItem('uk.co.whitehat.applied.interactions')
+            return interactions ? JSON.parse(interactions) : []
+        }
+        const saveInteraction = (interaction) => {
+            localStorage.setItem('uk.co.whitehat.applied.interactions', JSON.stringify([...getInteractions(), interaction]))
+        }
         const onSaveComment = idx => {
             const {value} = document.getElementById(`comment-${idx}`)
-            const index = SCORM.get('cmi.interactions._count')
             const page = Number(localStorage.getItem('uk.co.whitehat.applied.scorm.page')) || 0
-            SCORM.set(`cmi.interactions.${index}.id`, `page-${page + 1}-comment-${idx}`)
-            SCORM.set(`cmi.interactions.${index}.time`, new Date().toISOString().substring(11,19) + ".00")
-            SCORM.set(`cmi.interactions.${index}.student_response`, value)
-            return true
+            const id = `page-${page + 1}-comment-${idx}`
+            const count = SCORM.get('cmi.interactions._count')
+            const time = new Date().toISOString().substring(11,19) + ".00"
+
+            SCORM.set(`cmi.interactions.${count}.id`, id)
+            SCORM.set(`cmi.interactions.${count}.time`, time)
+            SCORM.set(`cmi.interactions.${count}.student_response`, value)
+
+            saveInteraction({id, time, value})
+            
+            window.SCORMrender()
         }
         window.SCORMrender = function () {
             setTimeout(function () {
@@ -69,6 +82,14 @@
                         question_element.querySelectorAll('.scorm-quiz-answer')
                         .forEach(ans => ans.removeAttribute('onclick'))
                     }
+                })
+
+                getInteractions().forEach(({id, time, value}) => {
+                    const textarea = document.getElementById(id.split('-').slice(2).join('-'))
+                    textarea.setAttribute('readonly', true)
+                    textarea.style.boxShadow = "0px 0px 0px 0px transparent"
+                    textarea.value = [value, "✅submitted", new Date().toISOString().substring(0,10), time].join(" ")
+                    textarea.nextElementSibling.setAttribute('disabled', true)
                 })
             }, 400)
         }

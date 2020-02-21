@@ -206,35 +206,35 @@ ul img:not(:first-child) {
 }
 @-moz-keyframes throbber-loader {
     0% {
-        background: #A18DEE;
+        background: #AAA8A8;
     }
     10% {
-        background: #5D44BE;
+        background: #CACACA;
     }
     40% {
-        background: #BEAEFE;
+        background: #DCDCDC;
     }
 }
 @-webkit-keyframes throbber-loader {
     0% {
-        background: #A18DEE;
+        background: #AAA8A8;
     }
     10% {
-        background: #5D44BE;
+        background: #CACACA;
     }
     40% {
-        background: #BEAEFE;
+        background: #DCDCDC;
     }
 }
 @keyframes throbber-loader {
     0% {
-        background: #A18DEE;
+        background: #AAA8A8;
     }
     10% {
-        background: #5D44BE;
+        background: #CACACA;
     }
     40% {
-        background: #BEAEFE;
+        background: #DCDCDC;
     }
 }
 /* :not(:required) hides these rules from IE9 and below */
@@ -242,7 +242,7 @@ ul img:not(:first-child) {
     -moz-animation: throbber-loader 2000ms 300ms infinite ease-out;
     -webkit-animation: throbber-loader 2000ms 300ms infinite ease-out;
     animation: throbber-loader 2000ms 300ms infinite ease-out;
-    background: #dde2e7;
+    background: #888888;
     display: inline-block;
     position: relative;
     text-indent: -9999px;
@@ -251,7 +251,7 @@ ul img:not(:first-child) {
     margin: 0 1.6em;
 }
 .throbber-loader:not(:required):before, .throbber-loader:not(:required):after {
-    background: #dde2e7;
+    background: #888888;
     content: '\x200B';
     display: inline-block;
     width: 0.9em;
