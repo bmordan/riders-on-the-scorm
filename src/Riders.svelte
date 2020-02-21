@@ -3,6 +3,7 @@
     import Packages from "./Packages.svelte"
     import Navbar from "./Navbar.svelte"
     import Edit from "./Edit.svelte"
+    import Helppage from "./Helppage.svelte"
 
     const [uid] = location.pathname.split("/").slice(-1)
 
@@ -27,6 +28,10 @@
         <Route path="/users/:uid/packages/:pid/editor" let:params>
         	<Navbar user={user}></Navbar>
             <Edit uid={params.uid} pid={params.pid} /> 
+        </Route>
+        <Route path="/help">
+            <Navbar user={user}></Navbar>
+            <Helppage></Helppage>
         </Route>
     </Router>
 </section>

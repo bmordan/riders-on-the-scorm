@@ -79,7 +79,8 @@ function scorm_comment (md) {
 const md = new Markdown({
     html: true, 
     breaks: true, 
-    linkify: true
+    linkify: true,
+    typographer: true
 })
 .use(emoji)
 .use(highlightjs)

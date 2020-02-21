@@ -86,6 +86,10 @@ blockquote {
 }
 a {
     text-decoration: none !important;
+    display: inline-block;
+}
+a:-webkit-any-link {
+    cursor: pointer;
 }
 .scorm-quiz {
     margin: 2rem 0;
