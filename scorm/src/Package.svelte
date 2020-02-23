@@ -22,6 +22,7 @@
         .then(res => res.json())
         .then(_pages => {
             pages = _pages
+            page = page >= _pages.length ? 0 : page
         })
         .catch(console.error)
 </script>
