@@ -34,7 +34,8 @@ export default args => {
 					{src: 'scorm/templates/pipwerks.js', dest},
 					{src: 'public/global.css', dest},
 					{src: 'public/reset.css', dest},
-					{src: 'public/Roboto-Regular.ttf', dest}
+					{src: 'public/Roboto-Regular.ttf', dest},
+					{src: 'public/Roboto-Bold.ttf', dest}
 				]
 			}),
 			commonjs(),
