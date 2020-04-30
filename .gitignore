@@ -5,3 +5,4 @@ public/bundle.*.map
 public/packages
 scorm/builds
 docker-compose.yml
+.env

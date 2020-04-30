@@ -1,6 +1,7 @@
 <script>
     import Avatar from "./Avatar.svelte"
     import {link} from "svelte-routing"
+    import { version } from "../package.json"
     export let user;
 
     const signout = evt => {
@@ -16,8 +17,10 @@
     const isHelpPage = window.location.pathname === "/help"
 </script>
 <nav>
+    <img src="/icons/scorm-logo.svg" alt="SCORM logo" height="32rem" style="margin-right:.5rem;" />
+    <span>v{version}</span> 
     <Avatar user={user}></Avatar>
-    <hgroup>    
+    <hgroup>
         {#if isHelpPage}
             <a href={`/users/${user.uid}`} use:link>Back</a>
         {:else}
@@ -39,6 +42,14 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;
+    }
+    nav span {
+        position: absolute;
+        top: 8px;
+        left: 148px;
+        margin-right: .5rem;
+        font-size: .5rem;
+        color: var(--wh-gray);
     }
     hgroup a {
         color: var(--wh-gray);

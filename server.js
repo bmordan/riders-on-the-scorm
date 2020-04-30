@@ -2,17 +2,16 @@ const express = require('express')
 const session = require('express-session')
 const app = express()
 const fetch = require('node-fetch')
-const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NODE_ENV = 'development' } = process.env
+const { SCORM_CLIENT_ID, SCORM_GOOGLE_CLIENT_SECRET, NODE_ENV = 'development' } = process.env
 const {OAuth2Client} = require('google-auth-library')
-const gapi = new OAuth2Client(GOOGLE_CLIENT_ID)
+const gapi = new OAuth2Client(SCORM_CLIENT_ID)
 const dgraph = require('./dgraph')
 const scormify = require('./scorm')
 const fs = require('fs')
 const path = require('path')
-
 const publicRoot = file => `${__dirname}/public/${file}.html`
 const session_settings = {
-    secret: GOOGLE_CLIENT_SECRET,
+    secret: SCORM_GOOGLE_CLIENT_SECRET,
     resave: false,
     saveUninitialized: true
 }
@@ -42,15 +41,16 @@ async function getGoogleUser(token) {
     } else {
         const ticket = await gapi.verifyIdToken({
             idToken: token,
-            audience: GOOGLE_CLIENT_ID
+            audience: SCORM_CLIENT_ID
         })
         payload = ticket.getPayload()
     }
 
     const { error, iss, aud, exp, hd } = payload
+
     return !error
         && (iss === "https://accounts.google.com" || iss === "accounts.google.com")
-        && aud === GOOGLE_CLIENT_ID
+        && aud === SCORM_CLIENT_ID
         && Number(exp) > Math.floor(new Date().getTime()/1000)
         && hd === "whitehat.org.uk"
         && payload
@@ -68,15 +68,19 @@ app.get("/", (req, res) => {
     }
 })
 app.post("/login", (req, res) => {
-    
     const { tokenid } = req.body
-    
     getGoogleUser(tokenid)
-        .then(googleUser => dgraph.getOrCreateUser(googleUser))
+        .then(googleUser => {
+            if (googleUser) {
+                return dgraph.getOrCreateUser(googleUser)
+            } else {
+                throw new Error('no google User')
+            }
+        })
         .then(user => {
             const [{uid}] = user
             req.session.uid = uid
-            res.send({status: true, uid})
+            req.session.uid ? res.send({status: true, uid}) : res.sendFile(publicRoot("index"))
         })
         .catch(err => {
             console.error(err)
@@ -211,6 +215,9 @@ app.get("/users/:uid/packages/:pid/pages/:pgid/delete", (req, res) => {
             console.error(err)
             res.send(err)
         })
+})
+app.get("/users/:uid/packages/:pid/editor", protect, (req, res) => {
+    res.sendFile(publicRoot("users"))
 })
 app.get("/logout", (req, res) => {
     delete req.session.uid

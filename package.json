@@ -6,7 +6,7 @@
   "scripts": {
     "start": "NODE_ENV=development PORT=3000 nodemon --ignore 'public/packages/' --ignore 'scorm/' server.js",
     "build": "rollup -c && docker build -t bmordan/markdownscorm .",
-    "docker": "docker run -p 3000:3000 -e GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID} -e GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET} -e NODE_ENV=development -e PORT=3000 -d bmordan/riders-on-the-scorm",
+    "docker": "docker run -p 3000:3000 -e SCORM_CLIENT_ID=${SCORM_CLIENT_ID} -e SCORM_GOOGLE_CLIENT_SECRET=${SCORM_GOOGLE_CLIENT_SECRET} -e NODE_ENV=development -e PORT=3000 -d bmordan/riders-on-the-scorm",
     "roll": "rollup -c",
     "dev": "rollup -c -w && npm start",
     "prod": "rollup -c && node server.js",

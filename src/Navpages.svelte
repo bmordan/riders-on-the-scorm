@@ -1,6 +1,4 @@
 <script>
-    import { fly } from 'svelte/transition'
-
     export let onSave
     export let setPage
     export let pages = [""]
@@ -42,7 +40,7 @@
     }
 
     const onShift = (slice) => {
-        paginated = pages.slice(slice, slice + pagination)
+        paginated = pages.slice(slice, pagination + slice)
     }
 
     const delta = window.innerWidth / 2
@@ -52,9 +50,7 @@
     <nav>
         {#if pages.length > pagination && slice > 0}
             <article class="button" 
-                in:fly="{{x: 0 - delta, duration: 500}}" 
-                out:fly="{{x: delta, duration: 500}}"
-                on:click={e => onShift(slice-=1)}>•••</article>
+                on:click={e => onShift(slice-=pagination)}>previous pages</article>
         {/if}
         {#each paginated as _}
             <article class={`${page === Number(_.page) ? "active" : ""} ${String(_.page) === to ? "drop" : ""}`}
@@ -63,13 +59,12 @@
                 on:dragstart={setFrom}
                 on:dragend={setMove} 
                 on:dragover={setTo}
-                on:click={e => setPage(_.page)}>page {Number(_.page) + 1}</article>
+                on:click={e => setPage(_.page)}>page {Number(_.page) + 1}
+                </article>
         {/each}
         {#if pages.length > pagination && slice < pages.length - pagination}
             <article class="button"
-                in:fly="{{x: delta, duration: 500}}" 
-                out:fly="{{x: 0 - delta, duration: 500}}"
-                on:click={e => onShift(slice+=1)}>•••</article>
+                on:click={e => onShift(slice+=pagination)}>more pages</article>
         {/if}
     </nav>
     <small>created with love and care by the coaches and curriculum team at <a href="https://whitehat.org.uk" target="_blank">
@@ -107,10 +102,10 @@ article.button {
     box-shadow: 1px 1px 1px -1px transparent;
 }
 article.button:first-child {
-    transform: translate(.5rem,-.02rem);
+    transform: translate(.5rem,-.05rem);
 }
 article.button:last-child {
-    transform: translate(-.5rem,-.02rem);
+    transform: translate(-.5rem,-.05rem);
 }
 footer {
     backface-visibility: hidden;
