@@ -1,44 +1,44 @@
 version: '3'
 services:
-    # scorm:
-    #     image: bmordan/riders
-    #     ports:
-    #         - "3000:3000"
-    #     environment:
-    #         SCORM_CLIENT_ID: ${SCORM_CLIENT_ID}
-    #         SCORM_GOOGLE_CLIENT_SECRET: ${SCORM_GOOGLE_CLIENT_SECRET}
-    #         NODE_ENV: ${NODE_ENV}
-    #         PORT: 3000
-    #         VIRTUAL_HOST: scorm.whitehatcoaches.org.uk
-    #         LETSENCRYPT_HOST: scorm.whitehatcoaches.org.uk
-    #         VIRTUAL_PORT: 3000
-    #         LETSENCRYPT_EMAIL: bernard.mordan@whitehat.org.uk
-    # papper:
-    #     image: bmordan/papper
-    #     ports:
-    #         - "3030:3030"
-    #     environment:
-    #         GOOGLE_CLIENT_ID: ${PAPPER_GOOGLE_CLIENT_ID}
-    #         GOOGLE_CLIENT_SECRET: ${PAPPER_GOOGLE_CLIENT_SECRET}
-    #         DRIVE_CLIENT_EMAIL: ${DRIVE_CLIENT_EMAIL}
-    #         DRIVE_PRIVATE_KEY: ${DRIVE_PRIVATE_KEY}
-    #         MYSQL_DATABASE: ${MYSQL_DATABASE}
-    #         MYSQL_USER: ${MYSQL_USER}
-    #         MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    #         DRIVE_CLIENT_EMAIL: ${DRIVE_CLIENT_EMAIL}
-    #         DRIVE_PRIVATE_KEY: ${DRIVE_PRIVATE_KEY}
-    #         VIRTUAL_HOST: papper.whitehatcoaches.org.uk
-    #         LETSENCRYPT_HOST: papper.whitehatcoaches.org.uk
-    #         VIRTUAL_PORT: 3030
-    #         LETSENCRYPT_EMAIL: bernard.mordan@whitehat.org.uk
-    #     depends_on:
-    #         - mariadb
-    # topten:
-    #     image: bmordan/top-ten
-    #     environment:
-    #         EMAIL: bernard.mordan@whitehat.org.uk
-    #         APPLIED_PASSWORD: ${APPLIED_PASSWORD}
-    #         GMAIL_PASSWORD: ${GMAIL_PASSWORD}
+    scorm:
+        image: bmordan/riders
+        ports:
+            - "3000:3000"
+        environment:
+            SCORM_CLIENT_ID: ${SCORM_CLIENT_ID}
+            SCORM_GOOGLE_CLIENT_SECRET: ${SCORM_GOOGLE_CLIENT_SECRET}
+            NODE_ENV: ${NODE_ENV}
+            PORT: 3000
+            VIRTUAL_HOST: scorm.whitehatcoaches.org.uk
+            LETSENCRYPT_HOST: scorm.whitehatcoaches.org.uk
+            VIRTUAL_PORT: 3000
+            LETSENCRYPT_EMAIL: bernard.mordan@whitehat.org.uk
+    papper:
+        image: bmordan/papper
+        ports:
+            - "3030:3030"
+        environment:
+            GOOGLE_CLIENT_ID: ${PAPPER_GOOGLE_CLIENT_ID}
+            GOOGLE_CLIENT_SECRET: ${PAPPER_GOOGLE_CLIENT_SECRET}
+            DRIVE_CLIENT_EMAIL: ${DRIVE_CLIENT_EMAIL}
+            DRIVE_PRIVATE_KEY: ${DRIVE_PRIVATE_KEY}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            DRIVE_CLIENT_EMAIL: ${DRIVE_CLIENT_EMAIL}
+            DRIVE_PRIVATE_KEY: ${DRIVE_PRIVATE_KEY}
+            VIRTUAL_HOST: papper.whitehatcoaches.org.uk
+            LETSENCRYPT_HOST: papper.whitehatcoaches.org.uk
+            VIRTUAL_PORT: 3030
+            LETSENCRYPT_EMAIL: bernard.mordan@whitehat.org.uk
+        depends_on:
+            - mariadb
+    topten:
+        image: bmordan/top-ten
+        environment:
+            EMAIL: bernard.mordan@whitehat.org.uk
+            APPLIED_PASSWORD: ${APPLIED_PASSWORD}
+            GMAIL_PASSWORD: ${GMAIL_PASSWORD}
     zero:
         image: dgraph/dgraph:latest
         volumes:
@@ -63,40 +63,40 @@ services:
         ports:
             - 8000:8000
         command: dgraph-ratel
-    # mariadb:
-    #     image: mariadb
-    #     ports:
-    #         - "3306:3306"
-    #     volumes:
-    #         - mariadb:/var/lib/mysql
-    #     environment:
-    #         MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    #         MYSQL_DATABASE: ${MYSQL_DATABASE}
-    #         MYSQL_USER: ${MYSQL_USER}
-    #         MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    # nginx-proxy:
-    #     image: jwilder/nginx-proxy
-    #     container_name: nginx-proxy
-    #     ports:
-    #         - "80:80"
-    #         - "443:443"
-    #     volumes:
-    #         - vhost:/etc/nginx/vhost.d
-    #         - html:/usr/share/nginx/html
-    #         - certs:/etc/nginx/certs
-    #         - /var/run/docker.sock:/tmp/docker.sock:ro
-    #     labels:
-    #         - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true"
-    # letsencrypt:
-    #     image: jrcs/letsencrypt-nginx-proxy-companion
-    #     container_name: letsencrypt-nginx-proxy-companion
-    #     volumes:
-    #         - vhost:/etc/nginx/vhost.d
-    #         - html:/usr/share/nginx/html
-    #         - certs:/etc/nginx/certs
-    #         - /var/run/docker.sock:/var/run/docker.sock:ro
-    #     environment:
-    #         NGINX_PROXY_CONTAINER: nginx-proxy
+    mariadb:
+        image: mariadb
+        ports:
+            - "3306:3306"
+        volumes:
+            - mariadb:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    nginx-proxy:
+        image: jwilder/nginx-proxy
+        container_name: nginx-proxy
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - vhost:/etc/nginx/vhost.d
+            - html:/usr/share/nginx/html
+            - certs:/etc/nginx/certs
+            - /var/run/docker.sock:/tmp/docker.sock:ro
+        labels:
+            - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true"
+    letsencrypt:
+        image: jrcs/letsencrypt-nginx-proxy-companion
+        container_name: letsencrypt-nginx-proxy-companion
+        volumes:
+            - vhost:/etc/nginx/vhost.d
+            - html:/usr/share/nginx/html
+            - certs:/etc/nginx/certs
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+        environment:
+            NGINX_PROXY_CONTAINER: nginx-proxy
 networks:
     default:
         external:
