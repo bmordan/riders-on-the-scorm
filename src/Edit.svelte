@@ -109,7 +109,7 @@
 </script>
 <section class="editor">
     <nav>
-        <Link to={`/users/${uid}`} ><button class="noselect">Exit</button></Link>
+        <a href="/"><button class="noselect">Exit</button></a>
         <button disabled={saving} on:click={e => onSave()}>Save{saving ? "ing..." : ""}</button>
         <button on:click={togglePreview}>{showPreview ? 'Editor' : 'Preview'}</button>
         <button disabled={saving} on:click={addPage}>Add Page</button>
