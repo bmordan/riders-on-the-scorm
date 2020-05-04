@@ -8,6 +8,8 @@
     "build": "rollup -c && docker build -t bmordan/markdownscorm .",
     "docker": "docker run -p 3000:3000 -e SCORM_CLIENT_ID=${SCORM_CLIENT_ID} -e SCORM_GOOGLE_CLIENT_SECRET=${SCORM_GOOGLE_CLIENT_SECRET} -e NODE_ENV=development -e PORT=3000 -d bmordan/riders-on-the-scorm",
     "roll": "rollup -c",
+    "dgraph-up": "docker-compose -f ./dgraph-compose.yml up -d",
+    "dgraph-down": "docker-compose -f ./dgraph-compose.yml down",
     "dev": "rollup -c -w && npm start",
     "prod": "rollup -c && node server.js",
     "test": "http-server ./scorm -p 9292",

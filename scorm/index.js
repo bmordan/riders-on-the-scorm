@@ -10,10 +10,12 @@ const scormify = (_package, user) => {
         const title = _package.title.split(" ").join("").toLowerCase()
         const package_dir = path.join(__dirname, 'builds', title)
         const output_dir = path.join(__dirname, '..', 'public', 'packages')
-        
+        const markdown_dir = path.join(package_dir, 'markdown')
+
         try {
             execSync(`rm -fr ${package_dir}`)
             fs.mkdirSync(package_dir)
+            fs.mkdirSync(markdown_dir)
         } catch(err) {
             console.error(err)
             return reject(err)
@@ -24,8 +26,12 @@ const scormify = (_package, user) => {
         } catch(err) {
             console.error(`${output_dir}/${title}`, err.message)
         }
-    
-        const pages = _package.pages.map(page => markdown(page.markdown))
+
+        const pages = _package.pages.map((page, i) => {
+            // write a markdown file for each page in the package
+            fs.writeFileSync(`${markdown_dir}/page${i + 1}.md`, page.markdown)
+            return markdown(page.markdown)
+        })
     
         fs.writeFile(path.join(package_dir, 'pages.json'), JSON.stringify(pages), 'utf8', err => {
             if (err) return reject(err)
@@ -54,19 +60,17 @@ const scormify = (_package, user) => {
                     const poll = () => {
                         fs.readdir(output_dir, (err, files) => {
                             if (limit > 1000) {
-                                return reject(new Error(`cant find file that includes ${package_name}`))
+                                return reject(new Error(`can't find file that includes ${package_name}`))
                             }
                             const [file] = files.filter(f => f.toLowerCase().includes(title))
-                            console.log({file, files, package_name})
                             limit += 1
                             return file ? resolve(path.join(output_dir, file)) : poll()
                         })
                     }
-                    
+                    // call poll for the first time to start polling
                     poll()
                 })
-            })   
-
+            })
         })
     })
 }

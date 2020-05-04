@@ -33,12 +33,12 @@ services:
             LETSENCRYPT_EMAIL: bernard.mordan@whitehat.org.uk
         depends_on:
             - mariadb
-    topten:
-        image: bmordan/top-ten
+    scraper:
+        image: bmordan/rusty-scraper
         environment:
             EMAIL: bernard.mordan@whitehat.org.uk
             APPLIED_PASSWORD: ${APPLIED_PASSWORD}
-            GMAIL_PASSWORD: ${GMAIL_PASSWORD}
+            GMAIL_APP_PASSWORD: ${GMAIL_APP_PASSWORD}
     zero:
         image: dgraph/dgraph:latest
         volumes:
@@ -50,7 +50,6 @@ services:
         command: dgraph zero --my=zero:5080
     alpha:
         image: dgraph/dgraph:latest
-        container_name: alpha
         volumes:
             - /tmp/data:/dgraph
         ports:
