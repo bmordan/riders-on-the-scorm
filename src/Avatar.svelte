@@ -3,8 +3,8 @@
 </script>
 <article>
     {#if user}
-        <img src={user.picture} alt="user avatar" />
         <div id={user.uid}>{user.name}</div>
+        <img src={user.picture} alt="user avatar" />
     {:else}
         ••• ••••••••••••
     {/if}
@@ -13,12 +13,12 @@
 article {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: flex-end;
 }
 article img {
     height: 32px;
     width: 32px;
     border-radius: 50%;
-    margin-right: .75rem;
+    margin-left: .75rem;
 }
 </style>

@@ -89,10 +89,12 @@
 
                 getInteractions().forEach(({id, time, value}) => {
                     const textarea = document.getElementById(id.split('-').slice(2).join('-'))
-                    textarea.setAttribute('readonly', true)
-                    textarea.style.boxShadow = "0px 0px 0px 0px transparent"
-                    textarea.value = [value, "✅submitted", new Date().toISOString().substring(0,10), time].join(" ")
-                    textarea.nextElementSibling.setAttribute('disabled', true)
+                    if (textarea) {
+                        textarea.setAttribute('readonly', true)
+                        textarea.style.boxShadow = "0px 0px 0px 0px transparent"
+                        textarea.value = [value, "✅submitted", new Date().toISOString().substring(0,10), time].join(" ")
+                        textarea.nextElementSibling.setAttribute('disabled', true)
+                    }
                 })
             }, 400)
         }
