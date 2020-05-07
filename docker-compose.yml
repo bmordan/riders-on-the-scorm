@@ -62,10 +62,11 @@ services:
         ports:
             - 8000:8000
         command: dgraph-ratel
-        VIRTUAL_HOST: dgraph.whitehatcoaches.org.uk
-        LETSENCRYPT_HOST: dgraph.whitehatcoaches.org.uk
-        VIRTUAL_PORT: 8000
-        LETSENCRYPT_EMAIL: bernard.mordan@whitehat.org.uk
+        environment:
+            VIRTUAL_HOST: dgraph.whitehatcoaches.org.uk
+            LETSENCRYPT_HOST: dgraph.whitehatcoaches.org.uk
+            VIRTUAL_PORT: 8000
+            LETSENCRYPT_EMAIL: bernard.mordan@whitehat.org.uk
     mariadb:
         image: mariadb
         ports:

@@ -19,12 +19,12 @@
 <nav>
     <img src="/icons/scorm-logo.svg" alt="SCORM logo" height="32rem" style="margin-right:.5rem;" />
     <span>v{version}</span> 
+    {#if isHelpPage}
+        <a href={`/users/${user.uid}`} use:link>Back</a>
+    {:else}
+        <a href="/help" use:link>Help</a>
+    {/if}
     <hgroup>
-        {#if isHelpPage}
-            <a href={`/users/${user.uid}`} use:link>Back</a>
-        {:else}
-            <a href="/help" use:link>Help</a>
-        {/if}
         <Avatar user={user}></Avatar>
         <button on:click={signout}>Sign out</button>
     </hgroup>
@@ -51,7 +51,7 @@
         font-size: .5rem;
         color: var(--wh-gray);
     }
-    hgroup a {
+    a {
         color: var(--wh-gray);
     }
     nav button {

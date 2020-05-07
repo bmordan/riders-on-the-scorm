@@ -6,7 +6,7 @@
         <div id={user.uid}>{user.name}</div>
         <img src={user.picture} alt="user avatar" />
     {:else}
-        ••• ••••••••••••
+        •••••••••••• •••
     {/if}
 </article>
 <style>
