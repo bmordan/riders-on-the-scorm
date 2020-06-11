@@ -23,10 +23,6 @@ services:
         ports:
             - 8000:8000
         command: dgraph-ratel
-networks:
-    default:
-        external:
-            name: nginx-proxy
     
 volumes:
     vhost:

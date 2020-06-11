@@ -76,6 +76,28 @@ function scorm_comment (md) {
     })
 }
 
+function scorm_assignment_button (md) {
+    md.renderer.rules.scorm_assignment_button = function (tokens, idx, options, env, self) {
+        const {content, attrs} = tokens[idx]
+        const astyle = "display:flex;align-items:center;justify-content:center;padding:2rem;background-color:rgba(37,221,156,0.1);cursor:default;text-decoration:none;"
+        const bstyle = "border-width:0;padding:.5rem 1rem;background-color:var(--wh-green);color:white;border-radius:3px;box-shadow:1px 1px 3px -2px black;cursor:pointer;"
+        return `<a href="${attrs}" target="_Blank" style="${astyle}"><button style="${bstyle}" type="button">${content}</button></a>`.trim()
+    }
+    md.core.ruler.push('scorm_assignment_button', state => {
+        const pattern = new RegExp(/^\[{4}.*\]{3}$/gm)
+        state.tokens.forEach((token, i) => {
+            if (token.type === 'inline' && token.content.match(pattern)) {
+                console.log(token.content)
+                const [content = "assignment", href] = token.content.substring(4, token.content.length - 4).split('](')
+                const assignment_button = new state.Token('scorm_assignment_button', 'a', 0)
+                assignment_button.attrs = href
+                assignment_button.content = content
+                state.tokens[i] = assignment_button
+            }
+        })
+    })
+}
+
 const md = new Markdown({
     html: true, 
     breaks: true, 
@@ -85,6 +107,7 @@ const md = new Markdown({
 .use(emoji)
 .use(highlightjs)
 .use(scorm_quiz)
+.use(scorm_assignment_button)
 .use(scorm_comment)
 
 module.exports = markdown => md.render(markdown)
