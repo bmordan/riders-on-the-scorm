@@ -17,7 +17,7 @@
     const isHelpPage = window.location.pathname === "/help"
 </script>
 <nav>
-    <img src="/icons/scorm-logo.svg" alt="SCORM logo" height="32rem" style="margin-right:.5rem;" />
+    <img src="/icons/scorm-logo.svg" alt="SCORM logo" height="32rem" style="margin-right:1.25rem;" />
     <span>v{version}</span> 
     {#if isHelpPage}
         <a href={`/users/${user.uid}`} use:link>Back</a>

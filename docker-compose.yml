@@ -33,10 +33,24 @@ services:
             LETSENCRYPT_EMAIL: bernard.mordan@whitehat.org.uk
         depends_on:
             - mariadb
-    scraper:
-        image: bmordan/rusty-scraper
+    swebot:
+        image: bmordan/swebot
+        ports:
+            - "3300:3300"
         environment:
-            EMAIL: bernard.mordan@whitehat.org.uk
+            VIRTUAL_HOST: swebot.whitehatcoaches.org.uk
+            LETSENCRYPT_HOST: swebot.whitehatcoaches.org.uk
+            VIRTUAL_PORT: 3300
+            ROCKET_ADDRESS: "0.0.0.0"
+            ROCKET_PORT: 3300
+            ROCKET_SECRET_KEY: "s9s80RuQd8zTUANzKDMhJO2XkOjqg28ZpFQNkDGcuXY="
+            LETSENCRYPT_EMAIL: bernard.mordan@whitehat.org.uk
+    rusty-scraper:
+        image: bmordan/rusty-scraper
+        ports:
+            - "9222:9222"
+        environment:
+            DISPLAY: "0.0.0.0:9222"
             APPLIED_PASSWORD: ${APPLIED_PASSWORD}
             GMAIL_APP_PASSWORD: ${GMAIL_APP_PASSWORD}
     zero:
