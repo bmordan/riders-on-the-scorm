@@ -1,6 +1,6 @@
 {
   "name": "riders-on-the-scorm",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "create scorm packages in markdown",
   "main": "server.js",
   "scripts": {
