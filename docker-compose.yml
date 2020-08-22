@@ -5,7 +5,7 @@ services:
         ports:
             - "3000:3000"
         environment:
-            SCORM_CLIENT_ID: ${SCORM_CLIENT_ID}
+            SCORM_GOOGLE_CLIENT_ID: ${SCORM_GOOGLE_CLIENT_ID}
             SCORM_GOOGLE_CLIENT_SECRET: ${SCORM_GOOGLE_CLIENT_SECRET}
             NODE_ENV: ${NODE_ENV}
             PORT: 3000

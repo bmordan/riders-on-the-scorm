@@ -159,6 +159,11 @@ a:-webkit-any-link {
 code.hljs {
     padding: 2rem;
 }
+.green-header {
+    color: white;
+    background-color: var(--wh-green);
+    padding: 1rem;
+}
 .noselect {
     -webkit-touch-callout: none; /* iOS Safari */
       -webkit-user-select: none; /* Safari */

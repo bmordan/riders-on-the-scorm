@@ -9,6 +9,9 @@
     const {uid, title, score, createdAt, sharedwith} = pack
 
     $: downloading = false
+    $: downloadingMessages = ''
+    $: downloadingProgress = 0
+
 
 	const formatDate = ISOstring => {
 		const date = new Date(ISOstring)
@@ -19,15 +22,10 @@
 		return [wday, day, month, year].join(' ')
     }
 
-	function downloadPackage (evt) {
-		evt.preventDefault()
-		const pid = this.value
-		
-		downloading = pid
-
+	function downloadPackage (pid, pathToDownload) {
 		let filename = `package-${pid}`
 
-		fetch(`/users/${user.uid}/packages/${pid}/download`)
+		fetch(`/users/${user.uid}/packages/${pid}/download?file=${btoa(pathToDownload)}`)
 			.then(res => {
 				res.headers.forEach((key, value) => (
 					filename = key === 'x-scorm-download' ? value : filename
@@ -36,7 +34,6 @@
 			})
 			.then(blob => {
 				download(blob, filename, 'application/zip')
-				downloading = false
 				setTimeout(() => {
 					// there is no other way to know that the file has been downloaded
 					return fetch(`/users/${user.uid}/packages/${pid}/download/${filename}/remove`)
@@ -45,7 +42,29 @@
 				}, 6000)
 			})
 			.catch(console.error)
-	}
+    }
+    function buildAndDownload (evt) {
+        evt.preventDefault()
+        
+        const pid = this.value
+		downloading = pid
+        
+        const ws = new WebSocket(`ws://localhost:3000/users/${user.uid}/packages/${pid}/download`)
+        
+        ws.onmessage =  msg => {
+            downloadingMessages = msg.data
+            downloadingProgress += downloadingProgress > 90 ? 0 : 5
+            if (msg.data.includes('complete')) {
+                const pathToDownload = msg.data.split(': ')[1]
+                downloadPackage(pid, pathToDownload)
+            }
+        }
+        ws.onclose = () => {
+            downloading = false
+            downloadingMessages = ''
+            downloadingProgress = 0
+        }
+    }
 </script>
 <Link to={`/users/${user.uid}/packages/${uid}/editor`}>
     <article>
@@ -73,9 +92,12 @@
             <h2>{title}</h2>
         </main>
         <footer>
-            <button value={uid} on:click={downloadPackage} class="wh-bg-purple" disabled={downloading && downloading === uid}>
+            <button value={uid} on:click={buildAndDownload} class="wh-bg-purple" disabled={downloading && downloading === uid}>
                 {#if downloading && downloading === uid}
-                    <div class="throbber-loader">Working...</div>
+                    <div class="download-progress">
+                        <progress value={downloadingProgress} max="100"></progress>
+                        <label>{downloadingMessages}</label>
+                    </div>
                 {:else}
                     <svg version="1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="16" height="16"><g fill="currentColor"><path d="M24 37.1L13 24h22zM20 4h8v4h-8zm0 6h8v4h-8z"/><path d="M20 16h8v11h-8zM6 40h36v4H6z"/></g></svg>
                     <span>&nbsp;Download</span>
@@ -188,6 +210,9 @@ article footer button {
     align-items: center;
     border-radius: 0 0 12px 12px;
 }
+article footer button:disabled {
+    background-color: var(--wh-light-purple);
+}
 ul {
     margin-block-start: 0;
     margin-block-end: 0;
@@ -204,71 +229,23 @@ ul img {
 ul img:not(:first-child) {
     margin-left: -.75rem;
 }
-@-moz-keyframes throbber-loader {
-    0% {
-        background: #AAA8A8;
-    }
-    10% {
-        background: #CACACA;
-    }
-    40% {
-        background: #DCDCDC;
-    }
-}
-@-webkit-keyframes throbber-loader {
-    0% {
-        background: #AAA8A8;
-    }
-    10% {
-        background: #CACACA;
-    }
-    40% {
-        background: #DCDCDC;
-    }
-}
-@keyframes throbber-loader {
-    0% {
-        background: #AAA8A8;
-    }
-    10% {
-        background: #CACACA;
-    }
-    40% {
-        background: #DCDCDC;
-    }
-}
-/* :not(:required) hides these rules from IE9 and below */
-.throbber-loader:not(:required) {
-    -moz-animation: throbber-loader 2000ms 300ms infinite ease-out;
-    -webkit-animation: throbber-loader 2000ms 300ms infinite ease-out;
-    animation: throbber-loader 2000ms 300ms infinite ease-out;
-    background: #888888;
-    display: inline-block;
+
+.download-progress {
+    width: 90%;
+    height: 1rem;
     position: relative;
-    text-indent: -9999px;
-    width: 0.9em;
-    height: 1.5em;
-    margin: 0 1.6em;
 }
-.throbber-loader:not(:required):before, .throbber-loader:not(:required):after {
-    background: #888888;
-    content: '\x200B';
-    display: inline-block;
-    width: 0.9em;
-    height: 1.5em;
+.download-progress progress {
+    display: block;
+    width: 100%;
+    line-height: 0.5rem;
+}
+.download-progress label {
+    line-height: 0.5rem;
+    font-size: 0.5rem;
     position: absolute;
-    top: 0;
-}
-.throbber-loader:not(:required):before {
-    -moz-animation: throbber-loader 2000ms 150ms infinite ease-out;
-    -webkit-animation: throbber-loader 2000ms 150ms infinite ease-out;
-    animation: throbber-loader 2000ms 150ms infinite ease-out;
-    left: -1.6em;
-}
-.throbber-loader:not(:required):after {
-    -moz-animation: throbber-loader 2000ms 450ms infinite ease-out;
-    -webkit-animation: throbber-loader 2000ms 450ms infinite ease-out;
-    animation: throbber-loader 2000ms 450ms infinite ease-out;
-    right: -1.6em;
+    top: 0.75rem;
+    left: 0;
+    color: var(--wh-purple);
 }
 </style>
