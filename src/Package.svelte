@@ -96,7 +96,7 @@
                 {#if downloading && downloading === uid}
                     <div class="download-progress">
                         <progress value={downloadingProgress} max="100"></progress>
-                        <label>{downloadingMessages}</label>
+                        <span>{downloadingMessages}</span>
                     </div>
                 {:else}
                     <svg version="1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="16" height="16"><g fill="currentColor"><path d="M24 37.1L13 24h22zM20 4h8v4h-8zm0 6h8v4h-8z"/><path d="M20 16h8v11h-8zM6 40h36v4H6z"/></g></svg>
@@ -240,7 +240,8 @@ ul img:not(:first-child) {
     width: 100%;
     line-height: 0.5rem;
 }
-.download-progress label {
+.download-progress span {
+    display: block;
     line-height: 0.5rem;
     font-size: 0.5rem;
     position: absolute;
