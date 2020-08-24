@@ -5,7 +5,7 @@ services:
         ports:
             - "3000:3000"
         environment:
-            SCORM_CLIENT_ID: ${SCORM_CLIENT_ID}
+            SCORM_GOOGLE_CLIENT_ID: ${SCORM_GOOGLE_CLIENT_ID}
             SCORM_GOOGLE_CLIENT_SECRET: ${SCORM_GOOGLE_CLIENT_SECRET}
             NODE_ENV: ${NODE_ENV}
             PORT: 3000
@@ -53,6 +53,17 @@ services:
             DISPLAY: "0.0.0.0:9222"
             APPLIED_PASSWORD: ${APPLIED_PASSWORD}
             GMAIL_APP_PASSWORD: ${GMAIL_APP_PASSWORD}
+    gocd:
+        image: gocd/gocd-server:v20.4.0
+        ports:
+            - "8153:8153"
+        environment:
+            VIRTUAL_HOST: gocd.whitehatcoaches.org.uk
+            LETSENCRYPT_HOST: gocd.whitehatcoaches.org.uk
+            VIRTUAL_PORT: 8153
+            LETSENCRYPT_EMAIL: bernard.mordan@whitehat.org.uk
+        volumes:
+            - godata:/godata
     zero:
         image: dgraph/dgraph:latest
         volumes:
@@ -126,3 +137,4 @@ volumes:
     certs:
     data:
     mariadb:
+    godata:
