@@ -36,6 +36,7 @@
     "downloadjs": "^1.4.7",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
+    "express-ws": "^4.0.0",
     "flat-color-icons": "^1.1.0",
     "google-auth-library": "^5.8.0",
     "grpc": "^1.24.2",
@@ -44,8 +45,8 @@
     "markdown-it-highlightjs": "^3.0.0",
     "node-fetch": "^2.6.0",
     "nodemon": "^2.0.2",
-    "simple-scorm-packager": "^0.2.4",
     "rollup-plugin-copy": "^3.3.0",
+    "simple-scorm-packager": "^0.2.4",
     "svelte-routing": "^1.4.0"
   },
   "devDependencies": {
