@@ -1,5 +1,6 @@
 const express = require('express')
 const session = require('express-session')
+const redis = require('redis')
 const app = express()
 require('express-ws')(app)
 const fetch = require('node-fetch')
@@ -12,10 +13,16 @@ const fs = require('fs')
 const path = require('path')
 const atob = require('atob')
 const publicRoot = file => `${__dirname}/public/${file}.html`
+
+const RedisStore = require('connect-redis')(session)
+const redisClient = redis.createClient()
+
 const session_settings = {
     secret: SCORM_GOOGLE_CLIENT_SECRET,
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: { secure: process.env.NODE_ENV === 'production' },
+    store: new RedisStore({ client: redisClient })
 }
 
 /*

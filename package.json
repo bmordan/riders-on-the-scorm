@@ -1,6 +1,6 @@
 {
   "name": "riders-on-the-scorm",
-  "version": "1.4.2",
+  "version": "1.5.1",
   "description": "create scorm packages in markdown",
   "main": "server.js",
   "scripts": {
@@ -33,6 +33,7 @@
   "dependencies": {
     "atob": "^2.1.2",
     "btoa": "^1.2.1",
+    "connect-redis": "^5.0.0",
     "dgraph-js": "^2.0.2",
     "downloadjs": "^1.4.7",
     "express": "^4.17.1",
@@ -46,6 +47,7 @@
     "markdown-it-highlightjs": "^3.0.0",
     "node-fetch": "^2.6.0",
     "nodemon": "^2.0.2",
+    "redis": "^3.0.2",
     "rollup-plugin-copy": "^3.3.0",
     "simple-scorm-packager": "^0.2.4",
     "svelte-routing": "^1.4.0"

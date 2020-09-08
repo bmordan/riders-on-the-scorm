@@ -23,6 +23,10 @@ services:
         ports:
             - 8000:8000
         command: dgraph-ratel
+    redis:
+        image: redis
+        ports:
+            - 6379:6379
     
 volumes:
     vhost:
