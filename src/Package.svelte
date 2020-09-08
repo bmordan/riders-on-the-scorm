@@ -49,7 +49,7 @@
         const pid = this.value
 		downloading = pid
         
-        const ws = new WebSocket(`wss://${window.location.origin}/users/${user.uid}/packages/${pid}/download`)
+        const ws = new WebSocket(`wss://${window.location.hostname}/users/${user.uid}/packages/${pid}/download`)
         
         ws.onmessage =  msg => {
             downloadingMessages = msg.data
