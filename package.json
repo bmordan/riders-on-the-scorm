@@ -45,7 +45,7 @@
     "markdown-it": "^10.0.0",
     "markdown-it-emoji": "^1.4.0",
     "markdown-it-highlightjs": "^3.0.0",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.7",
     "nodemon": "^2.0.2",
     "redis": "^3.0.2",
     "rollup-plugin-copy": "^3.3.0",
